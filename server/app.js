@@ -4,6 +4,8 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
+import userRoutes from "./routes/userRoutes.js";
+import errorMiddleware from "./middlewares/errorMiddleware.js";
 
 const app = express();
 
@@ -24,8 +26,12 @@ app.use("/ping", (req, res) => {
   res.send("pong");
 });
 
+app.use("/api/v1/user", userRoutes);
+
 app.all("*", (req, res) => {
   res.status(404).send("OOPS !! 404 Page Not Fount");
 });
+
+app.use(errorMiddleware);
 
 export default app;
