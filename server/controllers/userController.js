@@ -62,8 +62,6 @@ const login = async (req, res, next) => {
 
     const user = await User.findOne({ email }).select("+password");
 
-    console.log(user);
-
     if (!user || !(await user.comparePassword(password))) {
       return next(new AppError("Email and password does not match"));
     }
@@ -85,11 +83,31 @@ const login = async (req, res, next) => {
 };
 
 const logout = (req, res) => {
-  res.send("user logout successfully");
+  res.cookie("token", null, {
+    secure: true,
+    maxAge: 0,
+    httpOnly: true,
+  });
+
+  res.status(200).json({
+    success: true,
+    message: "user logout successfully",
+  });
 };
 
-const getProfile = (req, res) => {
-  res.send("user profile");
+const getProfile = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const user = await User.findById(userId);
+
+    res.status(200).json({
+      sucesss: true,
+      message: "User datails",
+      user,
+    });
+  } catch (error) {
+    return next(new AppError("Failed to fetch user Profile!!"));
+  }
 };
 
 export { register, login, logout, getProfile };

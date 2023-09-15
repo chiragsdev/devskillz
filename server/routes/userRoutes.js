@@ -5,12 +5,13 @@ import {
   logout,
   register,
 } from "../controllers/userController.js";
+import { isLoggedIn } from "../middlewares/authMiddleware.js";
 
 const route = Router();
 
 route.post("/register", register);
 route.post("/login", login);
 route.get("/logout", logout);
-route.get("/me", getProfile);
+route.get("/me", isLoggedIn, getProfile);
 
 export default route;
