@@ -1,18 +1,32 @@
 import { Router } from "express";
 import {
+  changePassword,
+  forgotPassword,
   getProfile,
   login,
   logout,
   register,
+  resetPassword,
+  updateUserProfile,
 } from "../controllers/userController.js";
 import { isLoggedIn } from "../middlewares/authMiddleware.js";
 import upload from "../middlewares/multerMiddleware.js";
 
-const route = Router();
+const router = Router();
 
-route.post("/register", upload.single("avatar"), register);
-route.post("/login", login);
-route.get("/logout", logout);
-route.get("/me", isLoggedIn, getProfile);
+router.post("/register", upload.single("avatar"), register);
+router.post("/login", login);
+router.get("/logout", logout);
+router.get("/me", isLoggedIn, getProfile);
 
-export default route;
+router.post("/forgot-password", forgotPassword);
+router.post("/reset-password", resetPassword);
+router.post("/change-password", isLoggedIn, changePassword);
+router.put(
+  "/update-user-profile",
+  isLoggedIn,
+  upload.single("avatar"),
+  updateUserProfile
+);
+
+export default router;
