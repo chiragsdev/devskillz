@@ -1,6 +1,7 @@
 import nodemailer from "nodemailer";
 
 const sendEmail = async function (email, subject, message) {
+  // create reusable transporter object using the default SMTP transport
   const transporter = nodemailer.createTransport({
     service: "Gmail",
     auth: {
@@ -9,11 +10,15 @@ const sendEmail = async function (email, subject, message) {
     },
   });
 
+  // send mail with defined transport object
   await transporter.sendMail({
     from: process.env.SMTP_FROM_EMAIL,
     to: email,
     subject: subject,
     html: message,
+    headers: {
+      "Content-Type": "text/html",
+    },
   });
 };
 
