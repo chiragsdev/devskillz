@@ -4,6 +4,7 @@ import User from "../models/userModel.js";
 import AppError from "../utils/error.js";
 import cloudinary from "cloudinary";
 import sendEmail from "../utils/sendEmail.js";
+import crypto from "crypto";
 
 const cookieOptions = {
   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
@@ -124,6 +125,8 @@ export const login = async (req, res, next) => {
     // Finding the user with the sent email
     const user = await User.findOne({ email }).select("+password");
 
+    console.log("user with password", user);
+
     // If no user or sent password do not match then send generic response
     if (!user || !(await user.comparePassword(password))) {
       return next(new AppError("Email and password does not match"));
@@ -177,7 +180,7 @@ export const logout = (req, res) => {
 export const getProfile = async (req, res) => {
   try {
     // Finding the user using the id from modified req object
-    const user = await User.findById(req.user.id);
+    const user = await User.findById(req.decodedToken.id);
 
     res.status(200).json({
       sucesss: true,
@@ -324,8 +327,9 @@ export const forgotPassword = async (req, res, next) => {
  * @ROUTE @POST {{URL}}/api/v1/user/reset/:resetToken
  * @ACCESS Public
  */
-export const resetPassword = async () => {
+export const resetPassword = async (req, res, next) => {
   // Extracting resetToken from req.params object
+  console.log("req.params log :", req.params);
   const { resetToken } = req.params;
 
   // Extracting password from req.body object
@@ -380,7 +384,7 @@ export const resetPassword = async () => {
 export const changePassword = async (req, res) => {
   // Destructuring the necessary data from the req object
   const { oldPassword, newPassword } = req.body;
-  const { id } = req.user; // because of the middleware isLoggedIn
+  const { id } = req.decodedToken; // because of the middleware isLoggedIn
 
   // Check if the values are there or not
   if (!oldPassword || !newPassword) {
@@ -426,7 +430,7 @@ export const changePassword = async (req, res) => {
 export const updateUserProfile = async (req, res) => {
   // Destructuring the necessary data from the req object
   const { fullName } = req.body;
-  const { id } = req.user.id;
+  const { id } = req.decodedToken;
 
   const user = await User.findById(id);
 

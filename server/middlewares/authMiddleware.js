@@ -13,13 +13,13 @@ const isLoggedIn = async (req, res, next) => {
   // Decoding the token using jwt package verify method
   const decoded = await jwt.verify(token, process.env.JWT_SECRET);
 
-   // If no decode send the message unauthorized
-   if (!decoded) {
+  // If no decode send the message unauthorized
+  if (!decoded) {
     return next(new AppError("Unauthorized, please login to continue", 401));
   }
 
   // If all good store the id in req object, here we are modifying the request object and adding a custom field user in it
-  req.user = decoded;
+  req.decodedToken = decoded;
 
   next();
 };

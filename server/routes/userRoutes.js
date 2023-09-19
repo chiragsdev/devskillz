@@ -20,7 +20,7 @@ router.get("/logout", logout);
 router.get("/me", isLoggedIn, getProfile);
 
 router.post("/forgot-password", forgotPassword);
-router.post("/reset-password", resetPassword);
+router.post("/reset-password/:resetToken", resetPassword);
 router.post("/change-password", isLoggedIn, changePassword);
 router.put(
   "/update-user-profile",
