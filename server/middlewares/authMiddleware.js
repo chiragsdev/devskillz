@@ -1,7 +1,7 @@
 import AppError from "../utils/error.js";
 import jwt from "jsonwebtoken";
 
-const isLoggedIn = async (req, res, next) => {
+export const isLoggedIn = async (req, res, next) => {
   // extracting token from the cookies
   const { token } = req.cookies;
 
@@ -24,4 +24,12 @@ const isLoggedIn = async (req, res, next) => {
   next();
 };
 
-export { isLoggedIn };
+export const authorizedRoles = (...roles) => {
+  return async function (req, res, next) {
+    const currentUserRole = req.decodedToken.role;
+    if (!roles.includes(currentUserRole)) {
+      return next(new AppError("Access Denied: unauthorized user", 403));
+    }
+    next();
+  };
+};

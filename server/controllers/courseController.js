@@ -1,5 +1,7 @@
 import Course from "../models/courseModel.js";
 import AppError from "../utils/error.js";
+import cloudinary from "cloudinary";
+import fs from "fs/promises";
 
 /**
  * @ALL_COURSES
@@ -45,3 +47,103 @@ export const getLecturesByCourseId = async (req, res, next) => {
     return next(new AppError(error.message, 500));
   }
 };
+
+export const createCourse = async (req, res, next) => {
+  const { title, description, category, createdBy } = req.body;
+
+  if (!title || !description || !category || !createdBy) {
+    return next(new AppError("All fields are required", 400));
+  }
+
+  const course = await Course.create({
+    title,
+    description,
+    category,
+    createdBy,
+    thumbnail: {
+      public_id: "temp public_id",
+      secure_url: "temp secure_url",
+    },
+  });
+
+  if (!course) {
+    return next(new AppError("Coures Creation failed,try Again", 500));
+  }
+
+  if (req.file) {
+    const result = await cloudinary.v2.uploader.upload(req.file.path, {
+      folder: "LMS",
+    });
+
+    if (result) {
+      course.thumbnail.public_id = result.public_id;
+      course.thumbnail.secure_url = result.secure_url;
+    }
+
+    fs.rm(`uploads/${req.file.filename}`);
+  }
+
+  await course.save();
+
+  res.status(201).json({
+    succes: true,
+    message: "coures created succssfully",
+    course,
+  });
+};
+
+export const updateCoures = async (req, res, next) => {
+  const { id } = req.params;
+
+  console.log(id);
+
+  const course = await Course.findByIdAndUpdate(
+    id,
+    { $set: req.body },
+    { runValidators: true, new: true }
+  );
+
+  console.log("updated coures>", course);
+
+  if (!course) {
+    return next(new AppError("Coures With given id does not exits", 404));
+  }
+
+  await course.save();
+
+  res.status(200).json({
+    succes: true,
+    message: "coures updated succssfully",
+    course,
+  });
+};
+
+export const deleteCoures = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const coures = await Course.findByIdAndDelete(id);
+
+    if (!coures) {
+      return next(new AppError("Coures With given id does not exits", 404));
+    }
+
+    res.status(201).json({
+      succes: true,
+      message: "coures deleted succssfully",
+    });
+  } catch (error) {
+    return next(new AppError(error.message, 500));
+  }
+};
+
+// export const addLectureToCouresById = async (req, res, next) => {
+//   const { title, description } = req.body;
+//   const { id } = req.params;
+
+//   const coures = await Course.findById(id);
+
+//   if (!coures) {
+//     return next(new AppError("Coures with given id does not exits", 500));
+//   }
+// };
