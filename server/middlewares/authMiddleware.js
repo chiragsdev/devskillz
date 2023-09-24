@@ -2,6 +2,7 @@ import AppError from "../utils/error.js";
 import jwt from "jsonwebtoken";
 
 export const isLoggedIn = async (req, res, next) => {
+  console.log("inside is loggedin");
   // extracting token from the cookies
   const { token } = req.cookies;
 
@@ -32,4 +33,17 @@ export const authorizedRoles = (...roles) => {
     }
     next();
   };
+};
+
+export const authorizeSubscriber = async (req, res, next) => {
+  const subscription = req.user.Subscription;
+
+  const currentUserRole = req.user.role;
+
+  if (currentUserRole != "ADMIN" && subscription.status != "active") {
+    return next(
+      new AppError("please subscription to access this route !", 403)
+    );
+  }
+  next();
 };

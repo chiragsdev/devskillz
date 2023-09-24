@@ -25,86 +25,92 @@ export const register = async (req, res, next) => {
   // console.log("file", req.file);
   // console.log("host", req.hostname);
   // Destructuring the necessary data from req object
-  const { fullName, email, password } = req.body;
+  try {
+    const { fullName, email, password } = req.body;
 
-  // Check if the data is there or not, if not throw error message
-  if (!fullName || !email || !password) {
-    return next(new AppError("All fields are required", 400));
-  }
+    // Check if the data is there or not, if not throw error message
+    if (!fullName || !email || !password) {
+      return next(new AppError("All fields are required", 400));
+    }
 
-  // Check if the user exists with the provided email
-  const userExists = await User.findOne({ email });
+    // Check if the user exists with the provided email
+    const userExists = await User.findOne({ email });
 
-  // If user exists send the reponse else it's null
-  if (userExists) {
-    return next(new AppError("Email is already Exists", 400));
-  }
+    // If user exists send the reponse else it's null
+    if (userExists) {
+      return next(new AppError("Email is already Exists", 400));
+    }
 
-  // Create new user with the given necessary data and save to DB
-  const user = await User.create({
-    fullName,
-    email,
-    password,
-    avatar: {
-      public_id: email,
-      secure_url:
-        "https://res.cloudinary.com/du9jzqlpt/image/upload/v1674647316/avatar_drzgxv.jpg",
-    },
-  });
+    // Create new user with the given necessary data and save to DB
+    const user = await User.create({
+      fullName,
+      email,
+      password,
+      avatar: {
+        public_id: email,
+        secure_url:
+          "https://res.cloudinary.com/du9jzqlpt/image/upload/v1674647316/avatar_drzgxv.jpg",
+      },
+    });
 
-  // If user not created send message response
-  if (!user) {
-    return next(new AppError("user registration failed,plase try again", 400));
-  }
-
-  // Run only if user sends a file else it's undefined
-  if (req.file) {
-    try {
-      const uploadedImageInfo = await cloudinary.v2.uploader.upload(
-        req.file.path,
-        {
-          folder: "LMS", // Save files in a folder named lms
-          width: 250,
-          height: 250,
-          gravity: "faces", // This option tells cloudinary to center the image around detected faces (if any) after cropping or resizing the original image
-          crop: "fill",
-        }
-      );
-
-      // If success
-      if (uploadedImageInfo) {
-        // Set the public_id and secure_url in DB
-        user.avatar.public_id = uploadedImageInfo.public_id;
-        user.avatar.secure_url = uploadedImageInfo.secure_url;
-      }
-
-      // After successful upload remove the file from local storage
-      fs.rm(`uploads/${req.file.filename}`);
-    } catch (error) {
+    // If user not created send message response
+    if (!user) {
       return next(
-        new AppError(error || "File not uploaded, please try again", 400)
+        new AppError("user registration failed,plase try again", 400)
       );
     }
+
+    // Run only if user sends a file else it's undefined
+    if (req.file) {
+      try {
+        const uploadedImageInfo = await cloudinary.v2.uploader.upload(
+          req.file.path,
+          {
+            folder: "LMS", // Save files in a folder named lms
+            width: 250,
+            height: 250,
+            gravity: "faces", // This option tells cloudinary to center the image around detected faces (if any) after cropping or resizing the original image
+            crop: "fill",
+          }
+        );
+
+        // If success
+        if (uploadedImageInfo) {
+          // Set the public_id and secure_url in DB
+          user.avatar.public_id = uploadedImageInfo.public_id;
+          user.avatar.secure_url = uploadedImageInfo.secure_url;
+        }
+
+        // After successful upload remove the file from local storage
+        fs.rm(`uploads/${req.file.filename}`);
+      } catch (error) {
+        return next(
+          new AppError(error || "File not uploaded, please try again", 400)
+        );
+      }
+    }
+
+    // Save the user object
+    await user.save();
+
+    // Generating a JWT token
+    const token = await user.generateJWTToken();
+
+    // Setting the password to undefined so it does not get sent in the response
+    user.password = undefined;
+
+    // Setting the token in the cookie with name token along with cookieOptions
+    res.cookie("token", token, cookieOptions);
+
+    // If all good send the response to the frontend
+    res.status(201).json({
+      success: true,
+      message: "User Register successfully",
+      user,
+    });
+  } catch (error) {
+    return next(new AppError(error.message, 500));
   }
-
-  // Save the user object
-  await user.save();
-
-  // Generating a JWT token
-  const token = await user.generateJWTToken();
-
-  // Setting the password to undefined so it does not get sent in the response
-  user.password = undefined;
-
-  // Setting the token in the cookie with name token along with cookieOptions
-  res.cookie("token", token, cookieOptions);
-
-  // If all good send the response to the frontend
-  res.status(201).json({
-    success: true,
-    message: "User Register successfully",
-    user,
-  });
 };
 
 /**
@@ -328,52 +334,56 @@ export const forgotPassword = async (req, res, next) => {
  * @ACCESS Public
  */
 export const resetPassword = async (req, res, next) => {
-  // Extracting resetToken from req.params object
-  console.log("req.params log :", req.params);
-  const { resetToken } = req.params;
+  try {
+    // Extracting resetToken from req.params object
+    console.log("req.params log :", req.params);
+    const { resetToken } = req.params;
 
-  // Extracting password from req.body object
-  const { password } = req.body;
+    // Extracting password from req.body object
+    const { password } = req.body;
 
-  // Check if password is not there then send response saying password is required
-  if (!password) {
-    return next(new AppError("Password is required", 400));
+    // Check if password is not there then send response saying password is required
+    if (!password) {
+      return next(new AppError("Password is required", 400));
+    }
+
+    // We are again hashing the resetToken using sha256 since we have stored our resetToken in DB using the same algorithm
+    const forgotPasswordToken = await crypto
+      .createHash("sha256")
+      .update(resetToken)
+      .digest("hex");
+
+    // Checking if token matches in DB and if it is still valid(Not expired)
+    const user = await User.findOne({
+      forgotPasswordToken,
+      forgotPasswordExpiry: { $gt: Date.now() },
+    });
+
+    // If not found or expired send the response
+    if (!user) {
+      return next(
+        new AppError("Token is Invalid or Expired,please Try Again", 400)
+      );
+    }
+
+    // Update the password if token is valid and not expired
+    user.password = password;
+
+    // making forgotPassword* valus undefined in the DB
+    user.forgotPasswordToken = undefined;
+    user.forgotPasswordExpiry = undefined;
+
+    // Saving the updated user values
+    await user.save();
+
+    // Sending the response when everything goes good
+    res.status(200).json({
+      success: true,
+      message: "Password changed successfully",
+    });
+  } catch (error) {
+    return next(new AppError(error.message, 500));
   }
-
-  // We are again hashing the resetToken using sha256 since we have stored our resetToken in DB using the same algorithm
-  const forgotPasswordToken = await crypto
-    .createHash("sha256")
-    .update(resetToken)
-    .digest("hex");
-
-  // Checking if token matches in DB and if it is still valid(Not expired)
-  const user = await User.findOne({
-    forgotPasswordToken,
-    forgotPasswordExpiry: { $gt: Date.now() },
-  });
-
-  // If not found or expired send the response
-  if (!user) {
-    return next(
-      new AppError("Token is Invalid or Expired,please Try Again", 400)
-    );
-  }
-
-  // Update the password if token is valid and not expired
-  user.password = password;
-
-  // making forgotPassword* valus undefined in the DB
-  user.forgotPasswordToken = undefined;
-  user.forgotPasswordExpiry = undefined;
-
-  // Saving the updated user values
-  await user.save();
-
-  // Sending the response when everything goes good
-  res.status(200).json({
-    success: true,
-    message: "Password changed successfully",
-  });
 };
 
 /**
@@ -382,44 +392,48 @@ export const resetPassword = async (req, res, next) => {
  * @ACCESS Private (Logged in users only)
  */
 export const changePassword = async (req, res) => {
-  // Destructuring the necessary data from the req object
-  const { oldPassword, newPassword } = req.body;
-  const { id } = req.decodedToken; // because of the middleware isLoggedIn
+  try {
+    // Destructuring the necessary data from the req object
+    const { oldPassword, newPassword } = req.body;
+    const { id } = req.decodedToken; // because of the middleware isLoggedIn
 
-  // Check if the values are there or not
-  if (!oldPassword || !newPassword) {
-    return next(new AppError("All fields are mandatory", 400));
+    // Check if the values are there or not
+    if (!oldPassword || !newPassword) {
+      return next(new AppError("All fields are mandatory", 400));
+    }
+
+    // Finding the user by ID and selecting the password
+    const user = await User.findById(id).select("+password");
+
+    // If no user then throw an error message
+    if (!user) {
+      return next(new AppError("User does not Exits"));
+    }
+
+    // Check if the old password is correct
+    const isPasswordValid = await user.comparePassword(oldPassword);
+
+    // If the old password is not valid then throw an error message
+    if (!isPasswordValid) {
+      return next(new AppError("Invalid Old Password", 400));
+    }
+
+    // Setting the new password
+    user.password = newPassword;
+
+    // Save the data in DB
+    await user.save();
+
+    // Setting the password undefined so that it won't get sent in the response
+    user.password = undefined;
+
+    res.status(200).json({
+      success: true,
+      message: "Password changed successfully",
+    });
+  } catch (error) {
+    return next(new AppError(error.message, 500));
   }
-
-  // Finding the user by ID and selecting the password
-  const user = await User.findById(id).select("+password");
-
-  // If no user then throw an error message
-  if (!user) {
-    return next(new AppError("User does not Exits"));
-  }
-
-  // Check if the old password is correct
-  const isPasswordValid = await user.comparePassword(oldPassword);
-
-  // If the old password is not valid then throw an error message
-  if (!isPasswordValid) {
-    return next(new AppError("Invalid Old Password", 400));
-  }
-
-  // Setting the new password
-  user.password = newPassword;
-
-  // Save the data in DB
-  await user.save();
-
-  // Setting the password undefined so that it won't get sent in the response
-  user.password = undefined;
-
-  res.status(200).json({
-    success: true,
-    message: "Password changed successfully",
-  });
 };
 
 /**
@@ -428,52 +442,56 @@ export const changePassword = async (req, res) => {
  * @ACCESS Private (Logged in user only)
  */
 export const updateUserProfile = async (req, res) => {
-  // Destructuring the necessary data from the req object
-  const { fullName } = req.body;
-  const { id } = req.decodedToken;
+  try {
+    // Destructuring the necessary data from the req object
+    const { fullName } = req.body;
+    const { id } = req.decodedToken;
 
-  const user = await User.findById(id);
+    const user = await User.findById(id);
 
-  if (!user) {
-    return next(new AppError("User does not exits", 400));
-  }
-
-  if (fullName) {
-    user.fullName = fullName;
-  }
-
-  // Run only if user sends a file
-  if (req.file) {
-    // Deletes the old image uploaded by the user
-    await cloudinary.v2.uploader.destroy(user.avatar.public_id);
-
-    try {
-      const result = await cloudinary.v2.uploader.upload(req.file.path, {
-        folder: "LMS",
-        width: 250,
-        height: 250,
-        gravity: "faces",
-        crop: "fill",
-      });
-
-      if (result) {
-        user.avatar.public_id = result.public_id;
-        user.avatar.secure_url = result.secure_url;
-      }
-
-      fs.rm(`uploads/${req.file.filename}`);
-    } catch (error) {
-      return next(
-        new AppError(error || "File not uploaded, please try again", 400)
-      );
+    if (!user) {
+      return next(new AppError("User does not exits", 400));
     }
+
+    if (fullName) {
+      user.fullName = fullName;
+    }
+
+    // Run only if user sends a file
+    if (req.file) {
+      // Deletes the old image uploaded by the user
+      await cloudinary.v2.uploader.destroy(user.avatar.public_id);
+
+      try {
+        const result = await cloudinary.v2.uploader.upload(req.file.path, {
+          folder: "LMS",
+          width: 250,
+          height: 250,
+          gravity: "faces",
+          crop: "fill",
+        });
+
+        if (result) {
+          user.avatar.public_id = result.public_id;
+          user.avatar.secure_url = result.secure_url;
+        }
+
+        fs.rm(`uploads/${req.file.filename}`);
+      } catch (error) {
+        return next(
+          new AppError(error || "File not uploaded, please try again", 400)
+        );
+      }
+    }
+
+    // Save the user object
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "user details updated successfully",
+    });
+  } catch (error) {
+    return next(new AppError(error.message, 500));
   }
-
-  // Save the user object
-  await user.save();
-
-  res.status(200).json({
-    success: true,
-    message: "user details updated successfully",
-  });
 };
