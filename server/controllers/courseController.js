@@ -2,6 +2,7 @@ import Course from "../models/courseModel.js";
 import AppError from "../utils/error.js";
 import cloudinary from "cloudinary";
 import fs from "fs/promises";
+import * as path from "path";
 
 /**
  * @ALL_COURSES
@@ -190,7 +191,10 @@ export const addLectureToCouresById = async (req, res, next) => {
           resource_type: "video",
         });
 
-        if (!result) {
+        console.log(result);
+
+        if (result) {
+          console.log("hello");
           lectureData.public_id = result.public_id;
           lectureData.secure_url = result.secure_url;
         }
@@ -212,6 +216,8 @@ export const addLectureToCouresById = async (req, res, next) => {
         );
       }
     }
+
+    console.log(lectureData);
 
     course.lectures.push({
       title,
@@ -238,7 +244,6 @@ export const addLectureToCouresById = async (req, res, next) => {
  * @ROUTE @DELETE {{URL}}/api/v1/courses/:courseId/lectures/:lectureId
  * @ACCESS Private (Admin only)
  */
-
 export const removeLecterFromCourse = async (req, res, next) => {
   try {
     // Grabbing the courseId and lectureId from req.query

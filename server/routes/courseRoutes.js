@@ -8,7 +8,11 @@ import {
   removeLecterFromCourse,
   updateCoures,
 } from "../controllers/courseController.js";
-import { authorizeSubscriber, authorizedRoles, isLoggedIn } from "../middlewares/authMiddleware.js";
+import {
+  authorizeSubscriber,
+  authorizedRoles,
+  isLoggedIn,
+} from "../middlewares/authMiddleware.js";
 import upload from "../middlewares/multerMiddleware.js";
 
 const router = Router();
