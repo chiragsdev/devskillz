@@ -1,14 +1,15 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
+import Footer from "./Components/Footer";
 
 const App = () => {
   return (
-    <div className="font-mono font-extrabold text-4xl">
-      Welcome To LearnXcel
-      <Routes>
+    <>
+      {/* <Routes>
         <Route></Route>
-      </Routes>
-    </div>
+      </Routes> */}
+      <Footer />
+    </>
   );
 };
 
