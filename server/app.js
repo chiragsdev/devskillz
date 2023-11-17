@@ -14,12 +14,13 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(
-  cors({
-    origin: [process.env.FRONTEND_URL],
-    credentials: true,
-  })
-);
+// Enable CORS with specific origin and credentials
+const corsOptions = {
+  origin: "http://127.0.0.1:5173", // Replace with your actual frontend origin
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 app.use(cookieParser());
 
