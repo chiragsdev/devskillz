@@ -131,8 +131,6 @@ export const login = async (req, res, next) => {
     // Finding the user with the sent email
     const user = await User.findOne({ email }).select("+password");
 
-    console.log("user with password", user);
-
     // If no user or sent password do not match then send generic response
     if (!user || !(await user.comparePassword(password))) {
       return next(new AppError("Email and password does not match"));

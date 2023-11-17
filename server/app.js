@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Enable CORS with specific origin and credentials
 const corsOptions = {
-  origin: "http://127.0.0.1:5173", // Replace with your actual frontend origin
+  origin: process.env.FRONTEND_URL, // Replace with your actual frontend origin
   credentials: true,
 };
 

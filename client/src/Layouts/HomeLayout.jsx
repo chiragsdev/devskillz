@@ -4,6 +4,7 @@ import { AiFillCloseCircle } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 import Footer from "../Components/Footer";
 import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../Redux/Slices/AuthSlice";
 
 const HomeLayout = ({ children }) => {
   const dispatch = useDispatch();
@@ -30,9 +31,10 @@ const HomeLayout = ({ children }) => {
 
   async function handleLogout(e) {
     e.preventDefault();
-    // const res = await dispatch(logout());
-    navigate("/");
+    const res = await dispatch(logout());
+    if (res?.payload?.success) navigate("/");
   }
+
   return (
     <div className="min-h-[90vh]">
       <div className="drawer absolute left-0 z-50 w-fit">
@@ -48,7 +50,7 @@ const HomeLayout = ({ children }) => {
         </div>
         <div className="drawer-side w-0">
           <label htmlFor="my-drawer" className="drawer-overlay"></label>
-          <ul className="menu p-4 w-48 sm:w-80 bg-base-200 text-base-content relative">
+          <ul className="menu p-4 w-48 h-[100%] sm:w-80 bg-base-200 text-base-content relative">
             <li className="w-fit absolute right-2 z-50">
               <button onClick={hideDrawer}>
                 <AiFillCloseCircle size={24} />
@@ -57,13 +59,12 @@ const HomeLayout = ({ children }) => {
             <li>
               <Link to="/">Home</Link>
             </li>
-
+            {console.log(role)}
             {isLoggedIn && role === "ADMIN" && (
               <li>
                 <Link to="/admin/dashboard">Admin DashBoard</Link>
               </li>
             )}
-
             <li>
               <Link to="/courses">All Courses</Link>
             </li>
@@ -73,9 +74,8 @@ const HomeLayout = ({ children }) => {
             <li>
               <Link to="/about">About Us</Link>
             </li>
-
             {!isLoggedIn && (
-              <li className="absolute bottom-1 w-[90%]">
+              <li className="absolute bottom-4 w-[90%]">
                 <div className="w-full flex items-center justify-center">
                   <button className="btn-primary px-4 py-1 font-semibold rounded-md w-full">
                     <Link to="/login">Login</Link>
@@ -86,7 +86,6 @@ const HomeLayout = ({ children }) => {
                 </div>
               </li>
             )}
-
             {isLoggedIn && (
               <li className="absolute bottom-4 w-[90%]">
                 <div className="w-full flex items-center justify-center">
