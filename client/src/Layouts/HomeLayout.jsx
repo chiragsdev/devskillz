@@ -59,7 +59,6 @@ const HomeLayout = ({ children }) => {
             <li>
               <Link to="/">Home</Link>
             </li>
-            {console.log(role)}
             {isLoggedIn && role === "ADMIN" && (
               <li>
                 <Link to="/admin/dashboard">Admin DashBoard</Link>

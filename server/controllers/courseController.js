@@ -15,7 +15,7 @@ export const getAllCourses = async (req, res, next) => {
     const courses = await Course.find({}).select("-lectures");
 
     res.status(200).json({
-      succes: true,
+      success: true,
       message: "All courses",
       courses,
     });
