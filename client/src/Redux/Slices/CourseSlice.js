@@ -13,8 +13,7 @@ export const getAllCourses = createAsyncThunk("/course/get", async () => {
     toast.success(res?.data?.message, { id: loadingMessage });
     return res?.data;
   } catch (error) {
-    toast.error(error?.response?.data?.message, { id: loadingMessage });
-    throw error;
+    toast.error(error?.message, { id: loadingMessage });
   }
 });
 

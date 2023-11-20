@@ -15,7 +15,7 @@ export const createAccount = createAsyncThunk("/auth/signup", async (data) => {
     toast.success(res?.data?.message, { id: loadingMessage });
     return res?.data;
   } catch (error) {
-    toast.error(error?.response?.data?.message, { id: loadingMessage });
+    toast.error(error?.message, { id: loadingMessage });
     throw error;
   }
 });
@@ -29,7 +29,7 @@ export const login = createAsyncThunk("/auth/login", async (data) => {
     toast.success(res?.data?.message, { id: loadingMessage });
     return res?.data;
   } catch (error) {
-    toast.error(error?.response?.data?.message, { id: loadingMessage });
+    toast.error(error?.message, { id: loadingMessage });
     throw error;
   }
 });
@@ -41,7 +41,7 @@ export const logout = createAsyncThunk("/auth/logout", async () => {
     toast.success(res?.data?.message, { id: loadingMessage });
     return res?.data;
   } catch (error) {
-    toast.error(error?.response?.data?.message, { id: loadingMessage });
+    toast.error(error?.message, { id: loadingMessage });
     throw error;
   }
 });
