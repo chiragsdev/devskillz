@@ -12,7 +12,9 @@ const CourseList = () => {
   const { courseData } = useSelector((state) => state.course);
 
   async function loadCourses() {
-    await dispatch(getAllCourses());
+    if (courseData.length === 0) {
+      await dispatch(getAllCourses());
+    }
   }
 
   useEffect(() => {

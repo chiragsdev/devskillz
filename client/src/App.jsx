@@ -8,6 +8,7 @@ import Login from "./Pages/Login";
 import CourseList from "./Pages/Courses/CourseList";
 import Contact from "./Pages/Contact";
 import CourseDescription from "./Pages/Courses/CourseDescription";
+import Denied from "./Pages/Denied";
 
 const App = () => {
   return (
@@ -23,7 +24,7 @@ const App = () => {
           path="course/description"
           element={<CourseDescription />}
         ></Route>
-
+        <Route path="/denied" element={<Denied />}></Route>
         <Route path="*" element={<NotFoundPage />}></Route>
       </Routes>
     </>

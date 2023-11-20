@@ -1,7 +1,12 @@
 import React from "react";
+import HomeLayout from "../Layouts/HomeLayout";
 
 const AboutUs = () => {
-  return <div>About US Page</div>;
+  return (
+    <HomeLayout>
+      <div>About US Page</div>
+    </HomeLayout>
+  );
 };
 
 export default AboutUs;
