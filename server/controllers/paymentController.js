@@ -18,7 +18,7 @@ export const getRazorpayApiKey = (req, res, next) => {
 
 export const buySubscription = async (req, res, next) => {
   try {
-    const { id } = req.decodedToken;
+    const { id } = req.user;
 
     const user = await User.findById(id);
 
@@ -52,7 +52,7 @@ export const buySubscription = async (req, res, next) => {
 
 export const verifySubscription = async (req, res, next) => {
   try {
-    const { id } = req.decodedToken;
+    const { id } = req.user;
 
     const {
       razorpay_payment_id,
@@ -98,7 +98,7 @@ export const verifySubscription = async (req, res, next) => {
 
 export const unSubscription = async (req, res, next) => {
   try {
-    const { id } = req.decodedToken;
+    const { id } = req.user;
 
     const user = await User.findById(id);
 

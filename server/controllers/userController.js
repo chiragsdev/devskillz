@@ -10,6 +10,7 @@ const cookieOptions = {
   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
   httpOnly: true,
   secure: true,
+  sameSite: "none",
 };
 
 /**
@@ -139,6 +140,8 @@ export const login = async (req, res, next) => {
     // Generating a JWT token
     const token = await user.generateJWTToken();
 
+    console.log("inside login ", token);
+
     // Setting the password to undefined so it does not get sent in the response
     user.password = undefined;
 
@@ -184,7 +187,7 @@ export const logout = (req, res) => {
 export const getProfile = async (req, res) => {
   try {
     // Finding the user using the id from modified req object
-    const user = await User.findById(req.decodedToken.id);
+    const user = await User.findById(req.user.id);
 
     res.status(200).json({
       sucesss: true,
@@ -393,7 +396,7 @@ export const changePassword = async (req, res) => {
   try {
     // Destructuring the necessary data from the req object
     const { oldPassword, newPassword } = req.body;
-    const { id } = req.decodedToken; // because of the middleware isLoggedIn
+    const { id } = req.user; // because of the middleware isLoggedIn
 
     // Check if the values are there or not
     if (!oldPassword || !newPassword) {
@@ -443,7 +446,7 @@ export const updateUserProfile = async (req, res) => {
   try {
     // Destructuring the necessary data from the req object
     const { fullName } = req.body;
-    const { id } = req.decodedToken;
+    const { id } = req.user;
 
     const user = await User.findById(id);
 

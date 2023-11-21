@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllCourses } from "../../Redux/Slices/CourseSlice.js";
 import { ShimmerCards } from "../../Shimmer/CourseListShimmer.jsx";
 import CourseCard from "./CourseCard.jsx";
-import toast from "react-hot-toast";
 
 const CourseList = () => {
   const dispatch = useDispatch();
