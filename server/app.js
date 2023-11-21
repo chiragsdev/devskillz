@@ -7,6 +7,7 @@ import morgan from "morgan";
 import userRoutes from "./routes/userRoutes.js";
 import courseRoutes from "./routes/courseRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
+import miscellaneousRoutes from "./routes/miscellaneousRoutes.js";
 import errorMiddleware from "./middlewares/errorMiddleware.js";
 
 const app = express();
@@ -35,6 +36,8 @@ app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/courses", courseRoutes);
 
 app.use("/api/v1/payments", paymentRoutes);
+
+app.use("/api/v1/", miscellaneousRoutes);
 
 app.all("*", (req, res) => {
   res.status(404).send("OOPS !! 404 Page Not Fount");
