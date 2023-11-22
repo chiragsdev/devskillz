@@ -2,10 +2,7 @@ import AppError from "../utils/error.js";
 import jwt from "jsonwebtoken";
 
 export const isLoggedIn = async (req, res, next) => {
-  console.log("req cookies", req.cookies);
   const { token } = req.cookies;
-
-  console.log("token", token);
 
   if (!token) {
     return next(new AppError("Unauthenticated, please login again", 400));
@@ -23,7 +20,6 @@ export const authorizedRoles = (...roles) => {
     if (!roles.includes(currentUserRole)) {
       return next(new AppError("Access Denied: unauthorized user", 403));
     }
-    console.log("auth role done");
     next();
   };
 };

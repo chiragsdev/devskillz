@@ -140,8 +140,6 @@ export const login = async (req, res, next) => {
     // Generating a JWT token
     const token = await user.generateJWTToken();
 
-    console.log("inside login ", token);
-
     // Setting the password to undefined so it does not get sent in the response
     user.password = undefined;
 

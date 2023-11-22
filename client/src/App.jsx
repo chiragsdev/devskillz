@@ -9,6 +9,7 @@ import CourseList from "./Pages/Courses/CourseList";
 import Contact from "./Pages/Contact";
 import CourseDescription from "./Pages/Courses/CourseDescription";
 import Denied from "./Pages/Denied";
+import Profile from "./Pages/User/Profile";
 import CreateCourse from "./Pages/Courses/CreateCourse";
 import RequireAuth from "./Components/Auth/RequireAuth";
 
@@ -16,25 +17,25 @@ const App = () => {
   return (
     <>
       <Routes>
-        <Route path="/" element={<HomePage />}></Route>
-        <Route path="/about" element={<AboutUs />}></Route>
-        <Route path="/contact" element={<Contact />}></Route>
-        <Route path="/signup" element={<SignUp />}></Route>
-        <Route path="/login" element={<Login />}></Route>
-        <Route path="/courses" element={<CourseList />}></Route>
-        <Route
-          path="course/description"
-          element={<CourseDescription />}
-        ></Route>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/about" element={<AboutUs />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/courses" element={<CourseList />} />
+        <Route path="course/description" element={<CourseDescription />} />
 
         {/* Requires authentication with the role "ADMIN" */}
         <Route element={<RequireAuth allowedRoles={["ADMIN"]} />}>
-          {/* Protected Route: Create Course Page */}
-          <Route path="/course/create" element={<CreateCourse />}></Route>
+          <Route path="/course/create" element={<CreateCourse />} />
         </Route>
 
-        <Route path="/denied" element={<Denied />}></Route>
-        <Route path="*" element={<NotFoundPage />}></Route>
+        <Route element={<RequireAuth allowedRoles={["ADMIN", "USER"]} />}>
+          <Route path="/user/profile" element={<Profile />} />
+        </Route>
+
+        <Route path="/denied" element={<Denied />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </>
   );
