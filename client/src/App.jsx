@@ -12,6 +12,7 @@ import Denied from "./Pages/Denied";
 import Profile from "./Pages/User/Profile";
 import CreateCourse from "./Pages/Courses/CreateCourse";
 import RequireAuth from "./Components/Auth/RequireAuth";
+import EditProfile from "./Pages/User/EditProfile";
 
 const App = () => {
   return (
@@ -32,6 +33,7 @@ const App = () => {
 
         <Route element={<RequireAuth allowedRoles={["ADMIN", "USER"]} />}>
           <Route path="/user/profile" element={<Profile />} />
+          <Route path="/user/editprofile" element={<EditProfile />} />
         </Route>
 
         <Route path="/denied" element={<Denied />} />

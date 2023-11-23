@@ -38,7 +38,7 @@ const Profile = () => {
               <button>Change Password</button>
             </Link>
             <Link
-              to="/user/editProfile"
+              to="/user/editprofile"
               className="w-1/2 bg-yellow-600 hover:bg-yellow-500 transition-all ease-in-out rounded-sm font-semibold py-2 cursor-pointer text-center"
             >
               <button>Edit Profile</button>

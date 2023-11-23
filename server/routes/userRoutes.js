@@ -23,7 +23,7 @@ router.post("/forgot-password", forgotPassword);
 router.post("/reset-password/:resetToken", resetPassword);
 router.post("/change-password", isLoggedIn, changePassword);
 router.put(
-  "/update-user-profile",
+  "/update/:id",
   isLoggedIn,
   upload.single("avatar"),
   updateUserProfile
