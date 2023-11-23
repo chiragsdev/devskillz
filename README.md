@@ -1,4 +1,4 @@
-# DevSkillz - eLearning Platform for Skill Development and Learning Website
+# DevSkillz - eLearning - Skill Development and Learning Website
 
 ## Overview
 
