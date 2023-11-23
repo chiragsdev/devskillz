@@ -1,4 +1,4 @@
-# DevSkillz - eLearning - Skill Development and Learning Website
+# DevSkillz - Skill Development and Learning Website
 
 ## Overview
 
