@@ -1,48 +1,26 @@
-# LearnExcel
+# DevSkillz - eLearning Platform for Skill Development and Learning
 
-Welcome to the LearnExcel project by PWKSkill. LearnExcel is an internship project aimed at helping users improve their Microsoft Excel skills through interactive learning resources.
+## Overview
 
-## Table of Contents
-
-- [Project Description](#project-description)
-- [Features](#features)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
-
-## Project Description
-
-LearnExcel is a web-based platform designed to provide users with a structured learning experience for Microsoft Excel. The project aims to offer the following:
-
-- Interactive tutorials and lessons on Excel basics and advanced topics.
-- Practice exercises and challenges to reinforce learning.
-- Progress tracking and achievement badges.
-- Community forums for users to discuss Excel-related topics and seek help.
-- User-friendly interface for a seamless learning experience.
+DevSkillz is a full-stack web application built on the MERN (MongoDB, Express.js, React, Node.js) stack, designed to provide a comprehensive eLearning experience for skill development and learning. This platform aims to connect learners with quality educational content and resources to enhance their skills in various domains.
 
 ## Features
 
-- User registration and authentication.
-- Access to a library of Excel tutorials and lessons.
-- Interactive exercises with instant feedback.
-- Progress tracking and achievements.
-- Community forums for discussions and support.
+- **User Authentication:** Secure user authentication system to ensure a personalized learning experience for each user.
 
-## Getting Started
+- **Course Management:** Easily create, edit, and manage courses covering a wide range of skill development topics.
 
-### Prerequisites
+- **Interactive Learning:** Engage users with interactive learning materials, quizzes, and assignments to reinforce their understanding.
 
-- Node.js and npm installed.
-- MongoDB database (local or remote).
+- **Progress Tracking:** Keep track of individual and overall course progress to monitor learning achievements.
 
-### Installation
+- **Discussion Forums:** Foster a sense of community by providing discussion forums for each course, allowing users to collaborate and share insights.
 
-1. Clone the repository:
+- **Responsive Design:** A responsive and user-friendly interface, accessible on various devices to facilitate learning anytime, anywhere.
+
+## Installation
+
+1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/chiragaug6/LearnXcel.git
-   cd learnexcel
-   ```
+   git clone https://github.com/your-username/DevSkillz.git
