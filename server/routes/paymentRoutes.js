@@ -12,7 +12,7 @@ const router = Router();
 
 router.get("/razorpay-key", isLoggedIn, getRazorpayApiKey);
 
-router.post("/subscribe", isLoggedIn, buySubscription);
+router.get("/subscribe", isLoggedIn, buySubscription);
 
 router.post("/verify", isLoggedIn, verifySubscription);
 

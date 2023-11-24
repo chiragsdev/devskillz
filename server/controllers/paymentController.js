@@ -1,6 +1,6 @@
 import User from "../models/userModel.js";
 import Payment from "../models/paymentModel.js";
-import { razorpay } from "../server.js";
+import { razorpayInstance } from "../server.js";
 import AppError from "../utils/error.js";
 import crypto from "crypto";
 
@@ -30,10 +30,14 @@ export const buySubscription = async (req, res, next) => {
       return next(new AppError("Admin cannot perchase a subscription", 400));
     }
 
-    const subscription = razorpay.subscriptions.create({
+    const subscription = await razorpayInstance.subscriptions.create({
       plan_id: process.env.RAZORPAY_PLAN_ID,
       customer_notify: 1,
+      quantity: 1,
+      total_count: 1,
     });
+
+    console.log("sub", subscription);
 
     user.subscription.id = subscription.id;
     user.subscription.status = subscription.status;
@@ -44,6 +48,7 @@ export const buySubscription = async (req, res, next) => {
       success: true,
       message: "subscription successfully",
       subscription_id: subscription.id,
+      subscription,
     });
   } catch (error) {
     return next(new AppError(error.message, 400));
@@ -60,6 +65,8 @@ export const verifySubscription = async (req, res, next) => {
       razorpay_signature,
     } = req.body;
 
+    console.log("body", req.body);
+
     const user = await User.findById(id);
 
     if (!user) {
@@ -72,6 +79,8 @@ export const verifySubscription = async (req, res, next) => {
       .createHmac("sha256", process.env.RAZORPAY_SECRET)
       .update(`${razorpay_payment_id}|${subscriptionId}`)
       .digest("hex");
+
+    console.log("gen", generatedSignature);
 
     if (generatedSignature !== razorpay_signature) {
       return next(new AppError("Payment not verified, please try again", 500));
