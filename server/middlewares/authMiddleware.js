@@ -1,3 +1,4 @@
+import User from "../models/userModel.js";
 import AppError from "../utils/error.js";
 import jwt from "jsonwebtoken";
 
@@ -25,11 +26,9 @@ export const authorizedRoles = (...roles) => {
 };
 
 export const authorizeSubscriber = async (req, res, next) => {
-  const subscription = req.user.Subscription;
+  const user = await User.findById(req.user.id);
 
-  const currentUserRole = req.user.role;
-
-  if (currentUserRole != "ADMIN" && subscription.status != "active") {
+  if (user.role !== "ADMIN" && user.subscription.status !== "active") {
     return next(
       new AppError("please subscription to access this route !", 403)
     );

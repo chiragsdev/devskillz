@@ -37,8 +37,6 @@ export const buySubscription = async (req, res, next) => {
       total_count: 1,
     });
 
-    console.log("sub", subscription);
-
     user.subscription.id = subscription.id;
     user.subscription.status = subscription.status;
 
@@ -65,8 +63,6 @@ export const verifySubscription = async (req, res, next) => {
       razorpay_signature,
     } = req.body;
 
-    console.log("body", req.body);
-
     const user = await User.findById(id);
 
     if (!user) {
@@ -79,8 +75,6 @@ export const verifySubscription = async (req, res, next) => {
       .createHmac("sha256", process.env.RAZORPAY_SECRET)
       .update(`${razorpay_payment_id}|${subscriptionId}`)
       .digest("hex");
-
-    console.log("gen", generatedSignature);
 
     if (generatedSignature !== razorpay_signature) {
       return next(new AppError("Payment not verified, please try again", 500));
@@ -96,6 +90,8 @@ export const verifySubscription = async (req, res, next) => {
 
     await user.save();
 
+    console.log(user);
+
     res.status(200).json({
       success: true,
       message: "Payment verified successfully",
@@ -105,27 +101,33 @@ export const verifySubscription = async (req, res, next) => {
   }
 };
 
-export const unSubscription = async (req, res, next) => {
+export const unsubscribe = async (req, res, next) => {
   try {
     const { id } = req.user;
-
     const user = await User.findById(id);
 
     if (!user) {
       return next(new AppError("unauthorized, please login"));
     }
 
-    if (user.role == "ADMIN") {
-      return next(new AppError("Admin cannot unsubscription", 400));
+    if (user.role === "ADMIN") {
+      return next(new AppError("Admin cannot unsubscribe", 403));
     }
 
     const subscriptionId = user.subscription.id;
 
-    const subscription = await razorpay.subscriptions.cancel(subscriptionId);
+    const cancelSubscribe = await razorpayInstance.subscriptions.cancel(
+      subscriptionId
+    );
 
-    user.subscription.status = subscription.status;
+    if (cancelSubscribe.error) {
+      return next(new AppError(cancelSubscribe.error.description, 500));
+    }
 
+    user.subscription.status = cancelSubscribe.status;
     await user.save();
+
+    res.status(200).json({ success: true, message: "Unsubscribe successful" });
   } catch (error) {
     return next(new AppError(error.message, 500));
   }
@@ -135,7 +137,7 @@ export const allPayments = async (req, res, next) => {
   try {
     const { count } = req.query;
 
-    const subscriptions = await razorpay.subscriptions.all({
+    const subscriptions = await razorpayInstance.subscriptions.all({
       count: count || 10,
     });
 

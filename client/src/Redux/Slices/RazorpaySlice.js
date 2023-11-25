@@ -100,6 +100,14 @@ const razorpaySlice = createSlice({
         state.allPayments = action?.payload?.allPayments;
         state.finalMonths = action?.payload?.finalMonths;
         state.monthlySalesRecord = action?.payload?.monthlySalesRecord;
+      })
+      .addCase(cancelCourseBundle.fulfilled, (state) => {
+        state.key = "";
+        state.subscription_id = "";
+        state.isPaymentVarified = false;
+        state.allPayments = {};
+        state.finalMonths = {};
+        state.monthlySalesRecord = [];
       });
   },
 });

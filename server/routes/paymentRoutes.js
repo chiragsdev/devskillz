@@ -3,7 +3,7 @@ import {
   allPayments,
   buySubscription,
   getRazorpayApiKey,
-  unSubscription,
+  unsubscribe,
   verifySubscription,
 } from "../controllers/paymentController.js";
 import { authorizedRoles, isLoggedIn } from "../middlewares/authMiddleware.js";
@@ -16,7 +16,7 @@ router.get("/subscribe", isLoggedIn, buySubscription);
 
 router.post("/verify", isLoggedIn, verifySubscription);
 
-router.post("/unSubscription", isLoggedIn, unSubscription);
+router.post("/unsubscribe", isLoggedIn, unsubscribe);
 
 router.get("/", isLoggedIn, authorizedRoles("ADMIN"), allPayments);
 
