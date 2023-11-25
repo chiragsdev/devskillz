@@ -25,7 +25,7 @@ const Profile = () => {
             <p>{userData?.role}</p>
             <p>subscription: </p>
             <p>
-              {userData?.subscription?.status === "active"
+              {userData?.subscription?.status === "created"
                 ? "Active"
                 : "Inactive"}
             </p>
@@ -44,7 +44,7 @@ const Profile = () => {
               <button>Edit Profile</button>
             </Link>
           </div>
-          {userData?.subscription?.status === "active" && (
+          {userData?.subscription?.status === "created" && (
             <button className="w-full bg-red-600 hover:bg-red-500 transition-all ease-in-out rounded-sm font-semibold py-2 cursor-pointer text-center">
               Cancel Subscription
             </button>
