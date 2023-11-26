@@ -16,6 +16,7 @@ import EditProfile from "./Pages/User/EditProfile";
 import Checkout from "./Pages/Payment/Checkout";
 import CheckoutFail from "./Pages/Payment/CheckoutFail";
 import CheckoutSuccess from "./Pages/Payment/CheckoutSuccess";
+import DisplayLectures from "./Pages/Dashboard/DisplayLectures";
 
 const App = () => {
   return (
