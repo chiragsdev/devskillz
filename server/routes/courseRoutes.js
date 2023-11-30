@@ -36,7 +36,7 @@ router
   .post(
     isLoggedIn,
     authorizedRoles("ADMIN"),
-    upload.single("avatar"),
+    upload.single("lecture"),
     addLectureToCouresById
   );
 

@@ -166,6 +166,7 @@ export const deleteCoures = async (req, res, next) => {
  */
 export const addLectureToCouresById = async (req, res, next) => {
   try {
+    console.log("starting");
     const { title, description } = req.body;
     const { id } = req.params;
 
@@ -189,7 +190,7 @@ export const addLectureToCouresById = async (req, res, next) => {
           resource_type: "video",
         });
 
-        console.log(result);
+        console.log("result", result);
 
         if (result) {
           console.log("hello");
@@ -206,16 +207,9 @@ export const addLectureToCouresById = async (req, res, next) => {
         }
 
         // Send the error message
-        return next(
-          new AppError(
-            JSON.stringify(error) || "File not uploaded, please try again",
-            400
-          )
-        );
+        return next(new AppError("File not uploaded, please try again", 400));
       }
     }
-
-    console.log(lectureData);
 
     course.lectures.push({
       title,
@@ -228,7 +222,7 @@ export const addLectureToCouresById = async (req, res, next) => {
     await course.save();
 
     res.status(200).json({
-      succes: true,
+      success: true,
       message: "Course lecture added successfully",
       course,
     });

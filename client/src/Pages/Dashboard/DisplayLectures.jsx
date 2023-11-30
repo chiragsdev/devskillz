@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import HomeLayout from "../../Layouts/HomeLayout";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { getCourseLectures } from "../../Redux/Slices/LectureSlice";
+import {
+  deleteCourseLecture,
+  getCourseLectures,
+} from "../../Redux/Slices/LectureSlice";
 import { IoMdVideocam } from "react-icons/io";
 
 const DisplayLectures = () => {
@@ -14,6 +17,13 @@ const DisplayLectures = () => {
   const { role } = useSelector((state) => state.auth);
 
   const [currentVideo, setCurrentVideo] = useState(0);
+
+  async function onLectureDelete(courseId, lectureId) {
+    await dispatch(
+      deleteCourseLecture({ courseId: courseId, lectureId: lectureId })
+    );
+    await dispatch(getCourseLectures(courseId));
+  }
 
   useEffect(() => {
     console.log(state);
