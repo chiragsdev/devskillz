@@ -9,6 +9,7 @@ const initialState = {
 export const getCourseLectures = createAsyncThunk(
   "course/lecture/get",
   async (courseId) => {
+    console.log("hii");
     try {
       const response = axiosInstance.get(`/courses/${courseId}`);
       toast.promise(response, {

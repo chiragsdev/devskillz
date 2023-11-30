@@ -111,8 +111,6 @@ export const updateCoures = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    console.log(id);
-
     const course = await Course.findByIdAndUpdate(
       id,
       { $set: req.body },

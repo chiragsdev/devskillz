@@ -41,6 +41,7 @@ const App = () => {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/checkout/success" element={<CheckoutSuccess />} />
           <Route path="/checkout/fail" element={<CheckoutFail />} />
+          <Route path="/course/displaylectures" element={<DisplayLectures />} />
         </Route>
 
         <Route path="/denied" element={<Denied />} />

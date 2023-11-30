@@ -57,7 +57,6 @@ const userSchema = new Schema(
 
 // Hashes password before saving to the database
 userSchema.pre("save", async function (next) {
-  console.log("save hook is activeted");
   // If password is not modified then do not hash it
   if (!this.isModified("password")) return next();
 
@@ -67,7 +66,6 @@ userSchema.pre("save", async function (next) {
 userSchema.methods = {
   // method which will help us compare plain password with hashed password and returns true or false
   comparePassword: async function (planeTextPassword) {
-    console.log("this", this);
     return await bcrypt.compare(planeTextPassword, this.password);
   },
 

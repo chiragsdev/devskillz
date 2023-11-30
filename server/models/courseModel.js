@@ -58,6 +58,11 @@ const courseSchema = new Schema(
   }
 );
 
+// courseSchema.pre("save", async function (next) {
+//   this.numberOfLectures = lectures?.length;
+//   next();
+// });
+
 const Course = model("courses", courseSchema);
 
 export default Course;

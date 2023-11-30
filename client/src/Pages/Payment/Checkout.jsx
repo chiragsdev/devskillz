@@ -22,10 +22,6 @@ const Checkout = () => {
     (state) => state?.razorpay?.subscription_id
   );
 
-  const isPaymentVarified = useSelector(
-    (state) => state?.razorpay?.isPaymentVarified
-  );
-
   const userData = useSelector((state) => state?.auth?.data);
 
   const paymentDetails = {
@@ -74,6 +70,11 @@ const Checkout = () => {
   }
 
   async function loadData() {
+    console.log(userData.subscription.status);
+    if (userData?.subscription?.status === "active") {
+      navigate("/courses");
+      return;
+    }
     await dispatch(getRazorPayId());
     await dispatch(purchaseCourseBundle());
   }

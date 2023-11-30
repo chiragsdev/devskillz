@@ -26,6 +26,10 @@ export const buySubscription = async (req, res, next) => {
       return next(new AppError("unauthorized, please login"));
     }
 
+    if (user.subscription.status === "active") {
+      return next(new AppError("user have already active subscription"));
+    }
+
     if (user.role == "ADMIN") {
       return next(new AppError("Admin cannot perchase a subscription", 400));
     }
@@ -90,8 +94,6 @@ export const verifySubscription = async (req, res, next) => {
 
     await user.save();
 
-    console.log(user);
-
     res.status(200).json({
       success: true,
       message: "Payment verified successfully",
@@ -102,34 +104,35 @@ export const verifySubscription = async (req, res, next) => {
 };
 
 export const unsubscribe = async (req, res, next) => {
+  console.log("req.user =>", req.user);
+  const { id } = req.user;
+
+  const user = await User.findById(id);
+
+  if (user.role === "ADMIN") {
+    return next(
+      new AppError("Admin does not need to cannot cancel subscription", 400)
+    );
+  }
+
+  console.log("user", user);
+
+  const subscriptionId = user.subscription.id;
+
   try {
-    const { id } = req.user;
-    const user = await User.findById(id);
-
-    if (!user) {
-      return next(new AppError("unauthorized, please login"));
-    }
-
-    if (user.role === "ADMIN") {
-      return next(new AppError("Admin cannot unsubscribe", 403));
-    }
-
-    const subscriptionId = user.subscription.id;
-
-    const cancelSubscribe = await razorpayInstance.subscriptions.cancel(
+    const subscription = await razorpayInstance.subscriptions.cancel(
       subscriptionId
     );
 
-    if (cancelSubscribe.error) {
-      return next(new AppError(cancelSubscribe.error.description, 500));
-    }
+    console.log("subscription", subscription);
 
-    user.subscription.status = cancelSubscribe.status;
+    user.subscription.status = subscription.status;
+
+    console.log("user before saving", user);
+
     await user.save();
-
-    res.status(200).json({ success: true, message: "Unsubscribe successful" });
   } catch (error) {
-    return next(new AppError(error.message, 500));
+    return next(new AppError(error.error.description, error.statusCode));
   }
 };
 

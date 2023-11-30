@@ -9,10 +9,14 @@ export const isLoggedIn = async (req, res, next) => {
     return next(new AppError("Unauthenticated, please login again", 400));
   }
 
-  const userDetails = await jwt.verify(token, process.env.JWT_SECRET);
-  req.user = userDetails;
+  try {
+    const userDetails = await jwt.verify(token, process.env.JWT_SECRET);
+    req.user = userDetails;
 
-  next();
+    next();
+  } catch (error) {
+    return next(new AppError("please login again !!", 400));
+  }
 };
 
 export const authorizedRoles = (...roles) => {
@@ -27,6 +31,8 @@ export const authorizedRoles = (...roles) => {
 
 export const authorizeSubscriber = async (req, res, next) => {
   const user = await User.findById(req.user.id);
+
+  console.log(user);
 
   if (user.role !== "ADMIN" && user.subscription.status !== "active") {
     return next(
