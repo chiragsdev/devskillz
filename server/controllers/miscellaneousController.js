@@ -1,3 +1,4 @@
+import User from "../models/userModel.js";
 import AppError from "../utils/error.js";
 import sendEmail from "../utils/sendEmail.js";
 
@@ -46,5 +47,24 @@ export const contactUs = async (req, res, next) => {
     });
   } catch (e) {
     return next(new AppError(e.message, 500));
+  }
+};
+
+export default stats = async (req, res, next) => {
+  try {
+    const allUsers = User.find({});
+    const allUserCount = allUsers.length;
+    const subscribedUserCount = allUsers.filter(
+      (user) => user.subscription.status === "active"
+    ).length;
+
+    res.status(200).json({
+      success: true,
+      message: "stats",
+      allUserCount,
+      subscribedUserCount,
+    });
+  } catch (error) {
+    return next(new AppError(error.message, 500));
   }
 };
