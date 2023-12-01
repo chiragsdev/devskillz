@@ -53,7 +53,7 @@ export const getPaymentRecord = createAsyncThunk(
   async () => {
     const loadingMessage = toast.loading("Getting the payment records ...");
     try {
-      const res = await axiosInstance.get("/payments?count=100");
+      const res = await axiosInstance.get("/payments?count=10");
       toast.success(res?.data?.message, { id: loadingMessage });
       return res?.data;
     } catch (error) {
@@ -97,7 +97,8 @@ const razorpaySlice = createSlice({
         state.isPaymentVarified = action?.payload?.success;
       })
       .addCase(getPaymentRecord.fulfilled, (state, action) => {
-        state.allPayments = action?.payload?.allPayments;
+        console.log("getPaymentRecord action", action);
+        state.allPayments = action?.payload?.subscriptions;
         state.finalMonths = action?.payload?.finalMonths;
         state.monthlySalesRecord = action?.payload?.monthlySalesRecord;
       })

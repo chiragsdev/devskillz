@@ -70,7 +70,6 @@ const CreateCourse = () => {
       });
       navigate("/courses");
     }
-    console.log(response);
   }
 
   return (

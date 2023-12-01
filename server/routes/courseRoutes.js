@@ -1,12 +1,12 @@
 import { Router } from "express";
 import {
-  addLectureToCouresById,
+  addLectureToCourseById,
   createCourse,
-  deleteCoures,
+  deleteCourse,
   getAllCourses,
   getLecturesByCourseId,
   removeLecterFromCourse,
-  updateCoures,
+  updateCourse,
 } from "../controllers/courseController.js";
 import {
   authorizeSubscriber,
@@ -31,13 +31,13 @@ router
 router
   .route("/:id")
   .get(isLoggedIn, authorizeSubscriber, getLecturesByCourseId)
-  .put(isLoggedIn, authorizedRoles("ADMIN"), updateCoures)
-  .delete(isLoggedIn, authorizedRoles("ADMIN"), deleteCoures)
+  .put(isLoggedIn, authorizedRoles("ADMIN"), updateCourse)
+  .delete(isLoggedIn, authorizedRoles("ADMIN"), deleteCourse)
   .post(
     isLoggedIn,
     authorizedRoles("ADMIN"),
     upload.single("lecture"),
-    addLectureToCouresById
+    addLectureToCourseById
   );
 
 export default router;

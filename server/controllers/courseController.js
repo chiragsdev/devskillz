@@ -107,7 +107,7 @@ export const createCourse = async (req, res, next) => {
  * @ROUTE @PUT {{URL}}/api/v1/courses/:id
  * @ACCESS Private (Admin only)
  */
-export const updateCoures = async (req, res, next) => {
+export const updateCourse = async (req, res, next) => {
   try {
     const { id } = req.params;
 
@@ -140,7 +140,7 @@ export const updateCoures = async (req, res, next) => {
  * @ROUTE @DELETE {{URL}}/api/v1/courses/:id
  * @ACCESS Private (Admin only)
  */
-export const deleteCoures = async (req, res, next) => {
+export const deleteCourse = async (req, res, next) => {
   try {
     const { id } = req.params;
 
@@ -164,7 +164,7 @@ export const deleteCoures = async (req, res, next) => {
  * @ROUTE @POST {{URL}}/api/v1/courses/:id
  * @ACCESS Private (Admin Only)
  */
-export const addLectureToCouresById = async (req, res, next) => {
+export const addLectureToCourseById = async (req, res, next) => {
   try {
     console.log("starting");
     const { title, description } = req.body;
