@@ -18,6 +18,7 @@ import CheckoutFail from "./Pages/Payment/CheckoutFail";
 import CheckoutSuccess from "./Pages/Payment/CheckoutSuccess";
 import DisplayLectures from "./Pages/Dashboard/DisplayLectures";
 import AddLecture from "./Pages/Dashboard/AddLecture";
+import AdminDashboard from "./Pages/Dashboard/AdminDashboard";
 
 const App = () => {
   return (
@@ -35,6 +36,7 @@ const App = () => {
         <Route element={<RequireAuth allowedRoles={["ADMIN"]} />}>
           <Route path="/course/create" element={<CreateCourse />} />
           <Route path="/course/addLecture" element={<AddLecture />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
         </Route>
 
         <Route element={<RequireAuth allowedRoles={["ADMIN", "USER"]} />}>
