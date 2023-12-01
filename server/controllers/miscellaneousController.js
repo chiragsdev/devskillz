@@ -50,9 +50,9 @@ export const contactUs = async (req, res, next) => {
   }
 };
 
-export default stats = async (req, res, next) => {
+export const stats = async (req, res, next) => {
   try {
-    const allUsers = User.find({});
+    const allUsers = await User.find({});
     const allUserCount = allUsers.length;
     const subscribedUserCount = allUsers.filter(
       (user) => user.subscription.status === "active"
