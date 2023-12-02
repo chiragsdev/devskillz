@@ -15,7 +15,7 @@ export const isLoggedIn = async (req, res, next) => {
 
     next();
   } catch (error) {
-    return next(new AppError("please login again !!", 400));
+    return next(new AppError("please login again !! Token expired", 400));
   }
 };
 

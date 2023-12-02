@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllCourses } from "../../Redux/Slices/CourseSlice.js";
 import { ShimmerCards } from "../../Shimmer/CourseListShimmer.jsx";
 import CourseCard from "./CourseCard.jsx";
-import HomeLayout2 from "../../Layouts/HomeLayout2.jsx";
 
 const CourseList = () => {
   const dispatch = useDispatch();
@@ -22,7 +21,7 @@ const CourseList = () => {
   }, []);
 
   return (
-    <HomeLayout2>
+    <HomeLayout>
       <div className="min-h-[90vh] pt-12 pl-20 flex flex-col gap-10 text-white">
         <h1 className="text-center text-3xl font-semibold mb-5">
           Explore the Courses made by{" "}
@@ -40,7 +39,7 @@ const CourseList = () => {
           )}
         </div>
       </div>
-    </HomeLayout2>
+    </HomeLayout>
   );
 };
 

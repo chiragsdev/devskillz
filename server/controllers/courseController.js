@@ -117,10 +117,21 @@ export const updateCourse = async (req, res, next) => {
       { runValidators: true, new: true }
     );
 
-    console.log("updated coures>", course);
-
     if (!course) {
       return next(new AppError("Coures With given id does not exits", 404));
+    }
+
+    if (req.file) {
+      const result = await cloudinary.v2.uploader.upload(req.file.path, {
+        folder: "LMS",
+      });
+
+      if (result) {
+        course.thumbnail.public_id = result.public_id;
+        course.thumbnail.secure_url = result.secure_url;
+      }
+
+      fs.rm(`uploads/${req.file.filename}`);
     }
 
     await course.save();
@@ -151,7 +162,7 @@ export const deleteCourse = async (req, res, next) => {
     }
 
     res.status(201).json({
-      succes: true,
+      success: true,
       message: "coures deleted succssfully",
     });
   } catch (error) {
@@ -166,7 +177,6 @@ export const deleteCourse = async (req, res, next) => {
  */
 export const addLectureToCourseById = async (req, res, next) => {
   try {
-    console.log("starting");
     const { title, description } = req.body;
     const { id } = req.params;
 
@@ -190,10 +200,7 @@ export const addLectureToCourseById = async (req, res, next) => {
           resource_type: "video",
         });
 
-        console.log("result", result);
-
         if (result) {
-          console.log("hello");
           lectureData.public_id = result.public_id;
           lectureData.secure_url = result.secure_url;
         }
@@ -240,8 +247,6 @@ export const removeLecterFromCourse = async (req, res, next) => {
   try {
     // Grabbing the courseId and lectureId from req.query
     const { courseId, lectureId } = req.query;
-
-    console.log(courseId);
 
     // Checking if both courseId and lectureId are present
     if (!courseId) {

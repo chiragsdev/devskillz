@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ArcElement,
   BarElement,
@@ -19,6 +19,8 @@ import { Bar, Pie } from "react-chartjs-2";
 import { FaUsers } from "react-icons/fa";
 import { FcSalesPerformance } from "react-icons/fc";
 import { GiMoneyStack } from "react-icons/gi";
+import { BsCollectionPlayFill } from "react-icons/bs";
+import { MdDelete, MdEditSquare } from "react-icons/md";
 
 ChartJS.register(
   ArcElement,
@@ -31,14 +33,6 @@ ChartJS.register(
 );
 
 const AdminDashboard = () => {
-  useEffect(() => {
-    (async () => {
-      await dispatch(getAllCourses());
-      await dispatch(getStatsData());
-      await dispatch(getPaymentRecord());
-    })();
-  }, []);
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -48,9 +42,17 @@ const AdminDashboard = () => {
     (state) => state.stat
   );
 
-  const { allPayments, finalMonths, monthlySalesRecord } = useSelector(
+  const { allPayments, monthlySalesRecord } = useSelector(
     (state) => state.razorpay
   );
+
+  useEffect(() => {
+    (async () => {
+      await dispatch(getAllCourses());
+      await dispatch(getStatsData());
+      await dispatch(getPaymentRecord());
+    })();
+  }, []);
 
   const userData = {
     labels: ["Registered User", "Enrolled User"],
@@ -95,6 +97,7 @@ const AdminDashboard = () => {
   async function onCourseDelete(id) {
     if (window.confirm("Are you sure you want to delete the course!!")) {
       const res = await dispatch(deleteCourse(id));
+      console.log(res);
       if (res?.payload?.success) {
         await dispatch(getAllCourses());
       }
@@ -139,7 +142,9 @@ const AdminDashboard = () => {
               <div className="flex items-center justify-between p-5 gap-5 rounded-md shadow-md">
                 <div className="flex flex-col items-center ">
                   <p className="font-semibold">Subscription Count</p>
-                  <h3 className="text-4xl font-bold">{allPayments?.count}</h3>
+                  <h3 className="text-4xl font-bold">
+                    {allPayments.count ? allPayments.count : 0}
+                  </h3>
                 </div>
                 <FcSalesPerformance className="text-green-500 text-5xl" />
               </div>
@@ -148,15 +153,101 @@ const AdminDashboard = () => {
                 <div className="flex flex-col items-center ">
                   <p className="font-semibold">Total Revenue</p>
                   <h3 className="text-4xl font-bold">
-                    {allPayments?.count
-                      ? parseInt(allPayments?.count) * 499
-                      : 0}
+                    {console.log(allPayments)}
+                    {allPayments.count ? parseInt(allPayments?.count) * 499 : 0}
                   </h3>
                 </div>
                 <GiMoneyStack className="text-green-500 text-5xl" />
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="mx-[10%] w-[80%] self-center flex flex-col items-center justify-center gap-10 mb-10">
+          <div className="flex w-full items-center justify-between">
+            <h1 className="text-center text-3xl font-semibold">
+              courses overview
+            </h1>
+            <button
+              onClick={() => {
+                navigate("/course/create");
+              }}
+              className="w-fit bg-yellow-500 hover:bg-yellow-600 transition-all ease-in-out duration-300 rounded py-2 px-2 font-semibold text-lg cursor-pointer"
+            >
+              create new course
+            </button>
+          </div>
+          <table className="table overflow-x-scroll">
+            <thead>
+              <tr>
+                <th>S No</th>
+                <th>Course Title</th>
+                <th>Course Category</th>
+                <th>Instuctor</th>
+                <th>Total Lectures</th>
+                <th className="text-center">Watch Lectures</th>
+                <th className="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {myCourses?.map((course, idx) => {
+                return (
+                  <tr key={course?._id}>
+                    <td>{idx + 1}</td>
+                    <td>
+                      <p className="w-40 h-auto bg-transparent">
+                        {course?.title}
+                      </p>
+                    </td>
+                    <td>{course?.category}</td>
+                    <td>{course?.createdBy}</td>
+                    <td className="flex items-center justify-center">
+                      {course?.numberOfLectures}
+                    </td>
+                    {/* <td className="max-w-28 overflow-hidden text-ellipsis whitespace-nowrap">
+                      <textarea
+                        value={course?.description} 
+                        readOnly
+                        className="w-80 h-auto bg-transparent resize-none overflow-hidden"
+                      />
+                    </td> */}
+                    <td className="text-center">
+                      <button
+                        className="bg-green-500 hover:bg-green-600 transition-all ease-in-out duration-300 text-xl py-2 px-4 rounded-md font-bold"
+                        onClick={() => {
+                          navigate("/course/displaylectures", {
+                            state: { ...course },
+                          });
+                        }}
+                      >
+                        <BsCollectionPlayFill />
+                      </button>
+                    </td>
+                    <td className="flex items-center justify-between">
+                      <button
+                        className="bg-blue-300 hover:bg-blue-400 transition-all ease-in-out duration-300 text-xl py-1 px-2 rounded-md font-bold"
+                        onClick={() => {
+                          navigate("/course/create", {
+                            state: { ...course, id: course._id },
+                          });
+                        }}
+                      >
+                        <MdEditSquare />
+                      </button>
+                      <button
+                        className="bg-red-500 hover:bg-red-600 transition-all ease-in-out duration-300 text-xl py-1 px-2 rounded-md font-bold"
+                        onClick={() => {
+                          onCourseDelete(course?._id);
+                        }}
+                      >
+                        <MdDelete />
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
       </div>
     </HomeLayout>

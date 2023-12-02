@@ -1,22 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import HomeLayout from "../../Layouts/HomeLayout";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import toast from "react-hot-toast";
-import { createNewCourse } from "../../Redux/Slices/CourseSlice";
+import { createNewCourse, updateCourse } from "../../Redux/Slices/CourseSlice";
 
 const CreateCourse = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const { state } = useLocation();
+
+  useEffect(() => {
+    console.log("state", state);
+  }, []);
+
   const [userInput, setUserInput] = useState({
-    title: "",
-    category: "",
-    createdBy: "",
-    description: "",
-    thumbnail: "",
-    previewImage: "",
+    title: state?.title || "",
+    category: state?.category || "",
+    createdBy: state?.createdBy || "",
+    description: state?.description || "",
+    thumbnail: state?.thumbnail || "",
+    previewImage: state?.thumbnail?.secure_url || "",
   });
 
   function handleImageUpload(e) {
@@ -57,7 +63,15 @@ const CreateCourse = () => {
       return;
     }
 
-    const response = await dispatch(createNewCourse(userInput));
+    if (state) {
+      userInput.id = state._id;
+    }
+
+    const response = state
+      ? await dispatch(updateCourse(userInput))
+      : await dispatch(createNewCourse(userInput));
+
+    // const response = await dispatch(createNewCourse(userInput));
 
     if (response?.payload?.succes) {
       setUserInput({
@@ -68,7 +82,7 @@ const CreateCourse = () => {
         thumbnail: null,
         previewImage: "",
       });
-      navigate("/courses");
+      navigate("/admin/dashboard");
     }
   }
 
@@ -79,11 +93,16 @@ const CreateCourse = () => {
           onSubmit={onFormSubmit}
           className="flex flex-col justify-center gap-5 rounded-lg p-4 text-white w-[700px] my-10 shadow-[0_0_10px_black] relative"
         >
-          <Link className="absolute top-8 text-2xl link text-accent cursor-pointer">
+          <Link
+            onClick={() => navigate(-1)}
+            className="absolute top-8 text-2xl link text-accent cursor-pointer"
+          >
             <AiOutlineArrowLeft />
           </Link>
 
-          <h1 className="text-center text-2xl font-bold">Create New Course</h1>
+          <h1 className="text-center text-2xl font-bold">
+            {!state ? " Create New Course" : "Update Course"}
+          </h1>
 
           <main className="grid grid-cols-2 gap-x-10">
             <div className="gap-y-6">
@@ -182,7 +201,7 @@ const CreateCourse = () => {
             type="submit"
             className="w-full py-2 rounded-sm font-semibold text-lg cursor-pointer bg-yellow-600 hover:bg-yellow-500 transition-all ease-in-out duration-300"
           >
-            Create Course
+            {!state ? "Create Course" : "update course"}
           </button>
         </form>
       </div>

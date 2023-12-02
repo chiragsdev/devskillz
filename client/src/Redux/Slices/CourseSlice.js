@@ -17,6 +17,30 @@ export const getAllCourses = createAsyncThunk("/course/get", async () => {
   }
 });
 
+export const createNewCourse = createAsyncThunk(
+  "/course/create",
+  async (data) => {
+    const loadingMessage = toast.loading("creating New course! ...");
+    try {
+      console.log("data", data.title);
+      let formData = new FormData();
+      formData.append("title", data?.title);
+      formData.append("description", data?.description);
+      formData.append("category", data?.category);
+      formData.append("createdBy", data?.createdBy);
+      formData.append("thumbnail", data?.thumbnail);
+
+      console.log("fd", formData.has(title));
+
+      const res = await axiosInstance.post("/courses", formData);
+      toast.success(res?.data?.message, { id: loadingMessage });
+      return res?.data;
+    } catch (error) {
+      toast.error(error?.message, { id: loadingMessage });
+    }
+  }
+);
+
 export const deleteCourse = createAsyncThunk("/course/delete", async (id) => {
   const loadingMessage = toast.loading("deleting course! ...");
   try {
@@ -28,19 +52,30 @@ export const deleteCourse = createAsyncThunk("/course/delete", async (id) => {
   }
 });
 
-export const createNewCourse = createAsyncThunk(
-  "/course/create",
-  async (data) => {
-    const loadingMessage = toast.loading("creating New course! ...");
-    try {
-      let formData = new FormData();
-      formData.append("title", data?.title);
-      formData.append("description", data?.description);
-      formData.append("category", data?.category);
-      formData.append("createdBy", data?.createdBy);
-      formData.append("thumbnail", data?.thumbnail);
+export const updateCourse = createAsyncThunk(
+  "/course/update",
+  async (courseData) => {
+    console.log("at update c cdata", courseData);
+    const loadingMessage = toast.loading("updating course! ...");
 
-      const res = await axiosInstance.post("/courses", formData);
+    let formData = new FormData();
+    formData.append("title", courseData?.title);
+    formData.append("description", courseData?.description);
+    formData.append("category", courseData?.category);
+    formData.append("createdBy", courseData?.createdBy);
+    formData.append("thumbnail", courseData?.thumbnail);
+
+    console.log("formData", formData.has(title));
+
+    for (var pair of formData.entries()) {
+      console.log(pair[0] + " - " + pair[1]);
+    }
+
+    try {
+      const res = await axiosInstance.put(
+        `/courses/${courseData.id}`,
+        formData
+      );
       toast.success(res?.data?.message, { id: loadingMessage });
       return res?.data;
     } catch (error) {
