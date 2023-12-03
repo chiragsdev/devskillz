@@ -19,6 +19,9 @@ import CheckoutSuccess from "./Pages/Payment/CheckoutSuccess";
 import DisplayLectures from "./Pages/Dashboard/DisplayLectures";
 import AddLecture from "./Pages/Dashboard/AddLecture";
 import AdminDashboard from "./Pages/Dashboard/AdminDashboard";
+import ForgetPassword from "./Pages/Password/ForgetPassword";
+import ResetPassword from "./Pages/Password/ResetPassword";
+import ChangePassword from "./Pages/Password/ChangePassword";
 
 const App = () => {
   return (
@@ -31,6 +34,9 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/courses" element={<CourseList />} />
         <Route path="course/description" element={<CourseDescription />} />
+
+        <Route path="/forgot-password" element={<ForgetPassword />} />
+        <Route path="/reset-password/:resetToken" element={<ResetPassword />} />
 
         {/* Requires authentication with the role "ADMIN" */}
         <Route element={<RequireAuth allowedRoles={["ADMIN"]} />}>
@@ -46,6 +52,7 @@ const App = () => {
           <Route path="/checkout/success" element={<CheckoutSuccess />} />
           <Route path="/checkout/fail" element={<CheckoutFail />} />
           <Route path="/course/displaylectures" element={<DisplayLectures />} />
+          <Route path="/change-password" element={<ChangePassword />} />
         </Route>
 
         <Route path="/denied" element={<Denied />} />

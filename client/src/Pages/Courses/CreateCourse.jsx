@@ -12,10 +12,6 @@ const CreateCourse = () => {
 
   const { state } = useLocation();
 
-  useEffect(() => {
-    console.log("state", state);
-  }, []);
-
   const [userInput, setUserInput] = useState({
     title: state?.title || "",
     category: state?.category || "",

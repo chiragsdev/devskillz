@@ -55,7 +55,6 @@ export const deleteCourse = createAsyncThunk("/course/delete", async (id) => {
 export const updateCourse = createAsyncThunk(
   "/course/update",
   async (courseData) => {
-    console.log("at update c cdata", courseData);
     const loadingMessage = toast.loading("updating course! ...");
 
     let formData = new FormData();
@@ -64,12 +63,6 @@ export const updateCourse = createAsyncThunk(
     formData.append("category", courseData?.category);
     formData.append("createdBy", courseData?.createdBy);
     formData.append("thumbnail", courseData?.thumbnail);
-
-    console.log("formData", formData.has(title));
-
-    for (var pair of formData.entries()) {
-      console.log(pair[0] + " - " + pair[1]);
-    }
 
     try {
       const res = await axiosInstance.put(

@@ -70,6 +70,21 @@ export const getUserData = createAsyncThunk("/user/details", async () => {
   }
 });
 
+export const forgetPassword = createAsyncThunk(
+  "/user/forget-password",
+  async (email) => {
+    const loadingMessage = toast.loading("Please wait! sending an email...");
+    try {
+      const res = await axiosInstance.post("/user/forgot-password", { email });
+      toast.success(res?.data?.message, { id: loadingMessage });
+      return res?.data;
+    } catch (error) {
+      toast.error(error?.message, { id: loadingMessage });
+      throw error;
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState,

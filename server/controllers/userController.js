@@ -322,7 +322,6 @@ export const forgotPassword = async (req, res, next) => {
     user.forgotPasswordExpiry = undefined;
 
     await user.save();
-
     return next(new AppError(error.message, 500));
   }
 };
