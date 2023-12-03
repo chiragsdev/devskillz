@@ -60,14 +60,9 @@ const HomeLayout = ({ children }) => {
               <Link to="/">Home</Link>
             </li>
             {isLoggedIn && role === "ADMIN" && (
-              <React.Fragment>
-                <li>
-                  <Link to="/admin/dashboard">Admin DashBoard</Link>
-                </li>
-                <li>
-                  <Link to="/course/create">Create New Course</Link>
-                </li>
-              </React.Fragment>
+              <li>
+                <Link to="/admin/dashboard">Admin DashBoard</Link>
+              </li>
             )}
             <li>
               <Link to="/courses">All Courses</Link>
