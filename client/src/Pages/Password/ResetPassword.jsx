@@ -38,7 +38,7 @@ const ResetPassword = () => {
           className="flex flex-col items-center gap-8 rounded-lg py-7 px-3 w-96 shadow-custom"
         >
           <div className="flex flex-col gap-3">
-            <label htmlFor="email" className="text-xl font-bold">
+            <label htmlFor="password" className="text-xl font-bold">
               Password
             </label>
             <input
