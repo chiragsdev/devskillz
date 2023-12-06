@@ -31,6 +31,7 @@ export const getAllCourses = async (req, res, next) => {
  */
 export const getLecturesByCourseId = async (req, res, next) => {
   try {
+    console.log("hii");
     const { id } = req.params;
 
     const course = await Course.findById(id);
@@ -296,6 +297,34 @@ export const removeLecterFromCourse = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: "Course lecture removed successfully",
+    });
+  } catch (error) {
+    return next(new AppError(error.message, 500));
+  }
+};
+
+export const getSuggestions = async (req, res, next) => {
+  const { query } = req.query;
+
+  try {
+    const suggestions = await Course.find({
+      $or: [
+        { title: { $regex: query, $options: "i" } },
+        { createdBy: { $regex: query, $options: "i" } },
+        { category: { $regex: query, $options: "i" } },
+      ],
+    }).select("title createdBy category");
+
+    console.log(suggestions);
+
+    // Filter suggestions based on whether they contain the query
+    const suggestionStrings = suggestions
+      .flatMap((course) => [course.title, course.createdBy, course.category])
+      .filter((string) => string.toLowerCase().includes(query.toLowerCase()));
+
+    res.status(200).json({
+      success: true,
+      suggestionStrings,
     });
   } catch (error) {
     return next(new AppError(error.message, 500));

@@ -5,6 +5,7 @@ import {
   deleteCourse,
   getAllCourses,
   getLecturesByCourseId,
+  getSuggestions,
   removeLecterFromCourse,
   updateCourse,
 } from "../controllers/courseController.js";
@@ -16,6 +17,9 @@ import {
 import upload from "../middlewares/multerMiddleware.js";
 
 const router = Router();
+
+// Route for getting suggestions should come before routes with :id parameter
+router.route("/suggestions").get(getSuggestions);
 
 router
   .route("/")
