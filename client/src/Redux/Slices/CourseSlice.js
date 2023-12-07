@@ -4,6 +4,7 @@ import { toast } from "react-hot-toast";
 
 const initialState = {
   courseData: [],
+  suggestions: [],
 };
 
 export const getAllCourses = createAsyncThunk("/course/get", async () => {
@@ -77,16 +78,36 @@ export const updateCourse = createAsyncThunk(
   }
 );
 
+export const getSuggestions = createAsyncThunk(
+  "/course/suggestions",
+  async (query) => {
+    try {
+      const res = await axiosInstance.get(
+        `/courses/suggestions?query=${query}`
+      );
+      return res?.data;
+    } catch (error) {
+      toast.error(error?.message);
+      // Make sure to return a rejected promise in case of an error
+      throw error;
+    }
+  }
+);
+
 const courseSlice = createSlice({
   name: "course",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getAllCourses.fulfilled, (state, action) => {
-      if (action?.payload) {
-        state.courseData = action?.payload?.courses;
-      }
-    });
+    builder
+      .addCase(getAllCourses.fulfilled, (state, action) => {
+        if (action?.payload) {
+          state.courseData = action?.payload?.courses;
+        }
+      })
+      .addCase(getSuggestions.fulfilled, (state, action) => {
+        state.suggestions = action?.payload?.suggestionStrings;
+      });
   },
 });
 

@@ -320,7 +320,8 @@ export const getSuggestions = async (req, res, next) => {
     // Filter suggestions based on whether they contain the query
     const suggestionStrings = suggestions
       .flatMap((course) => [course.title, course.createdBy, course.category])
-      .filter((string) => string.toLowerCase().includes(query.toLowerCase()));
+      .filter((string) => string.toLowerCase().includes(query.toLowerCase()))
+      .slice(0, 10); // Limit to the first 10 strings
 
     res.status(200).json({
       success: true,

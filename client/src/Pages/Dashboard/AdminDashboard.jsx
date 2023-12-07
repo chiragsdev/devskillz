@@ -143,7 +143,7 @@ const AdminDashboard = () => {
                 <div className="flex flex-col items-center ">
                   <p className="font-semibold">Subscription Count</p>
                   <h3 className="text-4xl font-bold">
-                    {allPayments.count ? allPayments.count : 0}
+                    {allPayments?.count ? allPayments?.count : 0}
                   </h3>
                 </div>
                 <FcSalesPerformance className="text-green-500 text-5xl" />
@@ -154,7 +154,7 @@ const AdminDashboard = () => {
                   <p className="font-semibold">Total Revenue</p>
                   <h3 className="text-4xl font-bold">
                     {console.log(allPayments)}
-                    {allPayments.count ? parseInt(allPayments?.count) * 499 : 0}
+                    {allPayments?.count ? parseInt(allPayments?.count) * 499 : 0}
                   </h3>
                 </div>
                 <GiMoneyStack className="text-green-500 text-5xl" />
