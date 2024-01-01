@@ -37,11 +37,9 @@ const courseSchema = new Schema(
     thumbnail: {
       public_id: {
         type: String,
-        required: [true, "public_id is Required"],
       },
       secure_url: {
         type: String,
-        required: [true, "secure_url is required"],
       },
     },
     numberOfLectures: {

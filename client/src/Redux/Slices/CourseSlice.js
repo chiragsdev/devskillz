@@ -94,10 +94,32 @@ export const getSuggestions = createAsyncThunk(
   }
 );
 
+// export const searchCourse = createAsyncThunk("/course/search");
+
 const courseSlice = createSlice({
   name: "course",
   initialState,
-  reducers: {},
+  reducers: {
+    searchCourse: (state, action) => {
+      console.log("hello");
+      console.log(action?.payload);
+      const searchTerm = action.payload.toLowerCase();
+
+      // Implement your search logic here
+      state.courseData = state.courseData.filter((course) => {
+        const titleMatch = course.title.toLowerCase().includes(searchTerm);
+        const createdByMatch = course.createdBy
+          .toLowerCase()
+          .includes(searchTerm);
+        const categoryMatch = course.category
+          .toLowerCase()
+          .includes(searchTerm);
+
+        // Return true if any of the fields match the search term
+        return titleMatch || createdByMatch || categoryMatch;
+      });
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getAllCourses.fulfilled, (state, action) => {
@@ -111,4 +133,5 @@ const courseSlice = createSlice({
   },
 });
 
+export const { searchCourse } = courseSlice.actions;
 export default courseSlice.reducer;

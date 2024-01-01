@@ -127,9 +127,13 @@ export const updateCourse = async (req, res, next) => {
         folder: "LMS",
       });
 
+      // Ensure that course.thumbnail is an object
+      course.thumbnail =
+        typeof course.thumbnail === "[object,object]" ? course.thumbnail : {};
+
       if (result) {
-        course.thumbnail.public_id = result.public_id;
-        course.thumbnail.secure_url = result.secure_url;
+        course.thumbnail.public_id = result?.public_id;
+        course.thumbnail.secure_url = result?.secure_url;
       }
 
       fs.rm(`uploads/${req.file.filename}`);

@@ -7,6 +7,7 @@ import {
   getCourseLectures,
 } from "../../Redux/Slices/LectureSlice";
 import { IoMdVideocam } from "react-icons/io";
+import { MdDelete, MdEditSquare } from "react-icons/md";
 
 const DisplayLectures = () => {
   const dispatch = useDispatch();
@@ -19,10 +20,12 @@ const DisplayLectures = () => {
   const [currentVideo, setCurrentVideo] = useState(0);
 
   async function onLectureDelete(courseId, lectureId) {
-    await dispatch(
-      deleteCourseLecture({ courseId: courseId, lectureId: lectureId })
-    );
-    await dispatch(getCourseLectures(courseId));
+    if (window.confirm("Are you sure you want to delete the Lecture!!")) {
+      await dispatch(
+        deleteCourseLecture({ courseId: courseId, lectureId: lectureId })
+      );
+      await dispatch(getCourseLectures(courseId));
+    }
   }
 
   useEffect(() => {
@@ -60,6 +63,7 @@ const DisplayLectures = () => {
                 controls
                 disablePictureInPicture
                 controlsList="nodownload"
+                autoPlay
               >
                 {/* <source
                   src={lectures[currentVideo].lecture?.secure_url}
@@ -99,7 +103,7 @@ const DisplayLectures = () => {
                 lectures.map((lecture, index) => {
                   return (
                     <li
-                      className="cursor-pointer h-16 rounded-lg p-3 hover:bg-slate-500 transition-all ease-in-out"
+                      className="cursor-pointer flex items-center justify-between h-16 rounded-lg p-3 hover:bg-slate-500 transition-all ease-in-out"
                       key={lecture?._id}
                     >
                       <p
@@ -110,6 +114,27 @@ const DisplayLectures = () => {
                         <span className="flex items-center gap-2">
                           <IoMdVideocam /> {lecture?.title}
                         </span>
+                      </p>
+                      {role === "ADMIN" ? (
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => {
+                              onLectureDelete(state?._id, lecture?._id);
+                            }}
+                            className="btn-info px-2 py-1 rounded-md font-semibold text-sm"
+                          >
+                            <MdEditSquare />
+                          </button>
+                          <button
+                            onClick={() => {
+                              onLectureDelete(state?._id, lecture?._id);
+                            }}
+                            className="btn-error px-2 py-1 rounded-md font-semibold text-sm"
+                          >
+                            <MdDelete />
+                          </button>
+                        </div>
+                      ) : (
                         <span>
                           <input
                             checked
@@ -120,16 +145,6 @@ const DisplayLectures = () => {
                             title="Mark as Complete"
                           />
                         </span>
-                      </p>
-                      {role === "ADMIN" && (
-                        <button
-                          onClick={() => {
-                            onLectureDelete(state?._id, lecture?._id);
-                          }}
-                          className="btn-accent px-2 py-1 rounded-md font-semibold text-sm"
-                        >
-                          Delete Lecture
-                        </button>
                       )}
                     </li>
                   );
@@ -137,7 +152,20 @@ const DisplayLectures = () => {
             </ul>
           </div>
         ) : (
-          <div> No lectures Added to This Course</div>
+          <div>
+            {role == "ADMIN" ? (
+              <button
+                onClick={() => {
+                  navigate("/course/addLecture", { state: { ...state } });
+                }}
+                className="btn-primary px-2 py-1 rounded-md font-semibold text-sm"
+              >
+                Add First Lecture of Course
+              </button>
+            ) : (
+              <div>No Lectures</div>
+            )}
+          </div>
         )}
       </div>
     </HomeLayout>
