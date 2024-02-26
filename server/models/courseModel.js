@@ -50,6 +50,12 @@ const courseSchema = new Schema(
       type: String,
       required: [true, "course instructor name is required"],
     },
+    mcqs: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "mcqs",
+      },
+    ],
   },
   {
     timestamps: true,

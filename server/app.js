@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import userRoutes from "./routes/userRoutes.js";
 import courseRoutes from "./routes/courseRoutes.js";
+import mcqRoutes from "./routes/mcqRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 import miscellaneousRoutes from "./routes/miscellaneousRoutes.js";
 import errorMiddleware from "./middlewares/errorMiddleware.js";
@@ -34,6 +35,8 @@ app.use("/ping", (req, res) => {
 app.use("/api/v1/user", userRoutes);
 
 app.use("/api/v1/courses", courseRoutes);
+
+app.use("/api/v1/mcqs", mcqRoutes);
 
 app.use("/api/v1/payments", paymentRoutes);
 
