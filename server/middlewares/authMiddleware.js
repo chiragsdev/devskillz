@@ -34,7 +34,7 @@ export const authorizeSubscriber = async (req, res, next) => {
 
   console.log(user);
 
-  if (user.role !== "ADMIN" && user.subscription.status !== "active") {
+  if (user?.role !== "ADMIN" && user?.subscription?.status !== "active") {
     return next(
       new AppError("please subscription to access this route !", 403)
     );

@@ -18,22 +18,10 @@ const courseSchema = new Schema(
       type: String,
       required: [true, "Category is required"],
     },
-    lectures: [
-      {
-        title: String,
-        description: String,
-        lecture: {
-          public_id: {
-            type: String,
-            required: [true, "public_id is required"],
-          },
-          secure_url: {
-            type: String,
-            required: [true, "secure_url is required"],
-          },
-        },
-      },
-    ],
+    createdBy: {
+      type: String,
+      required: [true, "course instructor name is required"],
+    },
     thumbnail: {
       public_id: {
         type: String,
@@ -42,30 +30,35 @@ const courseSchema = new Schema(
         type: String,
       },
     },
-    numberOfLectures: {
-      type: Number,
-      default: 0,
+    certificate: {
+      public_id: {
+        type: String,
+      },
+      secure_url: {
+        type: String,
+      },
     },
-    createdBy: {
-      type: String,
-      required: [true, "course instructor name is required"],
-    },
+    lectures: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "lectures",
+      },
+    ],
     mcqs: [
       {
         type: Schema.Types.ObjectId,
         ref: "mcqs",
       },
     ],
+    numberOfLectures: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,
   }
 );
-
-// courseSchema.pre("save", async function (next) {
-//   this.numberOfLectures = lectures?.length;
-//   next();
-// });
 
 const Course = model("courses", courseSchema);
 
