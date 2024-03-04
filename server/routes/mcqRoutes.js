@@ -5,15 +5,28 @@ import {
   editMcqById,
   getAllMcqsById,
 } from "../controllers/mcqController.js";
+import {
+  authorizeSubscriber,
+  authorizedRoles,
+  isLoggedIn,
+} from "../middlewares/authMiddleware.js";
 
 const router = Router();
 
-router.post("/addMcq/:courseId", addMcqByCourseId);
+router
+  .route("/getAllMcqs/:courseId")
+  .get(isLoggedIn, authorizeSubscriber, getAllMcqsById);
 
-router.get("/getAllMcqs/:courseId", getAllMcqsById);
+router
+  .route("/addMcq/:courseId")
+  .post(isLoggedIn, authorizedRoles("ADMIN"), addMcqByCourseId);
 
-router.put("/editMcq/:id", editMcqById);
+router
+  .route("/deleteMcq/:courseId/:mcqId")
+  .delete(isLoggedIn, authorizedRoles("ADMIN"), deleteMcqById);
 
-router.delete("/deleteMcq/:id", deleteMcqById);
+router
+  .route("/editMcq/:courseId/:mcqId")
+  .put(isLoggedIn, authorizedRoles("ADMIN"), editMcqById);
 
 export default router;

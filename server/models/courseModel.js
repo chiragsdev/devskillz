@@ -44,7 +44,7 @@ const courseSchema = new Schema(
         ref: "lectures",
       },
     ],
-    mcqs: [
+    test: [
       {
         type: Schema.Types.ObjectId,
         ref: "mcqs",
