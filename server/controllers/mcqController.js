@@ -64,7 +64,7 @@ export const getAllMcqsById = async (req, res, next) => {
     const { courseId } = req.params;
 
     // Find the course by ID and populate the 'mcqs' field with actual MCQ documents
-    const course = await Course.findById(courseId).populate("mcqs");
+    const course = await Course.findById(courseId).populate("test");
 
     // If no course is found with the provided ID, return a 404 error
     if (!course) {
@@ -76,7 +76,7 @@ export const getAllMcqsById = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: " getAllMcqs successfully",
-      data: course.test,
+      data: course?.test,
     });
   } catch (error) {
     console.error("Error In getAllMcqsById", error);
