@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import mongoose, { Schema, model } from "mongoose";
 
 const lectureSchema = Schema({
   title: String,
@@ -23,6 +23,12 @@ const lectureSchema = Schema({
       required: [true, "secure_url is required"],
     },
   },
+  comments: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Comment",
+    },
+  ],
   isWatched: {
     type: Boolean,
     default: false,

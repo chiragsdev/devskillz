@@ -15,6 +15,10 @@ export const addMcqByCourseId = async (req, res, next) => {
     // Extract MCQ data from request body
     const { question, options, correctOptionIndex } = req.body;
 
+    if (correctOptionIndex < 0 || correctOptionIndex > 3) {
+      return next(new AppError("correctOptionIndex is from 0 to 3", 400));
+    }
+
     // Validate the required fields
     if (!question || !options || !correctOptionIndex) {
       return next(new AppError("All fields are required", 400));
