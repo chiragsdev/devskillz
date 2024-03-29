@@ -3,12 +3,12 @@ import { isLoggedIn } from "../middlewares/authMiddleware.js";
 import {
   addCommentInLecture,
   addReplyToComment,
-  getAllComments,
+  getLectureComments,
 } from "../controllers/commentController.js";
 
 const router = Router();
 
-router.get("/getAllComments/:lectureId", getAllComments);
+router.get("/getLectureComments/:lectureId", isLoggedIn, getLectureComments);
 
 router.post("/addComment/:lectureId", isLoggedIn, addCommentInLecture);
 

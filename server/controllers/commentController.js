@@ -45,22 +45,40 @@ export const addCommentInLecture = async (req, res) => {
   }
 };
 
-export const getAllComments = async (req, res, next) => {
+export const getLectureComments = async (req, res, next) => {
   try {
-    const lectureId = req.params;
+    console.log("inside a getAllComment controller");
+    const { lectureId } = req.params;
 
-    const lecture = await Lecture.findById(lectureId);
+    console.log("inside a getAllComment controller", req.params);
+
+    const lecture = await Lecture.findById(lectureId).populate({
+      path: "comments",
+      populate: {
+        path: "author", // Populate the author field in each comment
+        select: "-password", // Example: excluding the password field
+      },
+    });
 
     if (!lecture) {
       return next(new AppError("lecture not found", 404));
     }
 
+    console.log("lecture comment", lecture.comments);
+
     return res.status(201).json({
       success: true,
       message: "lecture comment",
+      data: lecture.comments,
     });
-
-  } catch (error) {}
+  } catch (error) {
+    console.error("Error", error);
+    return res.status(500).json({
+      success: false,
+      message: "Error comment",
+      error: error,
+    });
+  }
 };
 
 export const addReplyToComment = async (req, res, next) => {

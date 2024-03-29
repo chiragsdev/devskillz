@@ -4,6 +4,7 @@ import { toast } from "react-hot-toast";
 
 const initialState = {
   courseData: [],
+  filterCourseData: [],
   suggestions: [],
 };
 
@@ -106,7 +107,7 @@ const courseSlice = createSlice({
       const searchTerm = action.payload.toLowerCase();
 
       // Implement your search logic here
-      state.courseData = state.courseData.filter((course) => {
+      state.filterCourseData = state.courseData.filter((course) => {
         const titleMatch = course.title.toLowerCase().includes(searchTerm);
         const createdByMatch = course.createdBy
           .toLowerCase()
@@ -125,6 +126,7 @@ const courseSlice = createSlice({
       .addCase(getAllCourses.fulfilled, (state, action) => {
         if (action?.payload) {
           state.courseData = action?.payload?.courses;
+          state.filterCourseData = action?.payload?.courses;
         }
       })
       .addCase(getSuggestions.fulfilled, (state, action) => {

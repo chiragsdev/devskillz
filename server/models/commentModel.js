@@ -7,18 +7,18 @@ const commentSchema = new Schema({
   },
   author: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: "users",
     require: true,
   },
   parentComment: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Comment",
+    ref: "comments",
     default: null,
   },
   replies: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Comment",
+      ref: "comments",
     },
   ],
   createdAt: { type: Date, default: Date.now() },

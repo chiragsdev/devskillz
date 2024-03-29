@@ -5,6 +5,8 @@ import axiosInstance from "../../Helpers/axiosInstance";
 const initialState = {
   mcqs: [],
   currentMcqIndex: 0,
+  selectedAnswers: {},
+  marks: 0,
 };
 
 export const getCourseMcqs = createAsyncThunk(
@@ -34,6 +36,14 @@ const testSlice = createSlice({
     prevQue: (state, action) => {
       state.currentMcqIndex -= 1;
     },
+    selectedAnswer: (state, action) => {
+      const [mcqId, selectedOption] = action.payload;
+      state.selectedAnswers[mcqId] = selectedOption;
+    },
+    submitTest: (state, action) => {
+      console.log("test submited");
+      console.log(action.payload);
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getCourseMcqs.fulfilled, (state, action) => {
@@ -45,4 +55,5 @@ const testSlice = createSlice({
 
 export default testSlice.reducer;
 
-export const { nextQue, prevQue } = testSlice.actions;
+export const { nextQue, prevQue, selectedAnswer, submitTest } =
+  testSlice.actions;

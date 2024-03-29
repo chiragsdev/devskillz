@@ -10,6 +10,7 @@ const CourseList = () => {
   const dispatch = useDispatch();
 
   const { courseData } = useSelector((state) => state.course);
+  const { filterCourseData } = useSelector((state) => state.course);
 
   async function loadCourses() {
     if (courseData.length === 0) {
@@ -30,11 +31,11 @@ const CourseList = () => {
         </h1>
         <Search />
         <div className="mb-10 flex flex-wrap items-center justify-evenly gap-y-20 gap-x-2">
-          {courseData.length === 0 ? (
+          {filterCourseData.length === 0 ? (
             <ShimmerCards />
           ) : (
             <React.Fragment>
-              {courseData.map((course) => {
+              {filterCourseData.map((course) => {
                 return <CourseCard key={course._id} data={course} />;
               })}
             </React.Fragment>
