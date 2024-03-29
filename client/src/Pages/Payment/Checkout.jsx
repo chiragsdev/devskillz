@@ -70,7 +70,6 @@ const Checkout = () => {
   }
 
   async function loadData() {
-    console.log(userData.subscription.status);
     if (userData?.subscription?.status === "active") {
       navigate("/courses");
       return;

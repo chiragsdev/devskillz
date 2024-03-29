@@ -22,6 +22,9 @@ import AdminDashboard from "./Pages/Dashboard/AdminDashboard";
 import ForgetPassword from "./Pages/Password/ForgetPassword";
 import ResetPassword from "./Pages/Password/ResetPassword";
 import ChangePassword from "./Pages/Password/ChangePassword";
+import ManageTest from "./Pages/Test/ManageTest";
+import AddMCQForm from "./Pages/Test/AddMCQForm";
+import StartTest from "./Pages/Test/startTest";
 
 const App = () => {
   return (
@@ -43,7 +46,11 @@ const App = () => {
           <Route path="/course/create" element={<CreateCourse />} />
           <Route path="/course/addLecture" element={<AddLecture />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/manageTest" element={<ManageTest />} />
+          <Route path="/test/addMcqForm" element={<AddMCQForm />} />
         </Route>
+
+        <Route path="/startTest" element={<StartTest />} />
 
         <Route element={<RequireAuth allowedRoles={["ADMIN", "USER"]} />}>
           <Route path="/user/profile" element={<Profile />} />

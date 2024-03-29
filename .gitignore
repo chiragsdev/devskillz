@@ -7,3 +7,5 @@ client/.gitignore
 client/.env
 
 server/.env
+
+docx

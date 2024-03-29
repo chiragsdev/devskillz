@@ -62,13 +62,18 @@ const Search = () => {
         <div className="absolute top-full left-20 mt-5 bg-white py-2 px-2 w-[37rem] shadow-lg rounded-lg border border-gray-100 opacity-90 z-50">
           <ul>
             {suggestions.map((s) => (
-              <div
-              onClick={()=>{console.log("hit")}}
+              <li
+                onMouseEnter={(e) => {
+                  setSearchQuery(s);
+                }}
+                onKeyDown={(e) =>
+                  e.key === "Enter" ? onSuggestionClick(s) : null
+                }
                 key={s}
                 className="cursor-pointer py-2 px-3 flex items-center justify-start gap-2 shadow-sm text-black hover:bg-gray-100"
               >
                 <FaSearch /> {s}
-              </div>
+              </li>
             ))}
           </ul>
         </div>
