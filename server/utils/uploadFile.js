@@ -10,7 +10,7 @@ export default async function uploadFile(file, resourceType, folder) {
     });
 
     // After successful upload remove the file from local storage
-    await fs.rm(file.path);
+    await fs.unlink(file.path);
 
     return {
       public_id: result.public_id,

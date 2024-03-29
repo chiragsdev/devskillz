@@ -17,6 +17,7 @@ const AddLecture = () => {
     title: "",
     description: "",
     videoSrc: "",
+    material: undefined,
   });
 
   function handleInputChange(e) {
@@ -35,6 +36,15 @@ const AddLecture = () => {
       ...userInput,
       lecture: video,
       videoSrc: source,
+    });
+  }
+
+  // Added function to handle material upload
+  function handleMaterial(e) {
+    const materialFile = e.target.files[0];
+    setUserInput({
+      ...userInput,
+      material: materialFile,
     });
   }
 
@@ -125,6 +135,16 @@ const AddLecture = () => {
                 />
               </div>
             )}
+            {/* metarial upload Input */}
+            <input
+              type="file"
+              name="material"
+              id="material"
+              onChange={handleMaterial}
+              accept=".pdf, .docx, .ppt, application/pdf, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.ms-powerpoint"
+              className="file-input file-input-bordered w-full max-w-xs"
+            />
+
             <button
               type="submit"
               className="btn btn-primary py-1 font-semibold text-lg"

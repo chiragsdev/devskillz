@@ -43,7 +43,8 @@ const DisplayLectures = () => {
 
   function courseProgress() {
     if (lectures.length === 0) return 0;
-    return (watchedLecturesCount / lectures.length) * 100;
+    const res = (watchedLecturesCount / lectures.length) * 100;
+    return res.toFixed(0);
   }
 
   return (

@@ -29,10 +29,14 @@ export const addCourseLecture = createAsyncThunk(
     try {
       const formData = new FormData();
       formData.append("lecture", data.lecture);
+      formData.append("material", data.material);
       formData.append("title", data.title);
       formData.append("description", data.description);
 
-      const response = axiosInstance.post(`/lectures/${data.id}`, formData);
+      const response = axiosInstance.post(
+        `/lectures/addLecture/${data.id}`,
+        formData
+      );
       console.log("res", response);
       toast.promise(response, {
         loading: "Wait !! it will take some Time to process...",
