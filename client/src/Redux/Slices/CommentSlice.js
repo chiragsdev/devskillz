@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axiosInstance from "../../Helpers/axiosInstance";
+import axiosInstance from "../../Utils/axiosInstance.js";
 import toast from "react-hot-toast";
 
 const initialState = {
@@ -7,17 +7,12 @@ const initialState = {
 };
 
 export const getLectureComments = createAsyncThunk(
-  "/getcomments",
+  "/getComments",
   async (lectureId) => {
-    console.log("innside getLectureComments", lectureId);
-    lectureId = "65e2fb3e9e70f7a9d18146d0";
-    const loadingMessage = toast.loading("fetching lecture commments! ...");
     try {
-      lectureId = "65e2fb3e9e70f7a9d18146d0";
       const res = await axiosInstance.get(
         `/comments/getLectureComments/${lectureId}`
       );
-      toast.success(res?.data?.message, { id: loadingMessage });
       return res?.data;
     } catch (error) {
       toast.error(error?.message, { id: loadingMessage });
@@ -26,11 +21,10 @@ export const getLectureComments = createAsyncThunk(
 );
 
 export const addCommentInLecture = createAsyncThunk(
-  "/getcomments",
+  "/addComment",
   async ({ content, lectureId }) => {
     console.log("innside getLectureComments", lectureId);
-    lectureId = "65e2fb3e9e70f7a9d18146d0";
-    const loadingMessage = toast.loading("fetching lecture commments! ...");
+    const loadingMessage = toast.loading("Adding comment into lecture ...");
     try {
       const res = await axiosInstance.post(
         `/comments/addComment/${lectureId}`,
@@ -51,10 +45,16 @@ const commentSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getLectureComments.fulfilled, (state, action) => {
-      console.log("hi", action.payload);
-      state.comments = action.payload.data;
-    });
+    builder
+      .addCase(getLectureComments.fulfilled, (state, action) => {
+        console.log("hi", action.payload);
+        state.comments = action.payload.data;
+      })
+      .addCase(addCommentInLecture.fulfilled, (state, action) => {
+        console.log("new comment", action.payload.data);
+        // Add the new comment to the comments array
+        state.comments.push(action.payload.data);
+      });
   },
 });
 

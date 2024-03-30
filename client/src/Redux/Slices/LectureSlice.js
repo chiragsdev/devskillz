@@ -1,9 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axiosInstance from "../../Helpers/axiosInstance";
+import axiosInstance from "../../Utils/axiosInstance.js";
 import toast from "react-hot-toast";
 
 const initialState = {
   lectures: [],
+  currentLecture: 0,
+  watchedLecturesCount: 0,
 };
 
 export const getCourseLectures = createAsyncThunk(
@@ -74,23 +76,7 @@ export const changeWatchStatus = createAsyncThunk(
   async (lectureId) => {
     try {
       const response = await axiosInstance.put(`/lectures/${lectureId}`);
-      // toast.promise(response, {
-      //   loading: "changning status",
-      //   success: "Lecture status successfully updated",
-      //   error: "Failed to update Lecture status",
-      // });
-      toast.success("Lecture status successfully updated", {
-        style: {
-          border: "1px solid #713200",
-          padding: "16px",
-          color: "#713200",
-        },
-        iconTheme: {
-          primary: "#713200",
-          secondary: "#FFFAEE",
-        },
-      });
-      return (await response).data;
+      return response?.data;
     } catch (error) {
       toast.error(error?.response?.data?.message);
     }
@@ -110,6 +96,9 @@ const lectureSlice = createSlice({
         return lecture;
       });
     },
+    setCurrentLecture: (state, action) => {
+      state.currentLecture = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -124,4 +113,4 @@ const lectureSlice = createSlice({
 
 export default lectureSlice.reducer;
 
-export const { updateLectures } = lectureSlice.actions;
+export const { updateLectures, setCurrentLecture } = lectureSlice.actions;
