@@ -5,19 +5,17 @@ import { MdDelete, MdEditSquare } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import {
   changeWatchStatus,
+  setCurrentLecture,
   updateLectures,
 } from "../../Redux/Slices/LectureSlice.js";
 
-const LectureList = ({
-  lecture,
-  index,
-  currentVideo,
-  setCurrentVideo,
-  courseId,
-}) => {
-  const { role } = useSelector((state) => state.auth);
-
+const LectureItem = ({ lecture, index, courseId }) => {
   const dispatch = useDispatch();
+
+  const { role } = useSelector((state) => state.auth);
+  const { lectures, currentLecture, watchedLecturesCount } = useSelector(
+    (state) => state?.lecture
+  );
 
   async function onLectureDelete(courseId, lectureId) {
     if (window.confirm("Are you sure you want to delete the Lecture!!")) {
@@ -40,10 +38,10 @@ const LectureList = ({
   return (
     <li
       className={`${
-        index === currentVideo ? "bg-slate-500" : "bg-slate-100"
+        index === currentLecture ? "bg-slate-500" : "bg-slate-100"
       } cursor-pointer flex items-center justify-between h-16 p-3 text-black transition-all ease-in-out`}
       key={lecture?._id}
-      onClick={() => setCurrentVideo(index)}
+      onClick={() => dispatch(setCurrentLecture(index))}
     >
       <p className=" flex items-center justify-between gap-3">
         <span className="flex items-center gap-2">
@@ -95,4 +93,4 @@ const LectureList = ({
   );
 };
 
-export default LectureList;
+export default LectureItem;

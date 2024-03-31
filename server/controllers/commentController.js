@@ -30,6 +30,9 @@ export const addCommentInLecture = async (req, res) => {
 
     await lecture.save();
 
+    const authorDetails = await User.findById(author._id);
+    newComment.author = authorDetails;
+
     return res.status(201).json({
       success: true,
       message: "Comment added successfully",
@@ -126,4 +129,40 @@ export const addReplyToComment = async (req, res, next) => {
       error: error,
     });
   }
+};
+
+export const getReplysOfComment = async (req, res, next) => {
+  const { commentId } = req.params;
+  const { id } = req.user;
+
+  const author = await User.findById(id);
+
+  if (!author) {
+    return next(new AppError("author Not Found", 404));
+  }
+
+  const comment = await Comment.findById(commentId);
+
+  if (!comment) {
+    return next(new AppError("comment Not Found", 404));
+  }
+
+  // Extract first-level nested replies IDs from the comment
+  const replyIds = comment.replies;
+
+  // Fetch the actual comments using the IDs
+  const firstLevelReplies = await Comment.find({
+    _id: { $in: replyIds },
+  }).populate("author");
+
+  console.log("first", firstLevelReplies);
+
+  // Return the first-level nested replies
+  // res.json({ replies: firstLevelReplies });
+
+  return res.status(201).json({
+    success: true,
+    message: "replys successfully",
+    data: firstLevelReplies,
+  });
 };

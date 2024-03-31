@@ -104,6 +104,9 @@ const lectureSlice = createSlice({
     builder
       .addCase(getCourseLectures.fulfilled, (state, action) => {
         state.lectures = action?.payload?.lectures;
+        state.watchedLecturesCount = state.lectures.filter(
+          (lec) => lec.isWatched
+        ).length;
       })
       .addCase(addCourseLecture.fulfilled, (state, action) => {
         state.lectures = action?.payload?.course?.lectures;
