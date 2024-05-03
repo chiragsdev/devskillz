@@ -20,7 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Enable CORS with specific origin and credentials
 const corsOptions = {
-  origin: process.env.FRONTEND_URL, // Replace with your actual frontend origin
+  origin: process.env.FRONTEND_URL || "*", // Replace with your actual frontend origin
   credentials: true,
 };
 
@@ -49,7 +49,24 @@ app.use("/api/v1/payments", paymentRoutes);
 app.use("/api/v1/", miscellaneousRoutes);
 
 app.all("*", (req, res) => {
-  res.status(404).send("OOPS !! 404 Page Not Fount");
+  res.status(404).send("OOPS !! 404 Page Not Found");
+});
+
+// Custom middleware to set Access-Control-Allow-Origin header
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", req.headers.origin);
+  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  res.header("Access-Control-Allow-Credentials", true);
+  next();
+});
+
+// Handle preflight OPTIONS requests
+app.options("*", (req, res) => {
+  res.sendStatus(200);
 });
 
 app.use(errorMiddleware);

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import {
   addLectureByCourseId,
-  changeWatchStatus,
+  // changeWatchStatus,
   deleteLecturebyId,
   getLecturesById,
   updateLecturebyId,
@@ -16,8 +16,8 @@ import upload from "../middlewares/multerMiddleware.js";
 const router = Router();
 
 router.get("/:courseId", isLoggedIn, authorizeSubscriber, getLecturesById);
+``;
 
-router.put("/:lectureId", isLoggedIn, authorizeSubscriber, changeWatchStatus);
 
 router.post(
   "/addLecture/:courseId",

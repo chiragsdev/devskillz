@@ -254,25 +254,4 @@ export const updateLecturebyId = async (req, res) => {
   }
 };
 
-export const changeWatchStatus = async (req, res) => {
-  try {
-    const { lectureId } = req.params;
 
-    const lecture = await Lecture.findById(lectureId);
-    console.log("lecture before", lecture);
-
-    lecture.isWatched = !lecture.isWatched;
-
-    await lecture.save();
-
-    console.log("lecture after", lecture);
-    res.status(200).json({
-      success: true,
-      message: "Lecture status changed successfully",
-      lecture: lecture,
-    });
-  } catch (error) {
-    console.log("error in changeWatchStatus");
-    return next(new AppError(error.message, 500));
-  }
-};

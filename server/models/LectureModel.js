@@ -29,10 +29,6 @@ const lectureSchema = Schema({
       ref: "comments",
     },
   ],
-  isWatched: {
-    type: Boolean,
-    default: false,
-  },
 });
 
 const Lecture = model("lectures", lectureSchema);
