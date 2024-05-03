@@ -493,3 +493,71 @@ export const updateUserProfile = async (req, res) => {
     return next(new AppError(error.message, 500));
   }
 };
+
+export const markLecture = async (req, res) => {
+  try {
+    const { courseId, lectureId } = req.body;
+    const { id } = req.user; // because of the middleware isLoggedIn
+
+    let user = await User.findById(id);
+
+    if (!user) {
+      res.json({ success: false, error: "User Not Found" });
+    }
+
+    // Update watchedLectures for the courseId
+    if (!user.watchedLectures.has(courseId)) {
+      user.watchedLectures.set(courseId, []);
+    }
+
+    const markedLecture = user.watchedLectures.get(courseId);
+
+    if (!markedLecture.includes(lectureId)) {
+      markedLecture.push(lectureId);
+    }
+
+    await user.save();
+
+    res.status(200).json({ success: true, message: "Lecture Marked" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "error while mark Lecture" });
+  }
+};
+
+export const unMarkLecture = async (req, res) => {
+  try {
+    const { courseId, lectureId } = req.body;
+    const { id } = req.user; // because of the middleware isLoggedIn
+
+    const user = await User.findById(id);
+
+    if (!user) {
+      res.status(404).json({ success: false, error: "User Not Found" });
+    }
+
+    // Update watchedLectures for the courseId
+    if (!user.watchedLectures.has(courseId)) {
+      res.status(404).json({
+        success: false,
+        message: "Course not found in watched lectures",
+      });
+    }
+
+    const index = watchedLectures.indexOf(lectureId);
+
+    if (index != -1) {
+      watchedLectures.splice(index, 1);
+    }
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Remove from Watch Lecture",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "error while unmark The Lecture" });
+  }
+};

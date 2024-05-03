@@ -49,6 +49,11 @@ const userSchema = new Schema(
       id: String,
       status: String,
     },
+    watchedLectures: {
+      type: Map,
+      of: [String], // Array of lecture IDs
+      default: new Map(),
+    },
   },
   {
     timestamps: true,
