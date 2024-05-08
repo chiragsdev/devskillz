@@ -5,7 +5,8 @@ import toast from "react-hot-toast";
 const initialState = {
   lectures: [],
   currentLecture: 0,
-  watchedLecturesCount: 0,
+  watchHistory: null,
+  progress: 0,
 };
 
 export const getCourseLectures = createAsyncThunk(
@@ -71,14 +72,47 @@ export const deleteCourseLecture = createAsyncThunk(
   }
 );
 
-export const changeWatchStatus = createAsyncThunk(
-  "/course/lecture/iswatched",
-  async (lectureId) => {
+export const markLecture = createAsyncThunk(
+  "/user/mark/lecture",
+  async (ids) => {
     try {
-      const response = await axiosInstance.put(`/lectures/${lectureId}`);
+      const response = await axiosInstance.put(`/user/mark-lecture`, {
+        courseId: ids[0],
+        lectureId: ids[1],
+      });
+      toast.success("Lecture Marked");
       return response?.data;
     } catch (error) {
       toast.error(error?.response?.data?.message);
+    }
+  }
+);
+
+export const unMarkLecture = createAsyncThunk(
+  "/user/unMark/lecture",
+  async (ids) => {
+    try {
+      const response = await axiosInstance.put(`/user/unmark-lecture`, {
+        courseId: ids[0],
+        lectureId: ids[1],
+      });
+      toast.success("Lecture unMarked");
+      return response?.data;
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    }
+  }
+);
+
+export const getWatchHistory = createAsyncThunk(
+  "/user/watchHistory",
+  async () => {
+    try {
+      const res = await axiosInstance.get("/user/watchHistory");
+      toast.success(res?.data?.message);
+      return res?.data;
+    } catch (error) {
+      toast.error(error?.message);
     }
   }
 );
@@ -87,33 +121,41 @@ const lectureSlice = createSlice({
   name: "lecture",
   initialState,
   reducers: {
-    updateLectures: (state, action) => {
-      state.lectures = state.lectures.map((lecture) => {
-        if (lecture._id === action.payload) {
-          // Toggle the isWatched status
-          return { ...lecture, isWatched: !lecture.isWatched };
-        }
-        return lecture;
-      });
-    },
     setCurrentLecture: (state, action) => {
       state.currentLecture = action.payload;
+    },
+    calculateProgress: (state, action) => {
+      const courseId = action.payload;
+      state.progress =
+        (state?.watchHistory?.[courseId]?.length * 100) /
+          state?.lectures?.length || 0;
+    },
+    clearOldLectures: (state, action) => {
+      state.lectures = [];
+      state.progress = 0;
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(getCourseLectures.fulfilled, (state, action) => {
         state.lectures = action?.payload?.lectures;
-        state.watchedLecturesCount = state.lectures.filter(
-          (lec) => lec.isWatched
-        ).length;
       })
       .addCase(addCourseLecture.fulfilled, (state, action) => {
         state.lectures = action?.payload?.course?.lectures;
+      })
+      .addCase(markLecture.fulfilled, (state, action) => {
+        state.watchHistory = action.payload.data;
+      })
+      .addCase(unMarkLecture.fulfilled, (state, action) => {
+        state.watchHistory = action.payload.data;
+      })
+      .addCase(getWatchHistory.fulfilled, (state, action) => {
+        state.watchHistory = action.payload.data;
       });
   },
 });
 
 export default lectureSlice.reducer;
 
-export const { updateLectures, setCurrentLecture } = lectureSlice.actions;
+export const { setCurrentLecture, calculateProgress, clearOldLectures } =
+  lectureSlice.actions;

@@ -1,18 +1,30 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { calculateProgress } from "../../Utils/helpers";
+import { MdArrowBack } from "react-icons/md";
+import { calculateProgress } from "../../Redux/Slices/LectureSlice.js";
 
 const RightPanelHeader = ({ state }) => {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const { role } = useSelector((state) => state?.auth);
-  const { lectures, currentLecture, watchedLecturesCount } = useSelector(
+  const { watchHistory, lectures, progress } = useSelector(
     (state) => state?.lecture
   );
 
+  useEffect(() => {
+    if (watchHistory && state) {
+      dispatch(calculateProgress(state._id));
+    }
+  }, [watchHistory, lectures]);
+
   return (
-    <li className="font-semibold text-2xl text-yellow-500 flex items-center justify-between mb-5">
+    <li className="font-semibold text-2xlflex flex-col items-center justify-between mb-5">
+      <div className="flex items-center w-full p-4 justify-between">
+        <MdArrowBack onClick={() => navigate(-1)} className="cursor-pointer" />
+        <div className=" text-yellow-500 underline text-3xl">{state.title}</div>
+        <div></div>
+      </div>
       {role == "ADMIN" ? (
         <div className="flex items-center justify-center gap-5 w-full">
           <button
@@ -31,18 +43,17 @@ const RightPanelHeader = ({ state }) => {
           </button>
         </div>
       ) : (
-        <div className="w-full bg-gray-200 dark:bg-gray-700 mb-4">
-          <div
-            className="bg-green-900 text-xs font-medium text-blue-100 text-center p-0.5 leading-5"
-            style={{
-              width: `${calculateProgress(
-                lectures.length,
-                watchedLecturesCount
-              )}%`,
-            }}
-          >
-            {calculateProgress(lectures.length, watchedLecturesCount)}%
-          </div>
+        <div className="w-full bg-gray-200 rounded-lg dark:bg-gray-700 mb-6 mt-4">
+          {watchHistory && (
+            <div
+              className="bg-green-900 text-sm  rounded-lg  font-medium text-blue-100 text-center p-0.5 leading-5"
+              style={{
+                width: `${progress}%`,
+              }}
+            >
+              {progress}%
+            </div>
+          )}
         </div>
       )}
     </li>

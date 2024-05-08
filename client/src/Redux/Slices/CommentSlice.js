@@ -12,9 +12,11 @@ export const getLectureComments = createAsyncThunk(
   "/getComments",
   async (lectureId) => {
     try {
+      const loadingMessage = toast.loading("fetching Lecture Comments ...");
       const res = await axiosInstance.get(
         `/comments/getLectureComments/${lectureId}`
       );
+      toast.success(res?.data?.message, { id: loadingMessage });
       return res?.data;
     } catch (error) {
       toast.error(error?.message, { id: loadingMessage });
@@ -25,7 +27,6 @@ export const getLectureComments = createAsyncThunk(
 export const addCommentInLecture = createAsyncThunk(
   "/addComment",
   async ({ content, lectureId }) => {
-    console.log("innside getLectureComments", lectureId);
     const loadingMessage = toast.loading("Adding comment into lecture ...");
     try {
       const res = await axiosInstance.post(
@@ -103,6 +104,9 @@ const commentSlice = createSlice({
         console.log("before", state.nestedReplies[id].isShowReplies);
       }
     },
+    clearOldComments: (state, action) => {
+      state.comments = [];
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -134,4 +138,4 @@ const commentSlice = createSlice({
 
 export default commentSlice.reducer;
 
-export const { toggleIsShowReplies } = commentSlice.actions;
+export const { toggleIsShowReplies, clearOldComments } = commentSlice.actions;

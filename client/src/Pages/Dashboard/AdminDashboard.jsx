@@ -154,7 +154,9 @@ const AdminDashboard = () => {
                   <p className="font-semibold">Total Revenue</p>
                   <h3 className="text-4xl font-bold">
                     {console.log(allPayments)}
-                    {allPayments?.count ? parseInt(allPayments?.count) * 499 : 0}
+                    {allPayments?.count
+                      ? parseInt(allPayments?.count) * 499
+                      : 0}
                   </h3>
                 </div>
                 <GiMoneyStack className="text-green-500 text-5xl" />
