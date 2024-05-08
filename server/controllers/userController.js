@@ -506,11 +506,11 @@ export const markLecture = async (req, res) => {
     }
 
     // Update watchedLectures for the courseId
-    if (!user.watchedLectures.has(courseId)) {
-      user.watchedLectures.set(courseId, []);
+    if (!user.watchHistory.has(courseId)) {
+      user.watchHistory.set(courseId, []);
     }
 
-    const markedLecture = user.watchedLectures.get(courseId);
+    const markedLecture = user.watchHistory.get(courseId);
 
     if (!markedLecture.includes(lectureId)) {
       markedLecture.push(lectureId);
@@ -518,10 +518,14 @@ export const markLecture = async (req, res) => {
 
     await user.save();
 
-    res.status(200).json({ success: true, message: "Lecture Marked" });
+    res.status(200).json({
+      success: true,
+      message: "Lecture Marked",
+      data: user.watchHistory,
+    });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "error while mark Lecture" });
+    res.status(500).json({ success: false, error: "error while mark Lecture" });
   }
 };
 
@@ -537,17 +541,19 @@ export const unMarkLecture = async (req, res) => {
     }
 
     // Update watchedLectures for the courseId
-    if (!user.watchedLectures.has(courseId)) {
+    if (!user.watchHistory.has(courseId)) {
       res.status(404).json({
         success: false,
         message: "Course not found in watched lectures",
       });
     }
 
-    const index = watchedLectures.indexOf(lectureId);
+    const courseLectures = user.watchHistory?.get(courseId);
+
+    const index = courseLectures.indexOf(lectureId);
 
     if (index != -1) {
-      watchedLectures.splice(index, 1);
+      user.watchHistory.get(courseId).splice(index, 1);
     }
 
     await user.save();
@@ -555,9 +561,43 @@ export const unMarkLecture = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Remove from Watch Lecture",
+      data: user.watchHistory,
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "error while unmark The Lecture" });
+    res
+      .status(500)
+      .json({ success: false, error: "error while unmark The Lecture" });
+  }
+};
+
+export const getWatchHistory = async (req, res) => {
+  try {
+    const { id } = req.user; // because of the middleware isLoggedIn
+
+    const user = await User.findById(id);
+
+    if (!user) {
+      res.status(404).json({ success: false, error: "User Not Found" });
+    }
+
+    if (user.watchHistory) {
+      res.status(200).json({
+        success: true,
+        message: "fetch User Watch History",
+        data: user.watchHistory,
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: "User watch History not found",
+      });
+    }
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({
+      success: false,
+      error: "error while getting User Watch watchHistory",
+    });
   }
 };

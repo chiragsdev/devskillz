@@ -49,7 +49,7 @@ const userSchema = new Schema(
       id: String,
       status: String,
     },
-    watchedLectures: {
+    watchHistory: {
       type: Map,
       of: [String], // Array of lecture IDs
       default: new Map(),

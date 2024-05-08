@@ -32,6 +32,7 @@ export const addCommentInLecture = async (req, res) => {
 
     const authorDetails = await User.findById(author._id);
     newComment.author = authorDetails;
+    newComment.createdAt = new Date();
 
     return res.status(201).json({
       success: true,
@@ -66,8 +67,6 @@ export const getLectureComments = async (req, res, next) => {
     if (!lecture) {
       return next(new AppError("lecture not found", 404));
     }
-
-    console.log("lecture comment", lecture.comments);
 
     return res.status(201).json({
       success: true,

@@ -3,6 +3,7 @@ import {
   changePassword,
   forgotPassword,
   getProfile,
+  getWatchHistory,
   login,
   logout,
   markLecture,
@@ -31,8 +32,10 @@ router.put(
   updateUserProfile
 );
 
-router.post("/mark-lecture", isLoggedIn, markLecture);
+router.put("/mark-lecture", isLoggedIn, markLecture);
 
-router.post("unmark-lecture", isLoggedIn, unMarkLecture);
+router.put("/unmark-lecture", isLoggedIn, unMarkLecture);
+
+router.get("/watchHistory", isLoggedIn, getWatchHistory);
 
 export default router;
