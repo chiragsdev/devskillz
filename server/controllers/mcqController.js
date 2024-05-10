@@ -20,7 +20,7 @@ export const addMcqByCourseId = async (req, res, next) => {
     }
 
     // Validate the required fields
-    if (!question || !options || !correctOptionIndex) {
+    if (!question || !options) {
       return next(new AppError("All fields are required", 400));
     }
 
@@ -121,7 +121,7 @@ export const editMcqById = async (req, res, next) => {
     const updatedMcq = await mcq.save();
 
     // If the MCQ ID is present in the course's mcqs array, update it
-    if (course.mcqs.includes(mcqId)) {
+    if (course.test.includes(mcqId)) {
       // Find the index of the MCQ ID in the course's mcqs array
       const mcqIndex = course.test.indexOf(mcqId);
 
@@ -167,7 +167,7 @@ export const deleteMcqById = async (req, res, next) => {
     }
 
     // Find the MCQ by ID and delete it
-    const deletedMcq = await Mcq.findByIdAndDelete(id);
+    const deletedMcq = await Mcq.findByIdAndDelete(mcqId);
 
     // If no MCQ was found with the provided ID, return a 404 error
     if (!deletedMcq) {
@@ -183,9 +183,11 @@ export const deleteMcqById = async (req, res, next) => {
     // Save the updated course without the deleted MCQ ID
     await course.save();
 
-    res
-      .status(200)
-      .json({ success: true, message: "MCQ deleted successfully" });
+    res.status(200).json({
+      success: true,
+      message: "MCQ deleted successfully",
+      data: deletedMcq._id,
+    });
   } catch (error) {
     console.error("Error while deleting mcq:", error);
     res.status(500).json({ success: false, message: "failed to delete MCQ" });

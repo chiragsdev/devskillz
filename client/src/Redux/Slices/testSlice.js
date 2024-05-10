@@ -26,6 +26,68 @@ export const getCourseMcqs = createAsyncThunk(
   }
 );
 
+export const addMcqInCourse = createAsyncThunk(
+  "course/mcqs/add",
+  async ({ courseId, mcqData }) => {
+    try {
+      console.log("jay", courseId, mcqData);
+      const { question, options, correctOptionIndex } = mcqData;
+      const response = axiosInstance.post(`/mcqs/addMcq/${courseId}`, {
+        question,
+        options,
+        correctOptionIndex,
+      });
+      toast.promise(response, {
+        loading: "Wait Adding MCQ",
+        success: "mcqs Added successfully",
+        error: "Failed to Add the MCQ",
+      });
+      return (await response).data;
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    }
+  }
+);
+
+export const editMcqInCourse = createAsyncThunk(
+  "course/mcqs/edit",
+  async ({ courseId, mcqData }) => {
+    try {
+      console.log("jay", courseId, mcqData);
+      const { question, options, correctOptionIndex, MCQId } = mcqData;
+      const response = axiosInstance.put(`/mcqs/editMcq/${courseId}/${MCQId}`, {
+        question,
+        options,
+        correctOptionIndex,
+      });
+      toast.promise(response, {
+        loading: "Wait updating MCQ",
+        success: "mcqs updated successfully",
+        error: "Failed to update the MCQ",
+      });
+      return (await response).data;
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    }
+  }
+);
+
+export const deleteMcq = createAsyncThunk("course/mcq/delete", async (ids) => {
+  try {
+    const response = axiosInstance.delete(
+      `/mcqs/deleteMcq/${ids[0]}/${ids[1]}`
+    );
+    toast.promise(response, {
+      loading: "deleting MCQ",
+      success: "mcqs deleted successfully",
+      error: "Failed to delete the mcq",
+    });
+    return (await response).data;
+  } catch (error) {
+    toast.error(error?.response?.data?.message);
+  }
+});
+
 const testSlice = createSlice({
   name: "test",
   initialState,
@@ -46,10 +108,29 @@ const testSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(getCourseMcqs.fulfilled, (state, action) => {
-      console.log(action.payload);
-      state.mcqs = action.payload.data;
-    });
+    builder
+      .addCase(getCourseMcqs.fulfilled, (state, action) => {
+        console.log(action.payload);
+        state.mcqs = action.payload.data;
+      })
+      .addCase(addMcqInCourse.fulfilled, (state, action) => {
+        // state.mcqs = action.payload.data;
+        state.mcqs.push(action.payload.data);
+      })
+      .addCase(deleteMcq.fulfilled, (state, action) => {
+        const id = action.payload.data;
+        state.mcqs = state.mcqs.filter((mcq) => mcq._id !== id);
+      })
+      .addCase(editMcqInCourse.fulfilled, (state, action) => {
+        const updatedMCQ = action.payload.data;
+        const index = state.mcqs.findIndex((mcq) => mcq._id === updatedMCQ._id);
+
+        if (index !== -1) {
+          state.mcqs[index] = updatedMCQ;
+        } else {
+          console.error("MCQ not found in state");
+        }
+      });
   },
 });
 

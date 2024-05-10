@@ -36,7 +36,14 @@ const RightPanelHeader = ({ state }) => {
             Add New Lectures
           </button>
           <button
-            onClick={() => navigate("/manageTest")}
+            onClick={() =>
+              navigate("/manageTest", {
+                state: {
+                  courseId: state._id,
+                  courseTitle: state.title,
+                },
+              })
+            }
             className="btn-primary px-2 py-1 rounded-md font-semibold text-sm"
           >
             Manage Test

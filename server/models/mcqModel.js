@@ -11,14 +11,16 @@ const mcqSchema = new Schema({
       {
         type: String,
         required: true,
+        trim: true,
+        unique: true,
       },
     ],
   },
   correctOptionIndex: {
     type: Number,
     required: [true, "Correct option index is required"],
-    min: 1,
-    max: 4,
+    min: 0,
+    max: 3,
   },
 });
 
@@ -26,6 +28,11 @@ const mcqSchema = new Schema({
 mcqSchema.pre("save", function (next) {
   if (this.options.length !== 4) {
     return next(new Error("Exactly 4 options are required"));
+  }
+  // Check if all options are unique after trimming
+  const uniqueOptions = new Set(this.options.map((option) => option.trim()));
+  if (uniqueOptions.size !== this.options.length) {
+    return next(new Error("All options Should be Unique"));
   }
   next();
 });

@@ -1,77 +1,131 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { addMcqInCourse, editMcqInCourse } from "../../Redux/Slices/TestSlice";
+import toast from "react-hot-toast";
 
-const AddMCQForm = ({ courseId }) => {
+const AddMCQForm = ({ courseId, editMCQData }) => {
+  const dispatch = useDispatch();
+
   const [question, setQuestion] = useState("");
   const [options, setOptions] = useState(["", "", "", ""]);
   const [correctOptionIndex, setCorrectOptionIndex] = useState(0);
 
+  useEffect(() => {
+    console.log("editMCQData inside form", editMCQData);
+    if (editMCQData) {
+      // If editMCQData is provided, set the form fields with its values
+      setQuestion(editMCQData.question);
+      setOptions(editMCQData.options);
+      setCorrectOptionIndex(editMCQData.correctOptionIndex);
+    }
+  }, [editMCQData]);
+
   const handleSubmit = async (e) => {
-    console.log("question", question);
-    console.log("options", options);
-    console.log("correct", correctOptionIndex);
     e.preventDefault();
-    try {
-      await axios.post(`/api/courses/${courseId}/mcqs`, {
-        question,
-        options,
-        correctOptionIndex,
-      });
-      // Handle success, clear form, etc.
-    } catch (error) {
-      console.error("Error adding MCQ:", error);
-      // Handle error
+
+    if (!question || !options) {
+      return toast.error("All fields are required");
+    }
+
+    const uniqueOptions = new Set(options.map((option) => option.trim()));
+    if (uniqueOptions.size !== options.length) {
+      return toast.error("All options Should be Unique");
+    }
+
+    if (editMCQData) {
+      const res = await dispatch(
+        editMcqInCourse({
+          courseId: courseId,
+          mcqData: {
+            question,
+            options,
+            correctOptionIndex,
+            MCQId: editMCQData._id,
+          },
+        })
+      );
+      return;
+    }
+
+    const res = await dispatch(
+      addMcqInCourse({
+        courseId: courseId,
+        mcqData: {
+          question,
+          options,
+          correctOptionIndex,
+        },
+      })
+    );
+    // Clear form fields on success
+    if (res.payload.success) {
+      setQuestion("");
+      setOptions(["", "", "", ""]);
+      setCorrectOptionIndex(0);
     }
   };
 
   return (
-    <div className="">
+    <div className="flex justify-center items-center h-full">
       <form
         onSubmit={handleSubmit}
-        className="max-w-md mx-auto mt-10 p-4 bg-gray-100 rounded-lg shadow-lg"
+        className="w-full max-w-md bg-gray-400 rounded-lg px-6"
       >
-        <label className="block mb-2 font-bold text-gray-700">Question:</label>
-        <input
-          type="text"
-          value={question}
-          onChange={(e) => setQuestion(e.target.value)}
-          className="w-full px-4 py-2 mb-4 text-gray-700 bg-white border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-        />
-        {options.map((option, index) => (
-          <div key={index} className="mb-4">
-            <label className="block mb-2 font-bold text-gray-700">{`Option ${
-              index + 1
-            }:`}</label>
-            <input
-              type="text"
-              value={option}
-              onChange={(e) => {
-                const newOptions = [...options];
-                newOptions[index] = e.target.value;
-                setOptions(newOptions);
-              }}
-              className="w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-            />
-          </div>
-        ))}
-        <label className="block mb-2 font-bold text-gray-700">
-          Correct Option:
-        </label>
-        <select
-          value={correctOptionIndex}
-          onChange={(e) => setCorrectOptionIndex(parseInt(e.target.value))}
-          className="w-full px-4 py-2 mb-4 text-gray-700 bg-white border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-        >
-          {options.map((option, index) => (
-            <option key={index} value={index}>{`Option ${index + 1}`}</option>
+        <div className="mb-6">
+          <label className="block text-gray-700 text-sm font-bold mb-2">
+            Question:
+          </label>
+          <input
+            type="text"
+            value={question}
+            onChange={(e) => setQuestion(e.target.value)}
+            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+            placeholder="Enter your question here"
+          />
+        </div>
+        {options &&
+          options.map((option, index) => (
+            <div key={index} className="mb-4">
+              <label className="block text-gray-700 text-sm font-bold mb-2">{`Option ${
+                index + 1
+              }:`}</label>
+              <input
+                type="text"
+                value={option}
+                onChange={(e) => {
+                  const newOptions = [...options];
+                  newOptions[index] = e.target.value;
+                  setOptions(newOptions);
+                }}
+                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+                placeholder={`Enter option ${index + 1} here`}
+              />
+            </div>
           ))}
-        </select>
-        <button
-          type="submit"
-          className="w-full px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
-        >
-          Add MCQ
-        </button>
+        <div className="mb-6">
+          <label className="block text-gray-700 text-sm font-bold mb-2">
+            Correct Option:
+          </label>
+          <select
+            value={correctOptionIndex}
+            onChange={(e) => setCorrectOptionIndex(parseInt(e.target.value))}
+            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+          >
+            {options.map((option, index) => (
+              <option key={index} value={index}>
+                {`Option ${index + 1}`} {option}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="flex justify-center">
+          <button
+            type="submit"
+            className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          >
+            {editMCQData ? "Edit MCQ" : "Add MCQ"}
+          </button>
+        </div>
       </form>
     </div>
   );
