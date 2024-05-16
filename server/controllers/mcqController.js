@@ -66,9 +66,18 @@ export const getAllMcqsById = async (req, res, next) => {
   try {
     // Extract the course ID from request parameters
     const { courseId } = req.params;
+    const { role } = req.user;
 
     // Find the course by ID and populate the 'mcqs' field with actual MCQ documents
-    const course = await Course.findById(courseId).populate("test");
+    let course;
+    if (role === "USER") {
+      course = await Course.findById(courseId).populate({
+        path: "test",
+        select: "-correctOptionIndex",
+      });
+    } else {
+      course = await Course.findById(courseId).populate("test");
+    }
 
     // If no course is found with the provided ID, return a 404 error
     if (!course) {
@@ -80,7 +89,7 @@ export const getAllMcqsById = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: " getAllMcqs successfully",
-      data: course?.test,
+      data: course.test,
     });
   } catch (error) {
     console.error("Error In getAllMcqsById", error);
@@ -192,4 +201,46 @@ export const deleteMcqById = async (req, res, next) => {
     console.error("Error while deleting mcq:", error);
     res.status(500).json({ success: false, message: "failed to delete MCQ" });
   }
+};
+
+export const submitTest = async (req, res) => {
+  const { courseId } = req.params;
+  const { selectedAnswers } = req.body;
+
+  console.log("selectedAnswers", selectedAnswers);
+
+  const course = await Course.findById(courseId).populate({
+    path: "test",
+    select: "-question -options", // Exclude multiple properties
+  });
+
+  let obtainMarks = 0;
+
+  course.test.forEach((mcq) => {
+    const selectedIndex = selectedAnswers[mcq._id];
+    if (selectedIndex === mcq.correctOptionIndex) {
+      obtainMarks++;
+    }
+  });
+
+  const totalMarks = course.test.length;
+
+  const per = (obtainMarks * 100) / totalMarks;
+
+  let result;
+  if (per >= 70) {
+    result = "pass";
+  } else {
+    result = "fail";
+  }
+
+  console.log("taka", per);
+
+  res.status(200).json({
+    message: "test submited done",
+    success: true,
+    obtainMarks: obtainMarks,
+    totalMarks: totalMarks,
+    result: result,
+  });
 };

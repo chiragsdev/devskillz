@@ -1,9 +1,9 @@
 import React from "react";
-import HomeLayout from "../Layouts/HomeLayout";
+import HomeLayout from "../../Layouts/HomeLayout.jsx";
 import { useState } from "react";
-import { isEmail } from "../Utils/regxMatcher.js";
+import { isEmail } from "../../Utils/regxMatcher.js";
 import { toast } from "react-hot-toast";
-import axiosInstance from "../Utils/axiosInstance.js";
+import axiosInstance from "../../Utils/axiosInstance.js";
 
 const Contact = () => {
   // State to manage user input for the contact form

@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const StartTestDialog = ({ courseId }) => {
+const StartTestDialog = ({ courseId, courseTitle }) => {
   const navigate = useNavigate();
 
   return (
@@ -9,9 +9,11 @@ const StartTestDialog = ({ courseId }) => {
       <div className="modal-box p-6 rounded-lg shadow-lg">
         <h3 className="font-bold text-lg mb-4">Test Rules</h3>
         <ul className="list-disc pl-4 mb-4">
-          <li>Test contains 25 multiple-choice questions (MCQs).</li>
-          <li>To receive a certificate, you must score 70+ marks.</li>
-          <li>You have 25 minutes to submit the test.</li>
+          <li>Test contains 10 multiple-choice questions (MCQs).</li>
+          <li>To receive a certificate, you must score 7 marks.</li>
+          <li>You have to answer all questions to submit the test.</li>
+          <li>Each question is worth 1 mark.</li>
+          <li>Once submitted, you cannot change your answers.</li>
         </ul>
         <div className="flex justify-between">
           <button
@@ -24,7 +26,7 @@ const StartTestDialog = ({ courseId }) => {
             className="btn btn-wide btn-md"
             onClick={() =>
               navigate("/startTest", {
-                state: { courseId: courseId },
+                state: { courseId: courseId, courseTitle: courseTitle },
               })
             }
           >

@@ -51,18 +51,25 @@ export const addCommentInLecture = async (req, res) => {
 
 export const getLectureComments = async (req, res, next) => {
   try {
-    console.log("inside a getAllComment controller");
     const { lectureId } = req.params;
+    const { page } = req.query;
 
-    console.log("inside a getAllComment controller", req.params);
+    const pageNumber = parseInt(page) || 1;
+    const pageSize = 3; // Limiting to 3 comments per page
 
-    const lecture = await Lecture.findById(lectureId).populate({
-      path: "comments",
-      populate: {
-        path: "author", // Populate the author field in each comment
-        select: "-password", // Example: excluding the password field
-      },
-    });
+    const lecture = await Lecture.findById(lectureId)
+      .populate({
+        path: "comments",
+        populate: {
+          path: "author",
+          select: "-password",
+        },
+        options: {
+          skip: (pageNumber - 1) * pageSize,
+          limit: pageSize, // Adjust the limit as needed
+        },
+      })
+      .lean();
 
     if (!lecture) {
       return next(new AppError("lecture not found", 404));

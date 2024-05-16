@@ -30,14 +30,6 @@ const courseSchema = new Schema(
         type: String,
       },
     },
-    certificate: {
-      public_id: {
-        type: String,
-      },
-      secure_url: {
-        type: String,
-      },
-    },
     lectures: [
       {
         type: Schema.Types.ObjectId,

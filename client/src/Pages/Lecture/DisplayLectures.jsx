@@ -47,22 +47,34 @@ const DisplayLectures = () => {
                 />
               );
             })}
-            <TestButtons courseId={state._id} />
+            <TestButtons courseId={state._id} courseTitle={state.title} />
           </ul>
         </div>
       ) : (
         <div>
           {role == "ADMIN" ? (
-            <div className="flex flex-col items-center justify-center w-full h-screen">
+            <div className="flex gap-10 items-center justify-center w-full h-screen">
               <button
                 onClick={() => {
                   navigate("/course/addLecture", { state: { ...state } });
                 }}
                 className="btn-primary px-2 py-1 rounded-md font-semibold text-sm"
               >
-                Add First Lecture of Course
+                Add New Lectures
               </button>
-              <button>Add Exam Questions</button>
+              <button
+                onClick={() =>
+                  navigate("/manageTest", {
+                    state: {
+                      courseId: state._id,
+                      courseTitle: state.title,
+                    },
+                  })
+                }
+                className="btn-primary px-2 py-1 rounded-md font-semibold text-sm"
+              >
+                Manage Test
+              </button>
             </div>
           ) : (
             <div className="flex items-center justify-center w-full h-screen">

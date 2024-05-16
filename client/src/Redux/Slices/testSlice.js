@@ -6,7 +6,6 @@ const initialState = {
   mcqs: [],
   currentMcqIndex: 0,
   selectedAnswers: {},
-  marks: 0,
 };
 
 export const getCourseMcqs = createAsyncThunk(
@@ -14,11 +13,11 @@ export const getCourseMcqs = createAsyncThunk(
   async (courseId) => {
     try {
       const response = axiosInstance.get(`/mcqs/getAllMcqs/${courseId}`);
-      toast.promise(response, {
-        loading: "Fetching Course mcqs",
-        success: "mcqs fetched successfully",
-        error: "Failed to load the mcqs",
-      });
+      // toast.promise(response, {
+      //   loading: "Fetching Course mcqs",
+      //   success: "mcqs fetched successfully",
+      //   error: "Failed to load the mcqs",
+      // });
       return (await response).data;
     } catch (error) {
       toast.error(error?.response?.data?.message);
@@ -30,7 +29,6 @@ export const addMcqInCourse = createAsyncThunk(
   "course/mcqs/add",
   async ({ courseId, mcqData }) => {
     try {
-      console.log("jay", courseId, mcqData);
       const { question, options, correctOptionIndex } = mcqData;
       const response = axiosInstance.post(`/mcqs/addMcq/${courseId}`, {
         question,
@@ -42,7 +40,7 @@ export const addMcqInCourse = createAsyncThunk(
         success: "mcqs Added successfully",
         error: "Failed to Add the MCQ",
       });
-      return (await response).data;
+      return (await response)?.data;
     } catch (error) {
       toast.error(error?.response?.data?.message);
     }
@@ -88,23 +86,43 @@ export const deleteMcq = createAsyncThunk("course/mcq/delete", async (ids) => {
   }
 });
 
+export const submitTest = createAsyncThunk(
+  "course/submitTest",
+  async ({ courseId, selectedAnswers }) => {
+    try {
+      const response = axiosInstance.post(`/mcqs/submitTest/${courseId}`, {
+        selectedAnswers: selectedAnswers,
+      });
+      toast.promise(response, {
+        loading: "submiting test",
+        success: "test submit successfully",
+        error: "Failed to submit the test",
+      });
+      return (await response).data;
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    }
+  }
+);
+
 const testSlice = createSlice({
   name: "test",
   initialState,
   reducers: {
     nextQue: (state, action) => {
-      state.currentMcqIndex += 1;
+      if (state.currentMcqIndex < state.mcqs.length) state.currentMcqIndex += 1;
     },
     prevQue: (state, action) => {
-      state.currentMcqIndex -= 1;
+      if (state.currentMcqIndex > 0) state.currentMcqIndex -= 1;
     },
-    selectedAnswer: (state, action) => {
+    selectAnswer: (state, action) => {
       const [mcqId, selectedOption] = action.payload;
       state.selectedAnswers[mcqId] = selectedOption;
     },
-    submitTest: (state, action) => {
-      console.log("test submited");
-      console.log(action.payload);
+    clearOldTestData: (state, action) => {
+      state.mcqs = [];
+      state.currentMcqIndex = 0;
+      state.selectedAnswers = {};
     },
   },
   extraReducers: (builder) => {
@@ -115,7 +133,11 @@ const testSlice = createSlice({
       })
       .addCase(addMcqInCourse.fulfilled, (state, action) => {
         // state.mcqs = action.payload.data;
-        state.mcqs.push(action.payload.data);
+        if (action?.payload?.data) {
+          state.mcqs.push(action.payload.data);
+        } else {
+          console.error("error while Pushing MCQ into state mcqs");
+        }
       })
       .addCase(deleteMcq.fulfilled, (state, action) => {
         const id = action.payload.data;
@@ -136,5 +158,5 @@ const testSlice = createSlice({
 
 export default testSlice.reducer;
 
-export const { nextQue, prevQue, selectedAnswer, submitTest } =
+export const { nextQue, prevQue, selectAnswer, clearOldTestData } =
   testSlice.actions;

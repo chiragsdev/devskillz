@@ -15,22 +15,42 @@ const CommentsSection = ({ lectureId }) => {
   const { currentLecture } = useSelector((state) => state?.lecture);
 
   const [commentContent, setCommentContent] = useState("");
-
-  const [loadComment, setLoadComment] = useState(false);
+  const [page, setPage] = useState(1);
+  const [hasMoreComments, setHasMoreComments] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setLoadComment(false);
+    dispatch(clearOldComments());
+    dispatch(getLectureComments({ lectureId, page: 1 }));
   }, [currentLecture]);
 
-  // useEffect(() => {
-  //   dispatch(getLectureComments(lectureId));
-  // }, [lectureId]);
+  useEffect(() => {
+    setHasMoreComments(true);
+    setLoading(false);
+    setPage(1);
+    setCommentContent("");
+  }, [currentLecture]);
 
-  function handleLoadComments() {
-    setLoadComment(true);
-    console.log("load comment called");
-    dispatch(clearOldComments());
-    dispatch(getLectureComments(lectureId));
+  async function handleLoadComments() {
+    if (!loading && hasMoreComments) {
+      setLoading(true);
+      try {
+        const res = await dispatch(
+          getLectureComments({ lectureId, page: page + 1 })
+        );
+
+        if (res?.payload?.data?.length === 0) {
+          setHasMoreComments(false);
+        } else {
+          setPage(page + 1);
+        }
+      } catch (error) {
+        console.error("Error loading comments:", error);
+        toast.error(error?.message || "something went wrong");
+      } finally {
+        setLoading(false);
+      }
+    }
   }
 
   function handleAddComment() {
@@ -43,7 +63,6 @@ const CommentsSection = ({ lectureId }) => {
       <h2 className="text-lg font-semibold mb-4">Comments :</h2>
       <div className="mb-6 mt-4">
         <div class="w-full">
-          {/* <h2 class="text-xl font-semibold mb-4">Comment</h2> */}
           <div className="flex items-end  gap-10">
             <textarea
               value={commentContent}
@@ -64,11 +83,25 @@ const CommentsSection = ({ lectureId }) => {
         </div>
       </div>
 
-      {loadComment && <CommentList />}
+      <CommentList />
 
-      <button onClick={handleLoadComments} className="btn btn-active btn-info">
-        Load Comments ...
-      </button>
+      {loading ? (
+        <div className="flex items-center gap-3 justify-center my-5">
+          {/* <span className="loading loading-spinner loading-md"></span> */}
+          <span className="loading loading-bars loading-md"></span>
+          {/* <span className="loading loading-dots loading-lg"></span> */}
+        </div>
+      ) : (
+        <div className="flex items-center justify-center my-5">
+          <button
+            onClick={handleLoadComments}
+            disabled={!hasMoreComments}
+            className="btn btn-active btn-info"
+          >
+            {hasMoreComments ? "Load Comments ..." : "No more comments"}
+          </button>
+        </div>
+      )}
     </div>
   );
 };

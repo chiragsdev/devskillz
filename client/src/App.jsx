@@ -1,30 +1,31 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import HomePage from "./Pages/HomePage";
-import AboutUs from "./Pages/AboutUs";
-import NotFoundPage from "./Pages/NotFoundPage";
-import SignUp from "./Pages/SignUp";
-import Login from "./Pages/Login";
-import CourseList from "./Pages/Courses/CourseList";
-import Contact from "./Pages/Contact";
-import CourseDescription from "./Pages/Courses/CourseDescription";
-import Denied from "./Pages/Denied";
-import Profile from "./Pages/User/Profile";
-import CreateCourse from "./Pages/Courses/CreateCourse";
 import RequireAuth from "./Components/Auth/RequireAuth";
-import EditProfile from "./Pages/User/EditProfile";
-import Checkout from "./Pages/Payment/Checkout";
-import CheckoutFail from "./Pages/Payment/CheckoutFail";
-import CheckoutSuccess from "./Pages/Payment/CheckoutSuccess";
-import DisplayLectures from "./Pages/Dashboard/DisplayLectures";
-import AddLecture from "./Pages/Dashboard/AddLecture";
+import SignUp from "./Pages/Auth/SignUp";
+import Login from "./Pages/Auth/Login";
+import Denied from "./Pages/Auth/Denied";
+import CourseList from "./Pages/Courses/CourseList";
+import CourseDescription from "./Pages/Courses/CourseDescription";
+import CreateCourse from "./Pages/Courses/CreateCourse";
 import AdminDashboard from "./Pages/Dashboard/AdminDashboard";
+import AddLecture from "./Pages/Lecture/AddLecture";
+import DisplayLectures from "./Pages/Lecture/DisplayLectures";
 import ForgetPassword from "./Pages/Password/ForgetPassword";
 import ResetPassword from "./Pages/Password/ResetPassword";
 import ChangePassword from "./Pages/Password/ChangePassword";
+import Checkout from "./Pages/Payment/Checkout";
+import CheckoutSuccess from "./Pages/Payment/CheckoutSuccess";
+import CheckoutFailure from "./Pages/Payment/CheckoutFailure";
+import HomePage from "./Pages/Static/HomePage";
+import AboutUs from "./Pages/Static/AboutUs";
+import Contact from "./Pages/Static/Contact";
+import NotFoundPage from "./Pages/Static/NotFoundPage";
 import ManageTest from "./Pages/Test/ManageTest";
 import AddMCQForm from "./Pages/Test/AddMCQForm";
 import StartTest from "./Pages/Test/startTest";
+import TestResult from "./Pages/Test/TestResult";
+import Profile from "./Pages/User/Profile";
+import EditProfile from "./Pages/User/EditProfile";
 
 const App = () => {
   return (
@@ -57,9 +58,10 @@ const App = () => {
           <Route path="/user/editprofile" element={<EditProfile />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/checkout/success" element={<CheckoutSuccess />} />
-          <Route path="/checkout/fail" element={<CheckoutFail />} />
+          <Route path="/checkout/fail" element={<CheckoutFailure />} />
           <Route path="/course/displaylectures" element={<DisplayLectures />} />
           <Route path="/changePassword" element={<ChangePassword />} />
+          <Route path="/test/result" element={<TestResult />} />
         </Route>
 
         <Route path="/denied" element={<Denied />} />

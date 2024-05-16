@@ -5,7 +5,6 @@ import { FaSearch } from "react-icons/fa";
 
 const Search = () => {
   const [searchQuery, setSearchQuery] = useState("");
-
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   const dispatch = useDispatch();
@@ -63,13 +62,13 @@ const Search = () => {
           <ul>
             {suggestions.map((s) => (
               <li
-                onMouseEnter={(e) => {
-                  setSearchQuery(s);
-                }}
-                onKeyDown={(e) =>
-                  e.key === "Enter" ? onSuggestionClick(s) : null
-                }
                 key={s}
+                onMouseDown={(e) => {
+                  onSuggestionClick(s);
+                }}
+                // onKeyDown={(e) =>
+                //   e.key === "Enter" ? onSuggestionClick(s) : null
+                // }
                 className="cursor-pointer py-2 px-3 flex items-center justify-start gap-2 shadow-sm text-black hover:bg-gray-100"
               >
                 <FaSearch /> {s}

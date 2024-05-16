@@ -26,9 +26,7 @@ const ManageTest = () => {
   const [editMCQ, setEditMCQ] = useState(null);
 
   function onEdit(mcqData) {
-    console.log("mcqData inside onEdit", mcqData);
     setEditMCQ(mcqData);
-    console.log("editMCQ", editMCQ);
   }
 
   return (

@@ -27,7 +27,7 @@ const MCQCard = ({
   return (
     <div className="w-3/4 h-auto bg-white rounded-lg shadow-md p-6 mb-4 relative">
       <div className="flex justify-between items-center mb-4">
-        <div className="bg-red-400 w-full font-semibold text-lg">
+        <div className="w-full font-semibold text-lg">
           <span> {parseInt(index + 1)}.</span>
           <span>{question}</span>
         </div>
@@ -47,7 +47,7 @@ const MCQCard = ({
       <div className="mb-4">
         <div className="flex flex-col">
           {options.map((option, i) => (
-            <span className="ml-2">
+            <span key={i} className="ml-2">
               {String.fromCharCode(65 + i)}. {option}
             </span>
           ))}

@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import HomeLayout from "../Layouts/HomeLayout";
+import HomeLayout from "../../Layouts/HomeLayout.jsx";
 import { BsPersonCircle } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { toast } from "react-hot-toast";
-import { isEmail, isPassword } from "../Utils/regxMatcher.js";
-import { createAccount } from "../Redux/Slices/AuthSlice";
+import { isEmail, isPassword } from "../../Utils/regxMatcher.js";
+import { createAccount } from "../../Redux/Slices/AuthSlice.js";
 
 const SignUp = () => {
   const dispatch = useDispatch();

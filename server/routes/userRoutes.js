@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   changePassword,
   forgotPassword,
+  generateCertificate,
   getProfile,
   getWatchHistory,
   login,
@@ -37,5 +38,7 @@ router.put("/mark-lecture", isLoggedIn, markLecture);
 router.put("/unmark-lecture", isLoggedIn, unMarkLecture);
 
 router.get("/watchHistory", isLoggedIn, getWatchHistory);
+
+router.post("/generate/certificate", isLoggedIn, generateCertificate);
 
 export default router;

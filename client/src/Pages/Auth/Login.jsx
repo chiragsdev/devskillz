@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import HomeLayout from "../Layouts/HomeLayout";
+import HomeLayout from "../../Layouts/HomeLayout";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { toast } from "react-hot-toast";
-import { login } from "../Redux/Slices/AuthSlice";
+import { login } from "../../Redux/Slices/AuthSlice";
 
 const Login = () => {
   const dispatch = useDispatch();

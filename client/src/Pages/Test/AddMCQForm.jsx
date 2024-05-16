@@ -11,7 +11,6 @@ const AddMCQForm = ({ courseId, editMCQData }) => {
   const [correctOptionIndex, setCorrectOptionIndex] = useState(0);
 
   useEffect(() => {
-    console.log("editMCQData inside form", editMCQData);
     if (editMCQData) {
       // If editMCQData is provided, set the form fields with its values
       setQuestion(editMCQData.question);
@@ -32,8 +31,9 @@ const AddMCQForm = ({ courseId, editMCQData }) => {
       return toast.error("All options Should be Unique");
     }
 
+    let response;
     if (editMCQData) {
-      const res = await dispatch(
+      response = await dispatch(
         editMcqInCourse({
           courseId: courseId,
           mcqData: {
@@ -44,21 +44,21 @@ const AddMCQForm = ({ courseId, editMCQData }) => {
           },
         })
       );
-      return;
+    } else {
+      response = await dispatch(
+        addMcqInCourse({
+          courseId: courseId,
+          mcqData: {
+            question,
+            options,
+            correctOptionIndex,
+          },
+        })
+      );
     }
 
-    const res = await dispatch(
-      addMcqInCourse({
-        courseId: courseId,
-        mcqData: {
-          question,
-          options,
-          correctOptionIndex,
-        },
-      })
-    );
     // Clear form fields on success
-    if (res.payload.success) {
+    if (response?.payload?.success) {
       setQuestion("");
       setOptions(["", "", "", ""]);
       setCorrectOptionIndex(0);

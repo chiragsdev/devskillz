@@ -14,11 +14,11 @@ export const getCourseLectures = createAsyncThunk(
   async (courseId) => {
     try {
       const response = axiosInstance.get(`/lectures/${courseId}`);
-      toast.promise(response, {
-        loading: "Fetching Course Lecture",
-        success: "Lectures fetched successfully",
-        error: "Failed to load the lectures",
-      });
+      // toast.promise(response, {
+      //   loading: "Fetching Course Lecture",
+      //   success: "Lectures fetched successfully",
+      //   error: "Failed to load the lectures",
+      // });
       return (await response).data;
     } catch (error) {
       toast.error(error?.response?.data?.message);
@@ -109,7 +109,7 @@ export const getWatchHistory = createAsyncThunk(
   async () => {
     try {
       const res = await axiosInstance.get("/user/watchHistory");
-      toast.success(res?.data?.message);
+      // toast.success(res?.data?.message);
       return res?.data;
     } catch (error) {
       toast.error(error?.message);

@@ -64,14 +64,15 @@ const LectureItem = ({ lecture, index, courseId }) => {
       </p>
       {role === "ADMIN" ? (
         <div className="flex gap-2">
-          <button
+          {/* Pending feature ... Edit Lecture */}
+          {/* <button
             onClick={() => {
               onLectureDelete(courseId, lecture?._id);
             }}
             className="btn-info px-2 py-1 rounded-md font-semibold text-sm"
           >
             <MdEditSquare />
-          </button>
+          </button> */}
           <button
             onClick={() => {
               onLectureDelete(courseId, lecture?._id);

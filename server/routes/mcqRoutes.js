@@ -4,6 +4,7 @@ import {
   deleteMcqById,
   editMcqById,
   getAllMcqsById,
+  submitTest,
 } from "../controllers/mcqController.js";
 import {
   authorizeSubscriber,
@@ -28,5 +29,9 @@ router
 router
   .route("/editMcq/:courseId/:mcqId")
   .put(isLoggedIn, authorizedRoles("ADMIN"), editMcqById);
+
+router
+  .route("/submitTest/:courseId")
+  .post(isLoggedIn, authorizeSubscriber, submitTest);
 
 export default router;

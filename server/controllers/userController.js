@@ -1,10 +1,12 @@
 import fs from "fs/promises";
-import fsMail from "fs";
+
 import User from "../models/userModel.js";
 import AppError from "../utils/error.js";
 import cloudinary from "cloudinary";
 import sendEmail from "../utils/sendEmail.js";
 import crypto from "crypto";
+import Course from "../models/courseModel.js";
+import { generatePdf } from "../utils/generatePdf.js";
 
 const cookieOptions = {
   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
@@ -598,6 +600,37 @@ export const getWatchHistory = async (req, res) => {
     res.status(500).json({
       success: false,
       error: "error while getting User Watch watchHistory",
+    });
+  }
+};
+
+export const generateCertificate = async (req, res) => {
+  try {
+    const { userId, courseId } = req.body;
+
+    const userData = await User.findById(userId);
+
+    const courseData = await Course.findById(courseId);
+
+    const filePath = await generatePdf(userData, courseData);
+
+    // Send the generated PDF file as response
+    res.download(filePath, "certificate.pdf", (err) => {
+      if (err) {
+        console.error("Error sending certificate:", err);
+        res.status(500).json({ error: "Internal server error" });
+      } else {
+        // Delete the generated file after sending
+        fs.unlink(filePath, (err) => {
+          if (err) console.error("Error deleting file:", err);
+        });
+      }
+    });
+  } catch (error) {
+    console.error(e);
+    res.status(500).json({
+      success: false,
+      error: "error while generateCertificate",
     });
   }
 };

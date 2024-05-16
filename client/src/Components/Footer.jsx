@@ -20,7 +20,11 @@ const Footer = () => {
           <a className="hover:text-yellow-500 translate-all ease-in-out duration-300">
             <BsTwitter />
           </a>
-          <a className="hover:text-yellow-500 translate-all ease-in-out duration-300">
+          <a
+            href="https://www.linkedin.com/in/chiragaug6/"
+            target="_blank"
+            className="hover:text-yellow-500 translate-all ease-in-out duration-300"
+          >
             <BsLinkedin />
           </a>
         </section>

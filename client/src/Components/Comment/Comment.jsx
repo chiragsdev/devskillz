@@ -14,7 +14,6 @@ const Comment = ({ commentData }) => {
   const dispatch = useDispatch();
 
   const toggleShowReplies = async () => {
-    console.log(commentData.isShowReplies);
     if (!commentData.isShowReplies) {
       await dispatch(getReplysOfComment({ commentData }));
     }
@@ -55,22 +54,24 @@ const Comment = ({ commentData }) => {
           </div>
           <div>
             <div className="font-semibold">{commentData?.author?.fullName}</div>
-            {/* <p>{commentData?._id}</p>{" "} */}
             <p className="text-gray-400">{commentData?.content}</p>
           </div>
         </div>
         <div className="text-gray-400 flex flex-col items-center justify-between">
           <div className="text-xs">{formatDate(commentData?.createdAt)}</div>
           {/* Show/hide reply input box */}
-          <div
-            className="text-sm text-gray-300 underline cursor-pointer"
-            onClick={toggleShowReplies}
-          >
-            {commentData.isShowReplies ? "Hide" : "Show"} replies{" "}
-            <span className=" text-gray-300">
-              ({commentData.replies.length})
-            </span>
-          </div>
+
+          {!commentData?.parentComment && (
+            <div
+              className="text-sm text-gray-300 underline cursor-pointer"
+              onClick={toggleShowReplies}
+            >
+              {commentData.isShowReplies ? "Hide" : "Show"} replies{" "}
+              <span className=" text-gray-300">
+                ({commentData?.replies?.length})
+              </span>
+            </div>
+          )}
         </div>
       </div>
       {/* Conditionally render reply input box */}

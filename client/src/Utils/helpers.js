@@ -10,28 +10,28 @@ export function formatDate(createdAt) {
 
   const timeDifferenceInMilliseconds = currentDate - commentDate;
 
-  console.log("timeDifferenceInMilliseconds", timeDifferenceInMilliseconds);
+  // console.log("timeDifferenceInMilliseconds", timeDifferenceInMilliseconds);
 
   const secondsDifference = Math.floor(timeDifferenceInMilliseconds / 1000);
 
-  console.log("secondsDifference", secondsDifference);
+  // console.log("secondsDifference", secondsDifference);
 
   const minutesDifference = Math.floor(secondsDifference / 60);
-  console.log("minutesDifference", minutesDifference);
+  // console.log("minutesDifference", minutesDifference);
 
   const hoursDifference = Math.floor(minutesDifference / 60);
-  console.log("hoursDifference", hoursDifference);
+  // console.log("hoursDifference", hoursDifference);
 
   const daysDifference = Math.floor(hoursDifference / 24);
-  console.log("daysDifference", daysDifference);
+  // console.log("daysDifference", daysDifference);
 
   const monthsDifference = Math.floor(daysDifference / 30);
-  console.log("monthsDifference", monthsDifference);
+  // console.log("monthsDifference", monthsDifference);
 
   const yearsDifference = Math.floor(monthsDifference / 12);
-  console.log("yearsDifference", yearsDifference);
+  // console.log("yearsDifference", yearsDifference);
 
-  console.log("****************************************************");
+  // console.log("****************************************************");
 
   if (yearsDifference > 0) {
     return `${yearsDifference} ${yearsDifference === 1 ? "year" : "years"} ago`;
