@@ -105,7 +105,7 @@ export const submitTest = createAsyncThunk(
   }
 );
 
-const TestSlice = createSlice({
+const testSlice = createSlice({
   name: "test",
   initialState,
   reducers: {
@@ -156,7 +156,7 @@ const TestSlice = createSlice({
   },
 });
 
-export default TestSlice.reducer;
+export default testSlice.reducer;
 
 export const { nextQue, prevQue, selectAnswer, clearOldTestData } =
-  TestSlice.actions;
+  testSlice.actions;
