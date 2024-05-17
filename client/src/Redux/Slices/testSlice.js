@@ -156,7 +156,7 @@ const testSlice = createSlice({
   },
 });
 
-export default testSlice.reducer;
-
 export const { nextQue, prevQue, selectAnswer, clearOldTestData } =
   testSlice.actions;
+
+export default testSlice.reducer;
