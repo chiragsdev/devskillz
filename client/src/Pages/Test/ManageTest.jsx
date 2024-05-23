@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import AddMCQForm from "./AddMCQForm";
 import { useLocation, useNavigate } from "react-router-dom";
 import { MdArrowBack } from "react-icons/md";
-import MCQCard from "../../Components/MCQ/McqCard";
+// import MCQCard from "../../Components/MCQ/McqCard";
+import MCQCard from "../../Components/MCQ/MCQCard";
 import { useDispatch, useSelector } from "react-redux";
-import { getCourseMcqs } from "../../Redux/Slices/TestSlice";
+import { getCourseMcqs } from "../../Redux/Slices/testSlice.js";
 
 const ManageTest = () => {
   const navigate = useNavigate();

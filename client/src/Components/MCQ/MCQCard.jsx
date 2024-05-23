@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { MdDelete, MdEdit } from "react-icons/md"; // Importing delete and edit icons from React Icons
 import { useDispatch } from "react-redux";
-import { deleteMcq } from "../../Redux/Slices/TestSlice";
+import { deleteMcq } from "../../Redux/Slices/testSlice.js";
 
 const MCQCard = ({
   _id,
@@ -13,14 +13,8 @@ const MCQCard = ({
   onEdit,
 }) => {
   const dispatch = useDispatch();
-  useEffect(() => {
-    console.log("courseId", courseId);
-    console.log("mcqId", _id);
-    console.log(index);
-  });
 
   function handleUpdate() {
-    console.log("handleUpdate there");
     onEdit({ _id, question, options, correctOptionIndex, courseId, index });
   }
 

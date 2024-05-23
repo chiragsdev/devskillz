@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   clearOldTestData,
@@ -7,7 +7,7 @@ import {
   prevQue,
   selectAnswer,
   submitTest,
-} from "../../Redux/Slices/TestSlice.js";
+} from "../../Redux/Slices/testSlice.js";
 import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { TbPlayerTrackNextFilled } from "react-icons/tb";
