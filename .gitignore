@@ -6,8 +6,10 @@ client/.gitignore
 
 client/.env
 
+server/.env
+
 client/dist
 
-server/.env
+server/dist
 
 docx

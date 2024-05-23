@@ -2,7 +2,6 @@ import Course from "../models/courseModel.js";
 import AppError from "../utils/error.js";
 import cloudinary from "cloudinary";
 import fs from "fs/promises";
-import * as path from "path";
 
 /**
  * @ALL_COURSES

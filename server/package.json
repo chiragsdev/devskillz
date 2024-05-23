@@ -7,10 +7,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon server.js",
-    "build": "npm run build",
+    "build": "webpack",
     "pro": "node server.js"
   },
-  "author": "",
+  "author": "chirag solanki",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -28,6 +28,8 @@
     "razorpay": "^2.9.2"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.0.1",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
   }
 }
