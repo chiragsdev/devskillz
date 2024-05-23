@@ -5,7 +5,7 @@ import razorpaySliceReducer from "./Slices/RazorpaySlice.js";
 import lectureSliceReducer from "./Slices/LectureSlice.js";
 import statSliceReducer from "./Slices/StatSlice.js";
 import commentSlice from "./Slices/CommentSlice.js";
-import testSlice from "./Slices/TestSlice.js";
+import testSlice from "./Slices/testSlice.js";
 
 const store = configureStore({
   reducer: {

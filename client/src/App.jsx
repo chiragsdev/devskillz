@@ -1,35 +1,48 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 import RequireAuth from "./Components/Auth/RequireAuth";
-import SignUp from "./Pages/Auth/SignUp";
-import Login from "./Pages/Auth/Login";
-import Denied from "./Pages/Auth/Denied";
-import CourseList from "./Pages/Courses/CourseList";
-import CourseDescription from "./Pages/Courses/CourseDescription";
-import CreateCourse from "./Pages/Courses/CreateCourse";
-import AdminDashboard from "./Pages/Dashboard/AdminDashboard";
-import AddLecture from "./Pages/Lecture/AddLecture";
-import DisplayLectures from "./Pages/Lecture/DisplayLectures";
-import ForgetPassword from "./Pages/Password/ForgetPassword";
-import ResetPassword from "./Pages/Password/ResetPassword";
-import ChangePassword from "./Pages/Password/ChangePassword";
-import Checkout from "./Pages/Payment/Checkout";
-import CheckoutSuccess from "./Pages/Payment/CheckoutSuccess";
-import CheckoutFailure from "./Pages/Payment/CheckoutFailure";
+import "./App.css";
+
+// Lazy-loaded components
+const SignUp = lazy(() => import("./Pages/Auth/SignUp"));
+const Login = lazy(() => import("./Pages/Auth/Login"));
+const Denied = lazy(() => import("./Pages/Auth/Denied"));
+const CourseList = lazy(() => import("./Pages/Courses/CourseList"));
+const CourseDescription = lazy(() =>
+  import("./Pages/Courses/CourseDescription")
+);
+const CreateCourse = lazy(() => import("./Pages/Courses/CreateCourse"));
+const AdminDashboard = lazy(() => import("./Pages/Dashboard/AdminDashboard"));
+const AddLecture = lazy(() => import("./Pages/Lecture/AddLecture"));
+const DisplayLectures = lazy(() => import("./Pages/Lecture/DisplayLectures"));
+const ForgetPassword = lazy(() => import("./Pages/Password/ForgetPassword"));
+const ResetPassword = lazy(() => import("./Pages/Password/ResetPassword"));
+const ChangePassword = lazy(() => import("./Pages/Password/ChangePassword"));
+const Checkout = lazy(() => import("./Pages/Payment/Checkout"));
+const CheckoutSuccess = lazy(() => import("./Pages/Payment/CheckoutSuccess"));
+const CheckoutFailure = lazy(() => import("./Pages/Payment/CheckoutFailure"));
+const NotFoundPage = lazy(() => import("./Pages/Static/NotFoundPage"));
+const ManageTest = lazy(() => import("./Pages/Test/ManageTest"));
+const AddMCQForm = lazy(() => import("./Pages/Test/AddMCQForm"));
+const StartTest = lazy(() => import("./Pages/Test/startTest"));
+const TestResult = lazy(() => import("./Pages/Test/TestResult"));
+const Profile = lazy(() => import("./Pages/User/Profile"));
+const EditProfile = lazy(() => import("./Pages/User/EditProfile"));
+
+// Eager-loaded components
 import HomePage from "./Pages/Static/HomePage";
 import AboutUs from "./Pages/Static/AboutUs";
 import Contact from "./Pages/Static/Contact";
-import NotFoundPage from "./Pages/Static/NotFoundPage";
-import ManageTest from "./Pages/Test/ManageTest";
-import AddMCQForm from "./Pages/Test/AddMCQForm";
-import StartTest from "./Pages/Test/startTest";
-import TestResult from "./Pages/Test/TestResult";
-import Profile from "./Pages/User/Profile";
-import EditProfile from "./Pages/User/EditProfile";
 
 const App = () => {
   return (
-    <>
+    <Suspense
+      fallback={
+        <div className="w-full h-screen flex items-center justify-center">
+          <span className="loading loading-bars loading-md"></span>
+        </div>
+      }
+    >
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<AboutUs />} />
@@ -67,7 +80,7 @@ const App = () => {
         <Route path="/denied" element={<Denied />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
-    </>
+    </Suspense>
   );
 };
 
