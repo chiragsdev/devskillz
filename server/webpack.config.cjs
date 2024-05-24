@@ -1,21 +1,51 @@
 const path = require("path");
+const webpack = require("webpack");
+const dotenv = require("dotenv");
+
+// Load environment variables from .env file
+dotenv.config();
 
 module.exports = {
-  mode: "production",
-  target: "node",
-  entry: "./app.js", // Entry point of your server-side code
+  entry: "./server.js",
   output: {
-    filename: "bundle.js", // Output file name
-    path: path.resolve(__dirname, "dist"), // Output directory
+    path: path.resolve(__dirname, "dist"),
+    filename: "bundle.js",
   },
-  externals: {
-    fs: "commonjs fs", // Exclude 'fs' module
-    // Add other Node.js core modules here if needed
+  target: "node",
+  mode: "production",
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: ["@babel/preset-env"],
+            plugins: ["@babel/plugin-transform-runtime"],
+          },
+        },
+      },
+    ],
   },
   resolve: {
-    extensions: [".js", ".json", ".node"],
+    extensions: [".js"],
   },
-  stats: {
-    errorDetails: true, // Enable error details
+  node: {
+    __dirname: false,
+    __filename: false,
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      "process.env": JSON.stringify(process.env),
+    }),
+    new webpack.IgnorePlugin({
+      resourceRegExp: /^optional_dependency$/,
+      contextRegExp: /mongodb\/lib/, // Ignore optional dependencies in mongodb
+    }),
+  ],
+  optimization: {
+    minimize: false, // Disable Terser minification
+  },
+  devtool: "source-map",
 };
