@@ -8,7 +8,7 @@
     "preinstall": "npm install webpack-cli",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon server.js",
-    "build": "webpack --mode production",
+    "build": "node server.js",
     "start": "node server.js"
   },
   "author": "chirag solanki",
