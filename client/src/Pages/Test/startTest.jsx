@@ -1,4 +1,4 @@
-import React, { useEffect} from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   clearOldTestData,
@@ -8,7 +8,7 @@ import {
   selectAnswer,
   submitTest,
 } from "../../Redux/Slices/testSlice.js";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { TbPlayerTrackNextFilled } from "react-icons/tb";
 import { TbPlayerTrackPrevFilled } from "react-icons/tb";
@@ -17,17 +17,15 @@ const StartTest = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { state } = useLocation();
-
+  const { currentCourse } = useSelector((state) => state.course);
   const { mcqs, currentMcqIndex, selectedAnswers } = useSelector(
     (state) => state.test
   );
 
   useEffect(() => {
-    if (state) {
-      console.log("state in startTet", state);
+    if (currentCourse) {
       dispatch(clearOldTestData());
-      dispatch(getCourseMcqs(state.courseId));
+      dispatch(getCourseMcqs(currentCourse._id));
     } else {
       navigate(-1);
     }
@@ -38,28 +36,23 @@ const StartTest = () => {
   };
 
   async function handleSubmitTest() {
-    console.log("keys", Object.keys(selectedAnswers).length);
-    console.log("length", mcqs.length);
-
     if (Object.keys(selectedAnswers).length !== mcqs.length) {
       return toast.error("Please select all MCQS");
     }
+
     const res = await dispatch(
       submitTest({
-        courseId: state.courseId,
+        courseId: currentCourse._id,
         selectedAnswers,
       })
     );
 
     if (res.payload.success) {
-      console.log("pa", res.payload);
       const { obtainMarks, result, totalMarks } = res.payload;
       navigate("/test/result", {
-        state: { obtainMarks, result, totalMarks, courseId: state.courseId },
+        state: { obtainMarks, result, totalMarks, courseId: currentCourse._id },
       });
     }
-
-    console.log("res", res);
   }
 
   return (
@@ -72,7 +65,7 @@ const StartTest = () => {
         <div className="flex flex-col h-screen pt-10">
           <div className="flex w-full items-center justify-evenly">
             <div className="text-4xl font-bold text-gray-500 underline">
-              {state.courseTitle} (Test Runuing)
+              {currentCourse.title} (Test Runuing)
             </div>
             <div className="w-44 h-28 rounded-lg flex flex-col items-start pl-2 justify-center gap-1 font-semibold shadow-2xl">
               <div>Totol MCQS: {mcqs.length}</div>

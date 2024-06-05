@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import AddMCQForm from "./AddMCQForm";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { MdArrowBack } from "react-icons/md";
 // import MCQCard from "../../Components/MCQ/McqCard";
 import MCQCard from "../../Components/MCQ/MCQCard";
@@ -10,21 +10,20 @@ import { getCourseMcqs } from "../../Redux/Slices/testSlice.js";
 const ManageTest = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { state } = useLocation();
-  const { courseId, courseTitle } = state;
 
   const { mcqs } = useSelector((state) => state.test);
   const { role } = useSelector((state) => state.auth);
-
-  useEffect(() => {
-    if (!state) {
-      navigate(-1);
-    } else {
-      dispatch(getCourseMcqs(courseId));
-    }
-  }, []);
+  const { currentCourse } = useSelector((state) => state.course);
 
   const [editMCQ, setEditMCQ] = useState(null);
+
+  useEffect(() => {
+    if (!currentCourse) {
+      navigate(-1);
+    } else {
+      dispatch(getCourseMcqs(currentCourse._id));
+    }
+  }, []);
 
   function onEdit(mcqData) {
     setEditMCQ(mcqData);
@@ -35,7 +34,7 @@ const ManageTest = () => {
       {mcqs && mcqs.length === 0 ? (
         <>
           {role === "ADMIN" ? (
-            <AddMCQForm courseId={courseId} />
+            <AddMCQForm courseId={currentCourse._id} />
           ) : (
             <div className="w-full h-screen flex items-center justify-center">
               <span className="loading loading-bars loading-lg"></span>
@@ -56,12 +55,12 @@ const ManageTest = () => {
                 <span>Back To Course</span>
               </button>
               <div className="text-white text-lg font-semibold">
-                {courseTitle} Test Management
+                {currentCourse.title} Test Management
               </div>
               <div className="w-6"></div>
             </div>
             <div className="w-full max-w-md">
-              <AddMCQForm courseId={courseId} editMCQData={editMCQ} />
+              <AddMCQForm courseId={currentCourse._id} editMCQData={editMCQ} />
             </div>
           </div>
           <div className="w-1/2 h-screen overflow-y-scroll border-l-red-600 border-2">
@@ -73,7 +72,7 @@ const ManageTest = () => {
                       key={mcq._id}
                       {...mcq}
                       index={index}
-                      courseId={courseId}
+                      courseId={currentCourse._id}
                       onEdit={onEdit}
                     />
                   );

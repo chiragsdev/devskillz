@@ -4,17 +4,19 @@ import { useNavigate } from "react-router-dom";
 import { MdArrowBack } from "react-icons/md";
 import { calculateProgress } from "../../Redux/Slices/LectureSlice.js";
 
-const RightPanelHeader = ({ state }) => {
+const RightPanelHeader = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const { role } = useSelector((state) => state?.auth);
+  const { currentCourse } = useSelector((state) => state.course);
   const { watchHistory, lectures, progress } = useSelector(
     (state) => state?.lecture
   );
 
   useEffect(() => {
-    if (watchHistory && state) {
-      dispatch(calculateProgress(state._id));
+    if (watchHistory && currentCourse) {
+      dispatch(calculateProgress(currentCourse._id));
     }
   }, [watchHistory, lectures]);
 
@@ -22,28 +24,23 @@ const RightPanelHeader = ({ state }) => {
     <li className="font-semibold text-2xlflex flex-col items-center justify-between mb-5">
       <div className="flex items-center w-full p-4 justify-between">
         <MdArrowBack onClick={() => navigate(-1)} className="cursor-pointer" />
-        <div className=" text-yellow-500 underline text-3xl">{state.title}</div>
+        <div className=" text-yellow-500 underline text-3xl">
+          {currentCourse.title}
+        </div>
         <div></div>
       </div>
       {role == "ADMIN" ? (
         <div className="flex items-center justify-center gap-5 w-full">
           <button
             onClick={() => {
-              navigate("/course/addLecture", { state: { ...state } });
+              navigate("/course/addLecture");
             }}
             className="btn-primary px-2 py-1 rounded-md font-semibold text-sm"
           >
             Add New Lectures
           </button>
           <button
-            onClick={() =>
-              navigate("/manageTest", {
-                state: {
-                  courseId: state._id,
-                  courseTitle: state.title,
-                },
-              })
-            }
+            onClick={() => navigate("/manageTest")}
             className="btn-primary px-2 py-1 rounded-md font-semibold text-sm"
           >
             Manage Test
@@ -58,7 +55,7 @@ const RightPanelHeader = ({ state }) => {
                 width: `${progress}%`,
               }}
             >
-              {progress}%
+              {progress.toFixed(0)}%
             </div>
           )}
         </div>

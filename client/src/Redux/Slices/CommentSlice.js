@@ -65,15 +65,14 @@ export const addReplyInComment = createAsyncThunk(
 export const getReplysOfComment = createAsyncThunk(
   "/getReplys",
   async ({ commentData }) => {
-    console.log("comment data", commentData);
-    const loadingMessage = toast.loading(
-      "wait getting reply for this comment ..."
-    );
+    // const loadingMessage = toast.loading(
+    //   "wait getting reply for this comment ..."
+    // );
     try {
       const res = await axiosInstance.get(
         `/comments/getReplys/${commentData._id}`
       );
-      toast.success(res?.data?.message, { id: loadingMessage });
+      // toast.success(res?.data?.message, { id: loadingMessage });
       return { commentData, replies: res?.data };
     } catch (error) {
       toast.error(error?.message, { id: loadingMessage });

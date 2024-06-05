@@ -4,11 +4,16 @@ import { useLocation, useNavigate } from "react-router-dom";
 import HomeLayout from "../../Layouts/HomeLayout";
 
 const CourseDescription = () => {
-  const { state } = useLocation();
-
   const navigate = useNavigate();
 
   const { role, data } = useSelector((state) => state.auth);
+  const { currentCourse } = useSelector((state) => state.course);
+
+  useEffect(() => {
+    if (!currentCourse) {
+      navigate("/courses");
+    }
+  }, []);
 
   return (
     <HomeLayout>
@@ -18,7 +23,7 @@ const CourseDescription = () => {
             <img
               className="w-full h-64"
               alt="thumbnail"
-              src={state?.thumbnail?.secure_url}
+              src={currentCourse?.thumbnail?.secure_url}
             />
 
             <div className="space-y-4">
@@ -27,22 +32,20 @@ const CourseDescription = () => {
                   <span className="text-yellow-500 font-bold">
                     Total lectures :{" "}
                   </span>
-                  {state?.numberOfLectures}
+                  {currentCourse?.numberOfLectures}
                 </p>
 
                 <p className="font-semibold">
                   <span className="text-yellow-500 font-bold">
                     Instructor :{" "}
                   </span>
-                  {state?.createdBy}
+                  {currentCourse?.createdBy}
                 </p>
               </div>
 
               {role === "ADMIN" || data?.subscription?.status === "active" ? (
                 <button
-                  onClick={() =>
-                    navigate("/course/displaylectures", { state: { ...state } })
-                  }
+                  onClick={() => navigate("/course/displaylectures")}
                   className="bg-yellow-600 text-xl rounded-md font-bold px-5 py-3 w-full hover:bg-yellow-500 transition-all ease-in-out duration-300"
                 >
                   Watch lectures
@@ -60,11 +63,11 @@ const CourseDescription = () => {
 
           <div className="space-y-2 text-xl">
             <h1 className="text-3xl font-bold text-yellow-500 mb-5 text-center">
-              {state?.title}
+              {currentCourse?.title}
             </h1>
 
             <p className="text-yellow-500">Course description: </p>
-            <p>{state?.description}</p>
+            <p>{currentCourse?.description}</p>
           </div>
         </div>
       </div>

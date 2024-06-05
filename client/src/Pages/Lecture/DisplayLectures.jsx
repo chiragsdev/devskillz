@@ -1,54 +1,42 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   clearOldLectures,
   getCourseLectures,
   getWatchHistory,
 } from "../../Redux/Slices/LectureSlice.js";
-import LectureItem from "../../Components/Lecture/LectureItem.jsx";
-import LeftPanel from "../../Components/Lecture/LeftPanel.jsx";
-import TestButtons from "../../Components/Lecture/TestButtons.jsx";
-import RightPanelHeader from "../../Components/Lecture/RightPanelHeader.jsx";
+import RightPanel from "../../Components/Lecture/RightPanel.jsx";
+import VideoLecture from "../../Components/Lecture/VideoLecture.jsx";
+import CommentsSection from "../../Components/Comment/CommentSection.jsx";
 
 const DisplayLectures = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { state } = useLocation();
 
   const { role } = useSelector((state) => state?.auth);
-  const { lectures } = useSelector((state) => state?.lecture);
+  const { lectures, currentLecture } = useSelector((state) => state?.lecture);
+  const { currentCourse } = useSelector((state) => state.course);
 
   useEffect(() => {
-    if (!state) {
+    if (!currentCourse) {
       navigate("/courses");
     } else {
       dispatch(clearOldLectures());
       dispatch(getWatchHistory());
-      dispatch(getCourseLectures(state?._id));
+      dispatch(getCourseLectures(currentCourse?._id));
     }
   }, []);
 
   return (
     <div className="text-white w-full h-full font-custom">
       {lectures && lectures.length > 0 ? (
-        <div className="flex gap-2 w-full h-full">
-          <LeftPanel />
-
-          <ul className="w-1/2 p-2 shadow-[0_0_10px_black] space-y-0 h-screen overflow-y-scroll">
-            <RightPanelHeader state={state} />
-            {lectures.map((lecture, index) => {
-              return (
-                <LectureItem
-                  key={lecture._id}
-                  lecture={lecture}
-                  index={index}
-                  courseId={state._id}
-                />
-              );
-            })}
-            <TestButtons courseId={state._id} courseTitle={state.title} />
-          </ul>
+        <div className="flex flex-row gap-2 w-full h-full lg:flex-col">
+          <div className="w-2/3 overflow-y-scroll h-screen lg:w-full  lg:overflow-visible">
+            <VideoLecture />
+            <CommentsSection lectureId={lectures[currentLecture]?._id} />
+          </div>
+          <RightPanel />
         </div>
       ) : (
         <div>
@@ -56,21 +44,14 @@ const DisplayLectures = () => {
             <div className="flex gap-10 items-center justify-center w-full h-screen">
               <button
                 onClick={() => {
-                  navigate("/course/addLecture", { state: { ...state } });
+                  navigate("/course/addLecture");
                 }}
                 className="btn-primary px-2 py-1 rounded-md font-semibold text-sm"
               >
                 Add New Lectures
               </button>
               <button
-                onClick={() =>
-                  navigate("/manageTest", {
-                    state: {
-                      courseId: state._id,
-                      courseTitle: state.title,
-                    },
-                  })
-                }
+                onClick={() => navigate("/manageTest")}
                 className="btn-primary px-2 py-1 rounded-md font-semibold text-sm"
               >
                 Manage Test

@@ -4,7 +4,7 @@ import StartTestDialog from "../Dialogbox/StartTestDialog";
 import { FaLock, FaUnlock } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 
-const TestButtons = ({ courseId,courseTitle }) => {
+const TestButtons = () => {
   const { role } = useSelector((state) => state?.auth);
   const { progress } = useSelector((state) => state?.lecture);
 
@@ -20,7 +20,7 @@ const TestButtons = ({ courseId,courseTitle }) => {
               >
                 <FaUnlock /> Start Test
               </button>
-              <StartTestDialog courseId={courseId} courseTitle={courseTitle} />
+              <StartTestDialog />
             </>
           ) : (
             <>

@@ -9,26 +9,30 @@ import {
   unMarkLecture,
 } from "../../Redux/Slices/LectureSlice.js";
 
-const LectureItem = ({ lecture, index, courseId }) => {
+const LectureItem = ({ lecture, index }) => {
   const dispatch = useDispatch();
 
+  const { currentCourse } = useSelector((state) => state.course);
   const { role } = useSelector((state) => state.auth);
   const { currentLecture, watchHistory } = useSelector(
     (state) => state?.lecture
   );
 
+  const [watched, setWatched] = useState(
+    watchHistory?.[currentCourse._id]?.includes(lecture._id) || false
+  );
+
   async function onLectureDelete(courseId, lectureId) {
     if (window.confirm("Are you sure you want to delete the Lecture!!")) {
       await dispatch(
-        deleteCourseLecture({ courseId: courseId, lectureId: lectureId })
+        deleteCourseLecture({
+          courseId: currentCourse._id,
+          lectureId: lectureId,
+        })
       );
-      await dispatch(getCourseLectures(courseId));
+      await dispatch(getCourseLectures(currentCourse._id));
     }
   }
-
-  const [watched, setWatched] = useState(
-    watchHistory?.[courseId]?.includes(lecture._id) || false
-  );
 
   async function handleWatchToggle(event) {
     event.stopPropagation();
@@ -36,9 +40,11 @@ const LectureItem = ({ lecture, index, courseId }) => {
 
     let response;
     if (watched) {
-      response = await dispatch(unMarkLecture([courseId, lecture._id]));
+      response = await dispatch(
+        unMarkLecture([currentCourse._id, lecture._id])
+      );
     } else {
-      response = await dispatch(markLecture([courseId, lecture._id]));
+      response = await dispatch(markLecture([currentCourse._id, lecture._id]));
     }
 
     if (!response.payload.success) {
@@ -75,7 +81,7 @@ const LectureItem = ({ lecture, index, courseId }) => {
           </button> */}
           <button
             onClick={() => {
-              onLectureDelete(courseId, lecture?._id);
+              onLectureDelete(currentCourse._id, lecture?._id);
             }}
             className="btn-error px-2 py-1 rounded-md font-semibold text-sm"
           >

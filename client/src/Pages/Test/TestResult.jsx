@@ -1,21 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Pie } from "react-chartjs-2";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import axiosInstance from "../../Utils/axiosInstance";
-import toast from "react-hot-toast";
+import axiosInstance from "../../Utils/axiosInstance.js";
 import HomeLayout from "../../Layouts/HomeLayout";
+import { Chart, ArcElement } from "chart.js";
+Chart.register(ArcElement);
 
 const TestResult = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  const { state } = useLocation();
-  const [totalMarks, setTotalMarks] = useState(state?.totalMarks || 0);
-  const [obtainedMarks, setObtainedMarks] = useState(state?.obtainMarks || 0);
-  const [result, setResult] = useState(state?.result == "pass" ? true : false);
 
   const userData = useSelector((state) => state?.auth?.data);
+  const { state } = useLocation();
+
+  const totalMarks = state?.totalMarks || 0;
+  const marks = parseInt(state.totalMarks - state.obtainMarks);
 
   useEffect(() => {
     if (!state) {
@@ -59,7 +58,7 @@ const TestResult = () => {
               labels: ["Obtained Marks", "Remaining Marks"],
               datasets: [
                 {
-                  data: [obtainedMarks, totalMarks - obtainedMarks],
+                  data: [totalMarks, marks],
                   backgroundColor: [
                     "rgba(75, 192, 192, 0.6)",
                     "rgba(255, 99, 132, 0.6)",
@@ -80,7 +79,7 @@ const TestResult = () => {
         </div>
         <div className="flex flex-col items-center">
           <div className="font-bold">
-            {result ? (
+            {state.result === "pass" ? (
               <div className="text-green-500 text-xl">
                 Congratulations! You passed the test.
               </div>
@@ -91,7 +90,7 @@ const TestResult = () => {
             )}
           </div>
           <div className="flex justify-center mt-4">
-            {result ? (
+            {state.result === "pass" ? (
               <button className="btn btn-accent" onClick={generate}>
                 Generate Certificate
               </button>

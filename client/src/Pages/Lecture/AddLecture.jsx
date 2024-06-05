@@ -7,12 +7,13 @@ import HomeLayout from "../../Layouts/HomeLayout";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 
 const AddLecture = () => {
-  const courseDetails = useLocation().state;
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [userInput, setUserInput] = useState({
-    id: courseDetails?._id,
+  const { currentCourse } = useSelector((state) => state.course);
+
+  const [lectureDetails, setLectureDetails] = useState({
+    courseId: currentCourse?._id,
     lecture: undefined,
     title: "",
     description: "",
@@ -20,10 +21,16 @@ const AddLecture = () => {
     material: undefined,
   });
 
+  useEffect(() => {
+    if (!currentCourse) {
+      navigate("/courses");
+    }
+  }, []);
+
   function handleInputChange(e) {
     const { name, value } = e.target;
-    setUserInput({
-      ...userInput,
+    setLectureDetails({
+      ...lectureDetails,
       [name]: value,
     });
   }
@@ -31,9 +38,9 @@ const AddLecture = () => {
   function handleVideo(e) {
     const video = e.target.files[0];
     const source = window.URL.createObjectURL(video);
-    console.log(source);
-    setUserInput({
-      ...userInput,
+
+    setLectureDetails({
+      ...lectureDetails,
       lecture: video,
       videoSrc: source,
     });
@@ -42,24 +49,27 @@ const AddLecture = () => {
   // Added function to handle material upload
   function handleMaterial(e) {
     const materialFile = e.target.files[0];
-    setUserInput({
-      ...userInput,
+    setLectureDetails({
+      ...lectureDetails,
       material: materialFile,
     });
   }
 
-  async function onFormSubmit(e) {
-    console.log("userInput", userInput);
+  async function addNewLecture(e) {
     e.preventDefault();
-    if (!userInput.lecture || !userInput.title || !userInput.description) {
+    if (
+      !lectureDetails.lecture ||
+      !lectureDetails.title ||
+      !lectureDetails.description
+    ) {
       toast.error("All field are mandatory");
       return;
     }
-    const response = await dispatch(addCourseLecture(userInput));
-    console.log("res", response);
+    const response = await dispatch(addCourseLecture(lectureDetails));
+
     if (response?.payload?.success) {
-      setUserInput({
-        id: courseDetails._id,
+      setLectureDetails({
+        courseId: currentCourse._id,
         lecture: undefined,
         title: "",
         description: "",
@@ -69,11 +79,6 @@ const AddLecture = () => {
     }
   }
 
-  useEffect(() => {
-    if (!courseDetails) {
-      navigate("/courses");
-    }
-  }, []);
   return (
     <HomeLayout>
       <div className="min-h-[90vh] text-white flex flex-col items-center justify-center gap-10 mx-16">
@@ -89,7 +94,7 @@ const AddLecture = () => {
               Add new Lecture
             </h1>
           </header>
-          <form className="flex flex-col gap-3" onSubmit={onFormSubmit}>
+          <form className="flex flex-col gap-3" onSubmit={addNewLecture}>
             <input
               type="text"
               name="title"
@@ -97,7 +102,7 @@ const AddLecture = () => {
               placeholder="enter title of the lecture"
               onChange={handleInputChange}
               className="bg-transparent px-3 py-1 border"
-              value={userInput.title}
+              value={lectureDetails.title}
             />
             <textarea
               type="text"
@@ -106,12 +111,12 @@ const AddLecture = () => {
               placeholder="enter the description of the lecture"
               onChange={handleInputChange}
               className="bg-transparent px-3 py-1 border resize-none overflow-y-scroll h-36"
-              value={userInput.description}
+              value={lectureDetails.description}
             />
-            {userInput.videoSrc ? (
+            {lectureDetails.videoSrc ? (
               <video
                 muted
-                src={userInput.videoSrc}
+                src={lectureDetails.videoSrc}
                 controls
                 controlsList="nodownload nofullscreen"
                 disablePictureInPicture

@@ -51,7 +51,6 @@ export const editMcqInCourse = createAsyncThunk(
   "course/mcqs/edit",
   async ({ courseId, mcqData }) => {
     try {
-      console.log("jay", courseId, mcqData);
       const { question, options, correctOptionIndex, MCQId } = mcqData;
       const response = axiosInstance.put(`/mcqs/editMcq/${courseId}/${MCQId}`, {
         question,
@@ -128,7 +127,7 @@ const testSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getCourseMcqs.fulfilled, (state, action) => {
-        console.log(action.payload);
+
         state.mcqs = action.payload.data;
       })
       .addCase(addMcqInCourse.fulfilled, (state, action) => {

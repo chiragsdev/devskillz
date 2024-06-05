@@ -26,14 +26,12 @@ const Search = () => {
   // }
 
   function onSuggestionClick(selectedSuggestion) {
-    console.log(selectedSuggestion);
     setSearchQuery(selectedSuggestion);
     setShowSuggestions(false);
     dispatch(searchCourse(selectedSuggestion));
   }
 
   async function onSearchCourse(searchText) {
-    console.log(searchText);
     dispatch(searchCourse(searchText));
   }
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const StartTestDialog = ({ courseId, courseTitle }) => {
+const StartTestDialog = () => {
   const navigate = useNavigate();
 
   return (
@@ -24,11 +24,7 @@ const StartTestDialog = ({ courseId, courseTitle }) => {
           </button>
           <button
             className="btn btn-wide btn-md"
-            onClick={() =>
-              navigate("/startTest", {
-                state: { courseId: courseId, courseTitle: courseTitle },
-              })
-            }
+            onClick={() => navigate("/startTest")}
           >
             Start Test
           </button>

@@ -1,7 +1,10 @@
 import React, { useEffect } from "react";
 import HomeLayout from "../../Layouts/HomeLayout";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllCourses } from "../../Redux/Slices/CourseSlice.js";
+import {
+  clearCurrentCourse,
+  getAllCourses,
+} from "../../Redux/Slices/CourseSlice.js";
 import { ShimmerCards } from "../../Shimmer/CourseListShimmer.jsx";
 import CourseCard from "./CourseCard.jsx";
 import Search from "../../Components/Search.jsx";
@@ -20,6 +23,7 @@ const CourseList = () => {
 
   useEffect(() => {
     loadCourses();
+    dispatch(clearCurrentCourse());
   }, []);
 
   return (
@@ -36,7 +40,7 @@ const CourseList = () => {
           ) : (
             <React.Fragment>
               {filterCourseData.map((course) => {
-                return <CourseCard key={course._id} data={course} />;
+                return <CourseCard key={course._id} courseDetails={course} />;
               })}
             </React.Fragment>
           )}

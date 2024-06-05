@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { addMcqInCourse, editMcqInCourse } from "../../Redux/Slices/testSlice.js";
+import {
+  addMcqInCourse,
+  editMcqInCourse,
+} from "../../Redux/Slices/testSlice.js";
 import toast from "react-hot-toast";
 
 const AddMCQForm = ({ courseId, editMCQData }) => {

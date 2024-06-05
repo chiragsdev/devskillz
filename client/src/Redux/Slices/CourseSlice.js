@@ -3,6 +3,7 @@ import axiosInstance from "../../Utils/axiosInstance.js";
 import { toast } from "react-hot-toast";
 
 const initialState = {
+  currentCourse: null,
   courseData: [],
   filterCourseData: [],
   suggestions: [],
@@ -24,7 +25,6 @@ export const createNewCourse = createAsyncThunk(
   async (data) => {
     const loadingMessage = toast.loading("creating New course! ...");
     try {
-      console.log("data", data.title);
       let formData = new FormData();
       formData.append("title", data?.title);
       formData.append("description", data?.description);
@@ -100,8 +100,6 @@ const courseSlice = createSlice({
   initialState,
   reducers: {
     searchCourse: (state, action) => {
-      console.log("hello");
-      console.log(action?.payload);
       const searchTerm = action.payload.toLowerCase();
 
       // Implement your search logic here
@@ -118,6 +116,12 @@ const courseSlice = createSlice({
         return titleMatch || createdByMatch || categoryMatch;
       });
     },
+    setCurrentCourse: (state, action) => {
+      state.currentCourse = action.payload;
+    },
+    clearCurrentCourse: (state, action) => {
+      state.currentCourse = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -133,5 +137,6 @@ const courseSlice = createSlice({
   },
 });
 
-export const { searchCourse } = courseSlice.actions;
+export const { searchCourse, setCurrentCourse, clearCurrentCourse } =
+  courseSlice.actions;
 export default courseSlice.reducer;

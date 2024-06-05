@@ -1,4 +1,3 @@
-// CommentsSection.jsx
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -59,7 +58,7 @@ const CommentsSection = ({ lectureId }) => {
   }
 
   return (
-    <div className="text-yellow-500 font-custom line-clamp-4 p-4 rounded-lg w-full">
+    <div className="text-yellow-500 lg:order-3 font-custom line-clamp-4 p-10 rounded-lg w-full">
       <h2 className="text-lg font-semibold mb-4">Comments :</h2>
       <div className="mb-6 mt-4">
         <div class="w-full">
@@ -87,9 +86,7 @@ const CommentsSection = ({ lectureId }) => {
 
       {loading ? (
         <div className="flex items-center gap-3 justify-center my-5">
-          {/* <span className="loading loading-spinner loading-md"></span> */}
           <span className="loading loading-bars loading-md"></span>
-          {/* <span className="loading loading-dots loading-lg"></span> */}
         </div>
       ) : (
         <div className="flex items-center justify-center my-5">
