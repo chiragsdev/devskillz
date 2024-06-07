@@ -25,7 +25,7 @@ const RightPanelHeader = () => {
       <div className="flex items-center w-full p-4 justify-between">
         <MdArrowBack onClick={() => navigate(-1)} className="cursor-pointer" />
         <div className=" text-yellow-500 underline text-3xl">
-          {currentCourse.title}
+          {currentCourse?.title}
         </div>
         <div></div>
       </div>

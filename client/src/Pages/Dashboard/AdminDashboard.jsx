@@ -11,7 +11,11 @@ import {
 } from "chart.js";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { deleteCourse, getAllCourses } from "../../Redux/Slices/CourseSlice";
+import {
+  deleteCourse,
+  getAllCourses,
+  setCurrentCourse,
+} from "../../Redux/Slices/CourseSlice";
 import { getStatsData } from "../../Redux/Slices/StatSlice";
 import { getPaymentRecord } from "../../Redux/Slices/RazorpaySlice";
 import HomeLayout from "../../Layouts/HomeLayout";
@@ -208,9 +212,8 @@ const AdminDashboard = () => {
                       <button
                         className="bg-green-500 hover:bg-green-600 transition-all ease-in-out duration-300 text-xl py-2 px-4 rounded-md font-bold"
                         onClick={() => {
-                          navigate("/course/displaylectures", {
-                            state: { ...course },
-                          });
+                          dispatch(setCurrentCourse(course));
+                          navigate("/course/displaylectures");
                         }}
                       >
                         <BsCollectionPlayFill />
