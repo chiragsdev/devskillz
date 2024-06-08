@@ -19,8 +19,8 @@ const MCQCard = ({
   }
 
   return (
-    <div className="w-3/4 h-auto bg-white rounded-lg shadow-md p-6 mb-4 relative">
-      <div className="flex justify-between items-center mb-4">
+    <div className="w-3/4 bg-white text-gray-800 rounded-lg shadow-md p-6">
+      <div className="flex justify-between items-center">
         <div className="w-full font-semibold text-lg">
           <span> {parseInt(index + 1)}.</span>
           <span>{question}</span>
