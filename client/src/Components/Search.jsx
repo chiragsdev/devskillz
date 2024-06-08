@@ -21,24 +21,17 @@ const Search = () => {
     };
   }, [searchQuery]);
 
-  // async function getSearchSuggestions() {
-  //   await dispatch(getSuggestions(searchQuery));
-  // }
-
   function onSuggestionClick(selectedSuggestion) {
     setSearchQuery(selectedSuggestion);
     setShowSuggestions(false);
     dispatch(searchCourse(selectedSuggestion));
   }
 
-  async function onSearchCourse(searchText) {
-    dispatch(searchCourse(searchText));
-  }
-
   return (
     <div className="col-span-10 px-16 relative">
       <div>
         <input
+          autocomplete="off"
           className="px-5 w-1/2 border border-gray-400 p-2 rounded-l-full outline-none border-none"
           type="text"
           id="searchBar"
@@ -64,9 +57,6 @@ const Search = () => {
                 onMouseDown={(e) => {
                   onSuggestionClick(s);
                 }}
-                // onKeyDown={(e) =>
-                //   e.key === "Enter" ? onSuggestionClick(s) : null
-                // }
                 className="cursor-pointer py-2 px-3 flex items-center justify-start gap-2 shadow-sm text-black hover:bg-gray-100"
               >
                 <FaSearch /> {s}

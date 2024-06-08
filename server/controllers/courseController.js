@@ -186,7 +186,7 @@ export const getSuggestions = async (req, res, next) => {
       ],
     }).select("title createdBy category");
 
-    console.log(suggestions);
+    console.log("suggestions", suggestions);
 
     // Filter suggestions based on whether they contain the query
     const suggestionStrings = suggestions
@@ -194,9 +194,13 @@ export const getSuggestions = async (req, res, next) => {
       .filter((string) => string.toLowerCase().includes(query.toLowerCase()))
       .slice(0, 10); // Limit to the first 10 strings
 
+    const uniqueSet = new Set(suggestionStrings);
+
+    const uniqueArray = [...uniqueSet];
+
     res.status(200).json({
       success: true,
-      suggestionStrings,
+      suggestionStrings: uniqueArray,
     });
   } catch (error) {
     return next(new AppError(error.message, 500));
