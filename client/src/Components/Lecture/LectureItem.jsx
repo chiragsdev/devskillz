@@ -94,6 +94,7 @@ const LectureItem = ({ lecture, index }) => {
             type="checkbox"
             className="checkbox cursor-default checkbox-md border-2 border-gray-400"
             checked={watched}
+            readOnly
             onClick={(event) => handleWatchToggle(event)}
           />
           <a

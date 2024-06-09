@@ -62,12 +62,12 @@ const StartTest = () => {
           <span className="loading loading-bars loading-lg"></span>
         </div>
       ) : (
-        <div className="flex flex-col h-screen pt-10">
-          <div className="flex w-full items-center justify-evenly">
-            <div className="text-4xl font-bold text-gray-500 underline">
+        <div className="flex flex-col h-screen pt-10 font-custom">
+          <div className="flex sm:flex-col sm:gap-2 w-full items-center justify-evenly">
+            <div className="text-4xl text-center lg:text-xl md:text-sm font-bold text-gray-500 underlin">
               {currentCourse.title} (Test Runuing)
             </div>
-            <div className="w-44 h-28 rounded-lg flex flex-col items-start pl-2 justify-center gap-1 font-semibold shadow-2xl">
+            <div className="w-44 h-28 md:w-32 md:h-28 md:text-xs sm:mb-6 rounded-lg flex flex-col items-start pl-2 justify-center gap-1 font-semibold shadow-2x">
               <div>Totol MCQS: {mcqs.length}</div>
               <div>Marked MCQS: {Object.keys(selectedAnswers).length}</div>
               <div>
@@ -76,16 +76,16 @@ const StartTest = () => {
               </div>
             </div>
           </div>
-          <div className="w-full font-custom px-10 h-screen flex flex-col gap-5 items-center justify-center">
-            <h1 className="text-2xl font-bold pb-3 border-b-2 p-3 text-gray-400">
+          <div className="w-full font-custom px-10 md:px-5 sm:px-2 h-screen flex flex-col gap-5 items-center justify-center">
+            <h1 className="text-2xl md:text-lg font-bold pb-3 border-b-2 p-3 text-gray-300">
               QUE {currentMcqIndex + 1} : {mcqs[currentMcqIndex]?.question}
             </h1>
-            <div className="card lg:card-side bg-base-10 shadow-2xl border-2 border-gray-500 w-1/2">
+            <div className="card lg:card-side bg-base-10 shadow-2xl border-2 border-gray-500 w-1/2 lg:w-full">
               <div className="card-body flex-col gap-5 items-center">
                 {mcqs[currentMcqIndex]?.options.map((option, index) => (
                   <div
                     key={index}
-                    className="w-full p-2 rounded-lg flex items-center bg-slate-800 gap-4 text-xl text-center"
+                    className="w-full p-2 rounded-lg flex items-center bg-slate-800 gap-4 text-xl md:text-base text-center"
                   >
                     <input
                       type="radio"
@@ -104,7 +104,7 @@ const StartTest = () => {
                 ))}
                 <div className="flex items-center gap-10">
                   <button
-                    className="btn"
+                    className="btn md:btn-sm sm:btn-sm"
                     onClick={(e) => currentMcqIndex > 0 && dispatch(prevQue())}
                   >
                     <TbPlayerTrackPrevFilled />
@@ -112,14 +112,14 @@ const StartTest = () => {
                   </button>
                   {currentMcqIndex === mcqs.length - 1 ? (
                     <button
-                      className="btn btn-success"
+                      className="btn btn-success md:btn-sm sm:btn-sm"
                       onClick={(e) => handleSubmitTest()}
                     >
                       Submit Test
                     </button>
                   ) : (
                     <button
-                      className="btn"
+                      className="btn md:btn-sm sm:btn-sm"
                       onClick={(e) => dispatch(nextQue())}
                     >
                       Next

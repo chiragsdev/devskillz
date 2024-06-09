@@ -34,24 +34,24 @@ const ManageTest = () => {
       <div className="w-full p-5 flex items-center justify-evenly font-custom bg-gray-700">
         <button
           onClick={() => navigate(-1)}
-          className="text-white flex items-center focus:outline-none"
+          className="text-white flex items-center sm:text-xs focus:outline-none"
         >
-          <MdArrowBack className="mr-2" />
-          <span>Back To Course</span>
+          <MdArrowBack className="mr-2 md:text-xl" />
+          <span className="md:hidden">Back To Course</span>
         </button>
-        <div className="text-gray-300 text-2xl font-semibold">
-          {currentCourse.title} (Test Management)
+        <div className="text-gray-300 text-2xl md:text-xl font-semibold">
+          {currentCourse.title} <div>(Test Management)</div>
         </div>
         <div className="w-6"></div>
       </div>
       {/* Main */}
-      <div className="w-full h-auto flex bg-gray-700">
+      <div className="w-full h-auto flex md:flex-col bg-gray-700">
         {/* Left Side Form */}
-        <div className="w-1/2 p-5 bg-gray-800">
+        <div className="w-1/2 md:w-full p-5 bg-gray-800">
           <AddMCQForm courseId={currentCourse._id} editMCQData={editMCQ} />
         </div>
         {/* Right Side Scroll */}
-        <div className="w-1/2 h-screen bg-slate-600 p-5 overflow-y-scroll">
+        <div className="w-1/2 md:w-full h-screen bg-slate-600 p-5 overflow-y-scroll">
           <div className="flex flex-col gap-10 items-center justify-center py-10">
             {mcqs && mcqs.length !== 0 ? (
               mcqs.map((mcq, index) => {

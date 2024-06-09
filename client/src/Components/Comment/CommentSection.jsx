@@ -61,13 +61,13 @@ const CommentsSection = ({ lectureId }) => {
     <div className="text-yellow-500 font-custom line-clamp-4 p-10 rounded-lg w-full lg:p-0 sm:mt-4 sm:text-xs">
       <h2 className="text-lg font-semibold mb-4">Comments :</h2>
       <div className="mb-6 mt-4">
-        <div class="w-full">
+        <div className="w-full">
           <div className="flex items-end gap-10 sm:flex-col sm:gap-2">
             <textarea
               value={commentContent}
               onChange={(e) => setCommentContent(e.target.value)}
               id="commentInput"
-              class="w-full h-20 bg-slate-900 border border-gray-600 focus:border-gray-500 rounded-md p-2 focus:outline-none resize-none"
+              className="w-full h-20 bg-slate-900 border border-gray-600 focus:border-gray-500 rounded-md p-2 focus:outline-none resize-none"
               placeholder="Write your comment here..."
             ></textarea>
             <button

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Pie } from "react-chartjs-2";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -13,8 +13,11 @@ const TestResult = () => {
   const userData = useSelector((state) => state?.auth?.data);
   const { state } = useLocation();
 
-  const totalMarks = state?.totalMarks || 0;
-  const marks = parseInt(state.totalMarks - state.obtainMarks);
+  const [totalMarks, setTotalMarks] = useState(state?.totalMarks);
+
+  const [gainMarks, setGainMarks] = useState(
+    state.totalMarks - state.obtainMarks
+  );
 
   useEffect(() => {
     if (!state) {
@@ -56,17 +59,14 @@ const TestResult = () => {
           <Pie
             data={{
               labels: ["Obtained Marks", "Remaining Marks"],
+              fontColor: "white",
               datasets: [
                 {
-                  data: [totalMarks, marks],
-                  backgroundColor: [
-                    "rgba(75, 192, 192, 0.6)",
-                    "rgba(255, 99, 132, 0.6)",
-                  ],
-                  hoverBackgroundColor: [
-                    "rgba(75, 192, 192, 0.8)",
-                    "rgba(255, 99, 132, 0.8)",
-                  ],
+                  labels: "Result",
+                  data: [totalMarks, gainMarks],
+                  backgroundColor: ["yellow", "green"],
+                  borderWidth: 1,
+                  borderColor: ["yellow", "green"],
                 },
               ],
             }}

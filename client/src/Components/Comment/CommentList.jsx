@@ -12,7 +12,7 @@ const CommentList = () => {
     <>
       {comments.map((comment) => {
         return (
-          <div key={comment._id}>
+          <div key={comment._id + Math.random()}>
             <Comment commentData={comment} />
             {comment.isShowReplies &&
               commentReplies[comment._id] &&

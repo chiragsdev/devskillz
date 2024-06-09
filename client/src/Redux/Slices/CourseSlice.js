@@ -103,7 +103,7 @@ const courseSlice = createSlice({
       const searchTerm = action.payload.toLowerCase();
 
       // Implement your search logic here
-      state.filterCourseData = state.courseData.filter((course) => {
+      const data = state.courseData.filter((course) => {
         const titleMatch = course.title.toLowerCase().includes(searchTerm);
         const createdByMatch = course.createdBy
           .toLowerCase()
@@ -115,6 +115,10 @@ const courseSlice = createSlice({
         // Return true if any of the fields match the search term
         return titleMatch || createdByMatch || categoryMatch;
       });
+
+      if (data?.length !== 0) {
+        state.filterCourseData = data;
+      }
     },
     setCurrentCourse: (state, action) => {
       state.currentCourse = action.payload;

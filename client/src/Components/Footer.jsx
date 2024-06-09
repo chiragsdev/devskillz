@@ -5,11 +5,11 @@ const Footer = () => {
   const currentDate = new Date();
   const year = currentDate.getFullYear();
   return (
-    <footer className="relative left-0 bottom-0 w-full py-5 flex flex-col sm:flex-row items-center justify-between text-white bg-gray-800 sm:px-20 px-4">
-      <section className="text-lg mb-3 sm:mb-0">
+    <footer className="relative left-0 bottom-0 w-full py-5 flex flex-row items-center justify-center gap-10 sm:gap-2 sm:px-3 text-white bg-gray-800 sm:text-xs">
+      <section className="text-lg sm:text-base">
         © {year} | All rights reserved
       </section>
-      <section className="flex items-center justify-center gap-5 text-2xl">
+      <section className="flex items-center justify-center gap-5 text-2xl sm:text-base">
         <a
           href="#"
           className="hover:text-yellow-500 transition-all ease-in-out duration-300"

@@ -7,7 +7,11 @@ const LecturesList = () => {
     <>
       {lectures.map((lecture, index) => {
         return (
-          <LectureItem key={lecture._id} lecture={lecture} index={index} />
+          <LectureItem
+            key={lecture._id + Math.random()}
+            lecture={lecture}
+            index={index}
+          />
         );
       })}
     </>

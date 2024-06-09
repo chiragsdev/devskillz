@@ -28,13 +28,13 @@ const CourseList = () => {
 
   return (
     <HomeLayout>
-      <div className="min-h-[90vh] pt-12 flex flex-col gap-10 text-white z-11">
-        <h1 className="text-center text-3xl font-semibold mb-5">
-          Explore the Courses made by{" "}
+      <div className="min-h-[90vh] pt-16 flex flex-col gap-10 text-white z-11 font-custom">
+        <h1 className="text-center text-3xl md:text-2xl font-semibold">
+          <div> Explore the Courses made by </div>
           <span className="font-bold text-yellow-500">Industry experts</span>
         </h1>
         <Search />
-        <div className="mb-10 flex flex-wrap items-center justify-evenly gap-y-20 gap-x-2">
+        <div className="mb-10 sm:mb-5 flex flex-wrap items-center justify-evenly gap-y-20 sm:gap-y-10 gap-x-2">
           {filterCourseData.length === 0 ? (
             <ShimmerCards />
           ) : (

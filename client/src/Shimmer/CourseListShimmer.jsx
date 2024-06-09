@@ -16,7 +16,7 @@ const ShimmerCard = () => (
 export const ShimmerCards = () => {
   return (
     <>
-      {new Array(9).fill(0).map((element, index) => {
+      {new Array(8).fill(0).map((element, index) => {
         return <ShimmerCard key={index} />;
       })}
     </>

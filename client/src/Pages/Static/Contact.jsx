@@ -61,16 +61,21 @@ const Contact = () => {
   }
   return (
     <HomeLayout>
-      <div className="flex items-center justify-center h-[100vh]">
+      <div className="flex items-center justify-center h-[100vh] w-full">
         <form
           onSubmit={onFormSubmit}
-          className="flex flex-col items-center justify-center gap-2 p-5 rounded-md text-white shadow-[0_0_10px_black] w-[20rem]"
+          className="flex flex-col items-center justify-center gap-2 p-5 md:p-3 sm:p-1 rounded-md text-white shadow-[0_0_10px_black] w-[20rem] md:w-[18rem]"
         >
-          <h1 className="text-3xl font-semibold">Contact Form</h1>
+          <h1 className="text-3xl md:text-xl sm:text-base font-semibold">
+            Contact Form
+          </h1>
 
           {/* Form fields for name, email, and message */}
           <div className="flex flex-col w-full gap-1">
-            <label htmlFor="name" className="text-xl font-semibold">
+            <label
+              htmlFor="name"
+              className="text-xl md:text-lg sm:text-base font-semibold"
+            >
               Name
             </label>
             <input
@@ -85,7 +90,10 @@ const Contact = () => {
           </div>
 
           <div className="flex flex-col w-full gap-1">
-            <label htmlFor="email" className="text-xl font-semibold">
+            <label
+              htmlFor="email"
+              className="text-xl md:text-lg sm:text-base font-semibold"
+            >
               Email
             </label>
             <input
@@ -100,7 +108,10 @@ const Contact = () => {
           </div>
 
           <div className="flex flex-col w-full gap-1">
-            <label htmlFor="message" className="text-xl font-semibold">
+            <label
+              htmlFor="message"
+              className="text-xl md:text-lg sm:text-base font-semibold"
+            >
               Message
             </label>
             <textarea
@@ -117,7 +128,7 @@ const Contact = () => {
           {/* Submit button */}
           <button
             type="submit"
-            className="w-full bg-yellow-500 hover:bg-yello-500 transition-all ease-in-out duration-300 rounded-sm py-2 font-semibold text-lg cursor-pointer"
+            className="w-full md:btn-md sm:btn-sm bg-yellow-500 hover:bg-yello-500 transition-all ease-in-out duration-300 rounded-sm py-2 sm:py-1 font-semibold text-lg cursor-pointer"
           >
             submit
           </button>

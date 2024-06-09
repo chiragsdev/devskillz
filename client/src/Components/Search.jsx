@@ -28,11 +28,11 @@ const Search = () => {
   }
 
   return (
-    <div className="col-span-10 px-16 relative">
-      <div>
+    <div className="col-span-10 px-16 md:px-8 sm:px-2 relative">
+      <div className="flex w-full">
         <input
-          autocomplete="off"
-          className="px-5 w-1/2 border border-gray-400 p-2 rounded-l-full outline-none border-none"
+          autoComplete="off"
+          className="px-5 p-2 sm:p-1 rounded-l-md shadow-md  sm:px-3 w-1/2 md:w-full border border-gray-400 outline-none border-none"
           type="text"
           id="searchBar"
           name="searchBar"
@@ -40,16 +40,18 @@ const Search = () => {
           onChange={(e) => setSearchQuery(e.target.value)}
           onFocus={() => setShowSuggestions(true)}
           onBlur={() => setShowSuggestions(false)}
+          placeholder="Search Courses"
         />
         <button
           onClick={() => onSuggestionClick(searchQuery)}
-          className="border border-gray-400 px-5 py-2 rounded-r-full bg-gray-500 text-white font-bold outline-none border-none"
+          className="border w-16 bg-yellow-600 border-black-500 rounded-r-md text-gray-300 outline-none border-none"
         >
           Search
         </button>
       </div>
+
       {showSuggestions && (
-        <div className="absolute top-full left-20 mt-5 bg-white py-2 px-2 w-[37rem] shadow-lg rounded-lg border border-gray-100 opacity-90 z-50">
+        <div className="absolute top-full left-20 sm:left-10 sm:text-sm mt-5 bg-white py-2 px-2 w-[37rem] sm:w-[21rem] shadow-lg rounded-lg border border-gray-100 opacity-90 z-50">
           <ul>
             {suggestions.map((s) => (
               <li
