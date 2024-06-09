@@ -11,11 +11,11 @@ const TestButtons = () => {
   return (
     <div>
       {role !== "ADMIN" && (
-        <li className="flex items-center justify-center pt-4">
+        <li className="flex items-center justify-center pt-4 sm:text-xs">
           {progress >= 80 ? (
             <>
               <button
-                className="btn btn-accent"
+                className="btn btn-accent sm:btn-sm"
                 onClick={() => document.getElementById("testInfo").showModal()}
               >
                 <FaUnlock /> Start Test
@@ -25,7 +25,7 @@ const TestButtons = () => {
           ) : (
             <>
               <button
-                className="btn btn-success"
+                className="btn btn-success sm:btn-sm"
                 onClick={() =>
                   document.getElementById("my_modal_3").showModal()
                 }

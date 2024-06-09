@@ -45,7 +45,7 @@ const Comment = ({ commentData }) => {
   return (
     <div
       key={commentData?._id}
-      className="shadow-lg bg-slate-800 rounded-md p-2 mb-4"
+      className="shadow-lg bg-slate-800 rounded-md p-2 mb-4 sm:text-xs"
     >
       <div className="flex justify-between mb-2">
         <div className="flex items-center">
@@ -57,13 +57,13 @@ const Comment = ({ commentData }) => {
             <p className="text-gray-400">{commentData?.content}</p>
           </div>
         </div>
-        <div className="text-gray-400 flex flex-col items-center justify-between">
+        <div className="text-gray-400 flex flex-col items-center justify-between sm:text-xs">
           <div className="text-xs">{formatDate(commentData?.createdAt)}</div>
           {/* Show/hide reply input box */}
 
           {!commentData?.parentComment && (
             <div
-              className="text-sm text-gray-300 underline cursor-pointer"
+              className="text-sm text-gray-300 underline cursor-pointer sm:text-xs"
               onClick={toggleShowReplies}
             >
               {commentData.isShowReplies ? "Hide" : "Show"} replies{" "}
@@ -76,18 +76,18 @@ const Comment = ({ commentData }) => {
       </div>
       {/* Conditionally render reply input box */}
       {commentData.isShowReplies && (
-        <div className="flex items-center justify-between mt-4 gap-4">
+        <div className="flex items-center justify-between mt-4 gap-2 sm:mt-3">
           <textarea
             value={replyContent}
             onChange={handleReplyChange}
             id="commentInput"
-            class="w-full h-12 bg-slate-900 border border-gray-600 focus:border-gray-500 rounded-md p-2 focus:outline-none resize-none"
+            class="w-full h-12 sm:h-8 bg-slate-900 border border-gray-600 focus:border-gray-500 rounded-md p-2 focus:outline-none resize-none"
             placeholder="Write your comment here..."
           ></textarea>
           <button
             onClick={handleAddReply}
             id="addCommentBtn"
-            className="btn btn-active btn-info"
+            className="btn btn-active btn-info sm:btn-sm"
           >
             Reply
           </button>

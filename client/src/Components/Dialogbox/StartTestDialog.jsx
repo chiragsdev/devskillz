@@ -23,7 +23,7 @@ const StartTestDialog = () => {
             Cancel
           </button>
           <button
-            className="btn btn-wide btn-md"
+            className="btn btn-wide btn-md sm:btn-sm"
             onClick={() => navigate("/startTest")}
           >
             Start Test

@@ -58,11 +58,11 @@ const CommentsSection = ({ lectureId }) => {
   }
 
   return (
-    <div className="text-yellow-500 lg:order-3 font-custom line-clamp-4 p-10 rounded-lg w-full">
+    <div className="text-yellow-500 font-custom line-clamp-4 p-10 rounded-lg w-full lg:p-0 sm:mt-4 sm:text-xs">
       <h2 className="text-lg font-semibold mb-4">Comments :</h2>
       <div className="mb-6 mt-4">
         <div class="w-full">
-          <div className="flex items-end  gap-10">
+          <div className="flex items-end gap-10 sm:flex-col sm:gap-2">
             <textarea
               value={commentContent}
               onChange={(e) => setCommentContent(e.target.value)}
@@ -74,7 +74,7 @@ const CommentsSection = ({ lectureId }) => {
               onClick={handleAddComment}
               disabled={!commentContent}
               id="addCommentBtn"
-              className="btn btn-active btn-info"
+              className="btn btn-active btn-info sm:btn-sm"
             >
               Add Comment
             </button>
@@ -89,11 +89,11 @@ const CommentsSection = ({ lectureId }) => {
           <span className="loading loading-bars loading-md"></span>
         </div>
       ) : (
-        <div className="flex items-center justify-center my-5">
+        <div className="flex items-center justify-center my-5 ">
           <button
             onClick={handleLoadComments}
             disabled={!hasMoreComments}
-            className="btn btn-active btn-info"
+            className="btn btn-active btn-info sm:btn-sm"
           >
             {hasMoreComments ? "Load Comments ..." : "No more comments"}
           </button>

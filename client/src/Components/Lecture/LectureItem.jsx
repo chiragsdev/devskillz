@@ -56,7 +56,7 @@ const LectureItem = ({ lecture, index }) => {
     <li
       className={`${
         index === currentLecture ? "bg-blue-200" : "bg-blue-100"
-      } cursor-pointer flex items-center justify-between h-16 p-3 text-black transition-all ease-in-out`}
+      } cursor-pointer flex items-center justify-between h-16 p-3 sm:h-14 sm:p-2 sm:text-xs text-black transition-all ease-in-out`}
       key={lecture?._id}
       onClick={() => dispatch(setCurrentLecture(index))}
     >
@@ -64,7 +64,7 @@ const LectureItem = ({ lecture, index }) => {
         <span className="flex items-center gap-2">
           <IoMdVideocam /> Lecture {index + 1} |
         </span>
-        <span className="flex items-center gap-2 text-base text-black">
+        <span className="flex items-center gap-2 text-base sm:text-xs text-black">
           {lecture?.title}
         </span>
       </p>

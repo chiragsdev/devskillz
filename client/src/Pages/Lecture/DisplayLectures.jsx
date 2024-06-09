@@ -9,6 +9,9 @@ import {
 import RightPanel from "../../Components/Lecture/RightPanel.jsx";
 import VideoLecture from "../../Components/Lecture/VideoLecture.jsx";
 import CommentsSection from "../../Components/Comment/CommentSection.jsx";
+import LecturesList from "../../Components/Lecture/LecturesList.jsx";
+import TestButtons from "../../Components/Lecture/TestButtons.jsx";
+import RightHeader from "../../Components/Lecture/RightHeader.jsx";
 
 const DisplayLectures = () => {
   const dispatch = useDispatch();
@@ -31,13 +34,22 @@ const DisplayLectures = () => {
   return (
     <div className="text-white w-full h-full font-custom">
       {lectures && lectures.length > 0 ? (
-        <div className="flex flex-row gap-2 w-full h-full lg:flex-col">
-          <div className="w-2/3 overflow-y-scroll h-screen lg:w-full  lg:overflow-visible">
+        <>
+          <div className="flex flex-row gap-2 w-full h-full lg:hidden">
+            <div className="w-2/3 overflow-y-scroll h-screen">
+              <VideoLecture />
+              <CommentsSection lectureId={lectures[currentLecture]?._id} />
+            </div>
+            <RightPanel />
+          </div>
+          <div className="hidden lg:block w-full h-full flex-col text-base p-5 md:p-4 md:text-sm sm:p-2 sm:text-xs">
             <VideoLecture />
+            <RightHeader />
+            <LecturesList />
+            <TestButtons />
             <CommentsSection lectureId={lectures[currentLecture]?._id} />
           </div>
-          <RightPanel />
-        </div>
+        </>
       ) : (
         <div>
           {role == "ADMIN" ? (

@@ -21,8 +21,8 @@ const RightPanelHeader = () => {
   }, [watchHistory, lectures]);
 
   return (
-    <li className="font-semibold text-2xlflex flex-col items-center justify-between mb-5">
-      <div className="flex items-center w-full p-4 justify-between">
+    <li className="font-semibold text-2xl flex flex-col items-center justify-between mb-5">
+      <div className="flex items-center w-full p-4 justify-between lg:hidden">
         <MdArrowBack onClick={() => navigate(-1)} className="cursor-pointer" />
         <div className=" text-yellow-500 underline text-3xl">
           {currentCourse?.title}
@@ -47,7 +47,7 @@ const RightPanelHeader = () => {
           </button>
         </div>
       ) : (
-        <div className="w-full bg-gray-200 rounded-lg dark:bg-gray-700 mb-6 mt-4">
+        <div className="w-full bg-gray-200 rounded-lg dark:bg-gray-700 mt-4 sm:mt-2">
           {watchHistory && (
             <div
               className="bg-green-900 text-sm  rounded-lg  font-medium text-blue-100 text-center p-0.5 leading-5"
