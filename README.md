@@ -8,8 +8,10 @@ DevSkillz is a full-stack web application built on the MERN stack (MongoDB, Expr
 - [Tech Stack](#tech-stack)
 - [Installation](#installation)
 - [Usage](#usage)
+- [Payment](#payment)
 - [Screenshots](#screenshots)
 - [License](#license)
+- [Admin Dashboard](#admin-dashboard)
 
 ## Features
 
@@ -161,3 +163,17 @@ DevSkillz is a full-stack web application built on the MERN stack (MongoDB, Expr
    ```
 
 3. Open your browser and navigate to http://localhost:5173
+
+## Payment
+
+1. to make dummy Payment use Below details
+
+   ```bash
+   Mastercard: 5267 3181 8797 5449
+   CVV: Random
+   Expiration Date: Any future date
+   ```
+
+## Admin Dashboard
+
+1. To gain access to the Admin Dashboard, please fill out the contact form.
