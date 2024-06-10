@@ -3,8 +3,8 @@ import axiosInstance from "../../Utils/axiosInstance.js";
 import { toast } from "react-hot-toast";
 
 const initialState = {
-  key: "",
-  subscription_id: "",
+  key: null,
+  subscription_id: null,
   isPaymentVarified: false,
   allPayments: {},
   finalMonths: {},

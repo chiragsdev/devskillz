@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getSuggestions, searchCourse } from "../Redux/Slices/CourseSlice";
+import {
+  getSuggestions,
+  searchCourse,
+  setFilterCourseData,
+} from "../Redux/Slices/CourseSlice";
 import { FaSearch } from "react-icons/fa";
 
 const Search = () => {
@@ -15,6 +19,10 @@ const Search = () => {
     const timer = setTimeout(() => {
       dispatch(getSuggestions(searchQuery));
     }, 200);
+
+    if (searchQuery == "") {
+      dispatch(setFilterCourseData());
+    }
 
     return () => {
       clearTimeout(timer);

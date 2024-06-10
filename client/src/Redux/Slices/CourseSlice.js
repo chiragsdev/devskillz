@@ -126,6 +126,9 @@ const courseSlice = createSlice({
     clearCurrentCourse: (state, action) => {
       state.currentCourse = null;
     },
+    setFilterCourseData: (state, action) => {
+      state.filterCourseData = state.courseData;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -141,6 +144,10 @@ const courseSlice = createSlice({
   },
 });
 
-export const { searchCourse, setCurrentCourse, clearCurrentCourse } =
-  courseSlice.actions;
+export const {
+  searchCourse,
+  setCurrentCourse,
+  clearCurrentCourse,
+  setFilterCourseData,
+} = courseSlice.actions;
 export default courseSlice.reducer;

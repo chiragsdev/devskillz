@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   clearCurrentCourse,
   getAllCourses,
+  setFilterCourseData,
 } from "../../Redux/Slices/CourseSlice.js";
 import { ShimmerCards } from "../../Shimmer/CourseListShimmer.jsx";
 import CourseCard from "./CourseCard.jsx";
@@ -24,6 +25,7 @@ const CourseList = () => {
   useEffect(() => {
     loadCourses();
     dispatch(clearCurrentCourse());
+    dispatch(setFilterCourseData());
   }, []);
 
   return (

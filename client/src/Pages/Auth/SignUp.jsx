@@ -51,13 +51,13 @@ const SignUp = () => {
     event.preventDefault();
 
     // Validation checks for required fields
-    if (
-      !signUpData.fullName ||
-      !signUpData.email ||
-      !signUpData.password ||
-      !signUpData.avatar
-    ) {
+    if (!signUpData.fullName || !signUpData.email || !signUpData.password) {
       toast.error("Please fill in all the details");
+      return;
+    }
+
+    if (!signUpData.avatar) {
+      toast.error("please Select Profile Picture");
       return;
     }
 

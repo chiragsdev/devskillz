@@ -34,7 +34,7 @@ const Checkout = () => {
     e.preventDefault();
 
     if (!razorpaykey || !subscription_id) {
-      toast.error("something went wrong");
+      toast.error("try after 2 seconds");
       return;
     }
 
