@@ -6,7 +6,6 @@ import "./App.css";
 // Lazy-loaded components
 const SignUp = lazy(() => import("./Pages/Auth/SignUp"));
 const Login = lazy(() => import("./Pages/Auth/Login"));
-const Denied = lazy(() => import("./Pages/Auth/Denied"));
 const CourseList = lazy(() => import("./Pages/Courses/CourseList"));
 const CourseDescription = lazy(() =>
   import("./Pages/Courses/CourseDescription")
@@ -18,10 +17,6 @@ const DisplayLectures = lazy(() => import("./Pages/Lecture/DisplayLectures"));
 const ForgetPassword = lazy(() => import("./Pages/Password/ForgetPassword"));
 const ResetPassword = lazy(() => import("./Pages/Password/ResetPassword"));
 const ChangePassword = lazy(() => import("./Pages/Password/ChangePassword"));
-const Checkout = lazy(() => import("./Pages/Payment/Checkout"));
-const CheckoutSuccess = lazy(() => import("./Pages/Payment/CheckoutSuccess"));
-const CheckoutFailure = lazy(() => import("./Pages/Payment/CheckoutFailure"));
-const NotFoundPage = lazy(() => import("./Pages/Static/NotFoundPage"));
 const ManageTest = lazy(() => import("./Pages/Test/ManageTest"));
 const AddMCQForm = lazy(() => import("./Pages/Test/AddMCQForm"));
 const StartTest = lazy(() => import("./Pages/Test/startTest"));
@@ -33,6 +28,12 @@ const EditProfile = lazy(() => import("./Pages/User/EditProfile"));
 import HomePage from "./Pages/Static/HomePage";
 import AboutUs from "./Pages/Static/AboutUs";
 import Contact from "./Pages/Static/Contact";
+import Denied from "./Pages/Auth/Denied";
+import NotFoundPage from "./Pages/Static/NotFoundPage";
+
+import Checkout from "./Pages/Payment/Checkout";
+import CheckoutSuccess from "./Pages/Payment/CheckoutSuccess";
+import CheckoutFailure from "./Pages/Payment/CheckoutFailure";
 
 const App = () => {
   return (
