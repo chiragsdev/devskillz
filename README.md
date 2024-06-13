@@ -9,8 +9,6 @@ DevSkillz is a full-stack web application built on the MERN stack (MongoDB, Expr
 - [Installation](#installation)
 - [Usage](#usage)
 - [Payment](#payment)
-- [Screenshots](#screenshots)
-- [License](#license)
 - [Admin Dashboard](#admin-dashboard)
 
 ## Features
