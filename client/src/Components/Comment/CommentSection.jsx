@@ -14,19 +14,15 @@ const CommentsSection = ({ lectureId }) => {
   const { currentLecture } = useSelector((state) => state?.lecture);
 
   const [commentContent, setCommentContent] = useState("");
-  const [page, setPage] = useState(1);
+  const [pageCount, setPageCount] = useState(-1);
   const [hasMoreComments, setHasMoreComments] = useState(true);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     dispatch(clearOldComments());
-    dispatch(getLectureComments({ lectureId, page: 1 }));
-  }, [currentLecture]);
-
-  useEffect(() => {
     setHasMoreComments(true);
     setLoading(false);
-    setPage(1);
+    setPageCount(0);
     setCommentContent("");
   }, [currentLecture]);
 
@@ -35,13 +31,13 @@ const CommentsSection = ({ lectureId }) => {
       setLoading(true);
       try {
         const res = await dispatch(
-          getLectureComments({ lectureId, page: page + 1 })
+          getLectureComments({ lectureId, page: pageCount + 1 })
         );
 
         if (res?.payload?.data?.length === 0) {
           setHasMoreComments(false);
         } else {
-          setPage(page + 1);
+          setPageCount(pageCount + 1);
         }
       } catch (error) {
         console.error("Error loading comments:", error);
