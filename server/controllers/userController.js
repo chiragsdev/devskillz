@@ -566,3 +566,8 @@ export const generateCertificate = async (req, res) => {
     });
   }
 };
+
+
+export const healthCheck =  async (req, res) => {
+  res.status(201).json({success: true, message: "server is health!"});
+}
