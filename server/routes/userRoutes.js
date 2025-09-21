@@ -12,6 +12,7 @@ import {
   resetPassword,
   unMarkLecture,
   updateUserProfile,
+  healthCheck
 } from "../controllers/userController.js";
 import { isLoggedIn } from "../middlewares/authMiddleware.js";
 import upload from "../middlewares/multerMiddleware.js";
@@ -40,5 +41,7 @@ router.put("/unmark-lecture", isLoggedIn, unMarkLecture);
 router.get("/watchHistory", isLoggedIn, getWatchHistory);
 
 router.post("/generate/certificate", isLoggedIn, generateCertificate);
+
+router.get("/health", healthCheck);
 
 export default router;
